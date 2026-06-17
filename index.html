@@ -3,79 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mr. Prompt | Ingeniero de Prompts & Planificador</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Mr. Prompt | Terminal v2.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== VARIABLES CSS POR TEMA ===== */
+        /* ===== VARIABLES POR TEMA ===== */
         :root {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --bg-tertiary: #f1f5f9;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --accent-primary: #6366f1;
-            --accent-secondary: #8b5cf6;
-            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-            --border-color: #e2e8f0;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            --card-bg: #ffffff;
-            --input-bg: #ffffff;
-            --code-bg: #f1f5f9;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --glow-effect: none;
-            --cyber-glow: none;
+            --bg-terminal: #0c0c0c;
+            --bg-header: #1a1a2e;
+            --text-primary: #00ff00;
+            --text-secondary: #00cc00;
+            --text-dim: #006600;
+            --text-warning: #ffff00;
+            --text-error: #ff4444;
+            --text-info: #00ffff;
+            --text-purple: #ff00ff;
+            --border-color: #00ff0033;
+            --glow-color: rgba(0, 255, 0, 0.5);
+            --cursor-blink: blink 1s step-end infinite;
+            --scanline-opacity: 0.03;
+        }
+
+        /* MODO DÍA */
+        [data-theme="day"] {
+            --bg-terminal: #f0f0f0;
+            --bg-header: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #333333;
+            --text-dim: #666666;
+            --text-warning: #cc8800;
+            --text-error: #cc0000;
+            --text-info: #0066cc;
+            --text-purple: #8800cc;
+            --border-color: #cccccc;
+            --glow-color: rgba(0, 0, 0, 0.1);
+            --cursor-blink: blink-dark 1s step-end infinite;
+            --scanline-opacity: 0;
         }
 
         /* MODO AMOLED */
         [data-theme="amoled"] {
-            --bg-primary: #000000;
-            --bg-secondary: #0a0a0a;
-            --bg-tertiary: #111111;
+            --bg-terminal: #000000;
+            --bg-header: #050505;
             --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --accent-primary: #6366f1;
-            --accent-secondary: #8b5cf6;
-            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
-            --border-color: #27272a;
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --card-bg: #0a0a0a;
-            --input-bg: #111111;
-            --code-bg: #18181b;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --glow-effect: none;
-            --cyber-glow: none;
+            --text-secondary: #cccccc;
+            --text-dim: #666666;
+            --text-warning: #ffaa00;
+            --text-error: #ff3333;
+            --text-info: #00aaff;
+            --text-purple: #ff55ff;
+            --border-color: #ffffff22;
+            --glow-color: rgba(255, 255, 255, 0.15);
+            --cursor-blink: blink-white 1s step-end infinite;
+            --scanline-opacity: 0.02;
         }
 
-        /* MODO CYBERPUNK */
+        /* MODO CYBER */
         [data-theme="cyber"] {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-tertiary: #1a1a25;
+            --bg-terminal: #0a0010;
+            --bg-header: #12001a;
             --text-primary: #00ff88;
-            --text-secondary: #00cc6a;
-            --text-muted: #00994d;
-            --accent-primary: #ff00ff;
-            --accent-secondary: #00ffff;
-            --accent-gradient: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
-            --border-color: #00ff8833;
-            --shadow-color: rgba(0, 255, 136, 0.15);
-            --card-bg: #12121a;
-            --input-bg: #1a1a25;
-            --code-bg: #0f0f18;
-            --success: #00ff88;
-            --warning: #ffff00;
-            --error: #ff0055;
-            --glow-effect: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(255, 0, 255, 0.2);
+            --text-secondary: #00cc66;
+            --text-dim: #005533;
+            --text-warning: #ffee00;
+            --text-error: #ff0044;
+            --text-info: #00eeff;
+            --text-purple: #ff00aa;
+            --border-color: #00ff8844;
+            --glow-color: rgba(0, 255, 136, 0.6);
+            --cursor-blink: blink-cyber 0.8s step-end infinite;
+            --scanline-opacity: 0.05;
             --cyber-glow: 0 0 10px currentColor, 0 0 20px currentColor;
         }
 
-        /* ===== ESTILOS BASE ===== */
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes blink-dark { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes blink-white { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes blink-cyber { 0%, 100% { opacity: 1; text-shadow: 0 0 10px #00ff88; } 50% { opacity: 0.7; text-shadow: 0 0 20px #00ff88; } }
+
         * {
             margin: 0;
             padding: 0;
@@ -83,1810 +87,1471 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
+            font-family: 'Fira Code', 'JetBrains Mono', monospace;
+            background: var(--bg-terminal);
             color: var(--text-primary);
             min-height: 100vh;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
         }
 
-        /* ===== HEADER / HERO SECTION ===== */
-        .hero-section {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
+        /* Scanlines effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, var(--scanline-opacity)) 2px,
+                rgba(0, 0, 0, var(--scanline-opacity)) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        .hero-content {
-            max-width: 1400px;
-            margin: 0 auto;
+        /* ===== HEADER / BARRA SUPERIOR ===== */
+        .terminal-header {
+            background: var(--bg-header);
+            border-bottom: 2px solid var(--border-color);
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1.5rem;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .logo-container {
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 16px;
         }
 
-        .logo-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--accent-gradient);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            box-shadow: var(--glow-effect);
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .logo-text h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: 2rem;
-            font-weight: 900;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: var(--cyber-glow);
-        }
-
-        .logo-text p {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* ===== CONTROLES DE TEMA Y MOTOR ===== */
-        .controls-container {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .theme-switcher {
-            display: flex;
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            padding: 4px;
-            border: 1px solid var(--border-color);
-        }
-
-        .theme-btn {
-            padding: 10px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            border-radius: 8px;
+        .terminal-title {
             font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-shadow: var(--cyber-glow, none);
+        }
+
+        .terminal-title span {
+            color: var(--text-info);
+        }
+
+        .clock-display {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--text-warning);
+            background: var(--bg-terminal);
+            padding: 6px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            letter-spacing: 2px;
+            text-shadow: var(--cyber-glow, none);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
             display: flex;
             align-items: center;
             gap: 6px;
-            color: var(--text-secondary);
+            background: var(--bg-terminal);
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .control-label {
+            font-size: 11px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-right: 4px;
+        }
+
+        .theme-btn, .engine-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-dim);
+            padding: 5px 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 3px;
+        }
+
+        .theme-btn:hover, .engine-btn:hover {
+            color: var(--text-primary);
+            border-color: var(--border-color);
         }
 
         .theme-btn.active {
-            background: var(--accent-gradient);
-            color: white;
-            box-shadow: var(--glow-effect);
+            background: var(--text-primary);
+            color: var(--bg-terminal);
+            box-shadow: 0 0 10px var(--glow-color);
         }
 
-        .theme-btn:hover:not(.active) {
-            background: var(--border-color);
-        }
-
-        .engine-selector {
-            position: relative;
-        }
-
-        .engine-btn {
-            padding: 12px 24px;
-            background: var(--bg-tertiary);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-weight: 700;
-            font-family: 'Orbitron', monospace;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 200px;
-            justify-content: space-between;
-        }
-
-        .engine-btn:hover {
-            border-color: var(--accent-primary);
-            box-shadow: var(--glow-effect);
+        .engine-btn.active {
+            color: var(--text-info);
+            border-color: var(--text-info);
         }
 
         .engine-dropdown {
             position: absolute;
             top: calc(100% + 8px);
-            left: 0;
             right: 0;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 40px var(--shadow-color);
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-            overflow: hidden;
+            background: var(--bg-header);
+            border: 1px solid var(--text-primary);
+            border-radius: 4px;
+            min-width: 220px;
+            z-index: 2000;
+            display: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
         .engine-dropdown.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+            display: block;
         }
 
         .engine-option {
-            padding: 16px 20px;
+            padding: 10px 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .engine-option:last-child {
-            border-bottom: none;
+            transition: background 0.2s;
         }
 
         .engine-option:hover {
-            background: var(--bg-tertiary);
+            background: var(--border-color);
         }
 
         .engine-option.selected {
-            background: var(--accent-gradient);
-            color: white;
+            background: var(--text-primary);
+            color: var(--bg-terminal);
         }
 
-        .engine-name {
-            font-weight: 700;
-            font-family: 'Orbitron', monospace;
+        .engine-option-name {
+            font-weight: 600;
+            color: var(--text-info);
         }
 
-        .engine-version {
-            font-size: 12px;
-            opacity: 0.7;
-            font-family: 'Fira Code', monospace;
+        .engine-option-desc {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 2px;
         }
 
-        .engine-desc {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 4px;
+        .engine-selector-wrapper {
+            position: relative;
         }
 
-        /* ===== LAYOUT PRINCIPAL ===== */
-        .main-container {
+        /* ===== TERMINAL PRINCIPAL ===== */
+        .terminal-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 2rem;
+            padding: 20px;
+            min-height: calc(100vh - 60px);
         }
 
-        @media (max-width: 1024px) {
-            .main-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ===== SIDEBAR DE HERRAMIENTAS ===== */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .tool-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
+        .terminal-screen {
+            background: var(--bg-terminal);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.3), 0 0 30px var(--glow-color);
         }
 
-        .tool-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--accent-gradient);
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
+        .terminal-output {
+            padding: 20px;
+            max-height: calc(100vh - 180px);
+            overflow-y: auto;
+            line-height: 1.6;
         }
 
-        .tool-card:hover::before,
-        .tool-card.active::before {
-            transform: scaleY(1);
+        .terminal-output::-webkit-scrollbar {
+            width: 8px;
         }
 
-        .tool-card:hover,
-        .tool-card.active {
-            border-color: var(--accent-primary);
-            box-shadow: var(--glow-effect);
-            transform: translateX(4px);
+        .terminal-output::-webkit-scrollbar-track {
+            background: var(--bg-header);
         }
 
-        .tool-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--bg-tertiary);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
+        .terminal-output::-webkit-scrollbar-thumb {
+            background: var(--text-dim);
+            border-radius: 4px;
         }
 
-        .tool-card:hover .tool-icon,
-        .tool-card.active .tool-icon {
-            background: var(--accent-gradient);
+        /* ===== ESTILOS DE TEXTO TERMINAL ===== */
+        .output-line {
+            margin-bottom: 4px;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
 
-        .tool-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+        .text-green { color: var(--text-primary); }
+        .text-cyan { color: var(--text-info); }
+        .text-yellow { color: var(--text-warning); }
+        .text-red { color: var(--text-error); }
+        .text-purple { color: var(--text-purple); }
+        .text-dim { color: var(--text-dim); }
+        .text-bold { font-weight: 700; }
+
+        .ascii-art {
+            font-size: 11px;
+            line-height: 1.2;
             color: var(--text-primary);
+            text-shadow: 0 0 5px var(--glow-color);
         }
 
-        .tool-description {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.5;
+        .box-border {
+            border: 1px solid var(--text-primary);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 4px;
         }
 
-        /* ===== ÁREA DE CONTENIDO PRINCIPAL ===== */
-        .content-area {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 4px 24px var(--shadow-color);
-            min-height: 70vh;
-        }
-
-        .content-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .content-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.5rem;
-            font-weight: 700;
+        .menu-item {
+            padding: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .content-title::before {
-            content: '▸';
-            color: var(--accent-primary);
-            font-size: 1.2rem;
+        .menu-item:hover {
+            color: var(--text-warning);
+            padding-left: 10px;
+        }
+
+        .menu-number {
+            color: var(--text-info);
+            min-width: 25px;
+        }
+
+        .menu-icon {
+            min-width: 30px;
+        }
+
+        .menu-desc {
+            color: var(--text-dim);
+            font-size: 12px;
+        }
+
+        /* ===== INPUT DE COMANDOS ===== */
+        .input-area {
+            border-top: 2px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-header);
+        }
+
+        .prompt-symbol {
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 16px;
+            text-shadow: var(--cyber-glow, none);
+        }
+
+        .command-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            outline: none;
+            caret-color: var(--text-primary);
+        }
+
+        .command-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--text-primary);
+            animation: var(--cursor-blink);
+            vertical-align: middle;
+            margin-left: 2px;
         }
 
         /* ===== SECCIONES DE CONTENIDO ===== */
-        .section {
+        .section-content {
             display: none;
-            animation: fadeIn 0.4s ease;
         }
 
-        .section.active {
+        .section-content.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Formularios dentro del terminal */
+        .term-form {
+            margin: 15px 0;
         }
 
-        /* ===== FORMULARIOS E INPUTS ===== */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
+        .form-prompt {
+            color: var(--text-info);
+            margin-bottom: 8px;
             display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
-        .form-input,
-        .form-textarea,
-        .form-select {
+        .form-prompt::before {
+            content: '> ';
+            color: var(--text-warning);
+        }
+
+        .term-input, .term-textarea, .term-select {
             width: 100%;
-            padding: 14px 18px;
-            background: var(--input-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
+            background: var(--bg-header);
+            border: 1px solid var(--text-dim);
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-        }
-
-        .form-textarea {
-            min-height: 150px;
-            resize: vertical;
             font-family: 'Fira Code', monospace;
-            line-height: 1.6;
+            font-size: 13px;
+            padding: 10px 12px;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
-        .form-select {
-            cursor: pointer;
+        .term-input:focus, .term-textarea:focus, .term-select:focus {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 10px var(--glow-color);
         }
 
-        /* ===== BOTONES ===== */
-        .btn {
-            padding: 14px 28px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Inter', sans-serif;
+        .term-textarea {
+            min-height: 120px;
+            resize: vertical;
         }
 
-        .btn-primary {
-            background: var(--accent-gradient);
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
-        }
-
-        .btn-secondary {
-            background: var(--bg-tertiary);
+        .term-btn {
+            background: transparent;
+            border: 2px solid var(--text-primary);
             color: var(--text-primary);
-            border: 2px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-primary);
-            background: var(--accent-gradient);
-            color: white;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        /* ===== ÁREA DE RESULTADO / OUTPUT ===== */
-        .output-area {
-            background: var(--code-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            position: relative;
-        }
-
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .output-title {
-            font-weight: 700;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-top: 10px;
+            transition: all 0.2s;
+            border-radius: 4px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .copy-btn {
-            padding: 8px 16px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.2s ease;
+        .term-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-terminal);
+            box-shadow: 0 0 15px var(--glow-color);
         }
 
-        .copy-btn:hover {
-            background: var(--accent-primary);
-            color: white;
-            border-color: var(--accent-primary);
+        .term-btn.primary {
+            border-color: var(--text-info);
+            color: var(--text-info);
         }
 
-        .output-content {
-            font-family: 'Fira Code', monospace;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            color: var(--text-primary);
-            max-height: 500px;
+        .term-btn.primary:hover {
+            background: var(--text-info);
+            color: var(--bg-terminal);
+        }
+
+        /* Resultado/output area */
+        .result-box {
+            background: var(--bg-header);
+            border: 1px dashed var(--text-dim);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            max-height: 400px;
             overflow-y: auto;
         }
 
-        .output-content.ascii-art {
+        .result-box pre {
+            font-family: 'Fira Code', monospace;
             font-size: 12px;
-            line-height: 1.2;
-            color: var(--accent-primary);
-        }
-
-        /* Scrollbar personalizado */
-        .output-content::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .output-content::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-            border-radius: 4px;
-        }
-
-        .output-content::-webkit-scrollbar-thumb {
-            background: var(--accent-primary);
-            border-radius: 4px;
-        }
-
-        /* ===== CARACTERÍSTICAS ESPECIALES CYBER MODE ===== */
-        [data-theme="cyber"] .tool-card {
-            border-style: dashed;
-        }
-
-        [data-theme="cyber"] .output-area {
-            border-style: dashed;
-            animation: cyber-border 3s linear infinite;
-        }
-
-        @keyframes cyber-border {
-            0%, 100% { border-color: #00ff8833; }
-            33% { border-color: #ff00ff33; }
-            66% { border-color: #00ffff33; }
-        }
-
-        [data-theme="cyber"] .logo-icon {
-            animation: cyber-pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes cyber-pulse {
-            0%, 100% { 
-                box-shadow: 0 0 20px #00ff88, 0 0 40px #ff00ff;
-                transform: scale(1) rotate(0deg);
-            }
-            50% { 
-                box-shadow: 0 0 30px #00ffff, 0 0 60px #ff00ff;
-                transform: scale(1.05) rotate(5deg);
-            }
-        }
-
-        /* ===== SECCIÓN DE PLANIFICACIÓN ===== */
-        .planning-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .plan-card {
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: all 0.3s ease;
-        }
-
-        .plan-card:hover {
-            border-color: var(--accent-primary);
-            transform: translateY(-4px);
-        }
-
-        .plan-card-title {
-            font-weight: 700;
-            margin-bottom: 0.75rem;
-            color: var(--accent-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .plan-card-content {
-            font-size: 0.9rem;
+            white-space: pre-wrap;
+            word-break: break-word;
             color: var(--text-secondary);
         }
 
-        /* ===== FLUJOGRAMA VISUAL ===== */
-        .flowchart-container {
-            background: var(--code-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-top: 1.5rem;
-            overflow-x: auto;
+        .copy-hint {
+            font-size: 10px;
+            color: var(--text-dim);
+            text-align: right;
+            margin-top: 8px;
+            cursor: pointer;
         }
 
-        .flowchart {
+        .copy-hint:hover {
+            color: var(--text-info);
+        }
+
+        /* Status bar */
+        .status-bar {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px 20px;
+            background: var(--bg-header);
+            border-top: 1px solid var(--border-color);
+            font-size: 11px;
+            color: var(--text-dim);
+        }
+
+        .status-item {
+            display: flex;
             align-items: center;
-            gap: 1rem;
-            min-width: fit-content;
+            gap: 6px;
         }
 
-        .flow-node {
-            padding: 16px 32px;
-            background: var(--card-bg);
-            border: 2px solid var(--accent-primary);
-            border-radius: 8px;
-            font-weight: 600;
-            text-align: center;
-            min-width: 180px;
-            position: relative;
-            box-shadow: var(--glow-effect);
-        }
-
-        .flow-node.start-end {
-            border-radius: 30px;
-            background: var(--accent-gradient);
-            color: white;
-        }
-
-        .flow-node.decision {
-            transform: rotate(0deg);
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            padding: 30px 40px;
-            background: var(--warning);
-            color: #000;
-        }
-
-        .flow-arrow {
-            font-size: 24px;
-            color: var(--accent-primary);
-        }
-
-        .flow-branch {
-            display: flex;
-            gap: 4rem;
-            align-items: flex-start;
-        }
-
-        .flow-branch-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .branch-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-            background: var(--bg-tertiary);
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
-
-        /* ===== TAGS Y BADGES ===== */
-        .tag {
-            display: inline-block;
-            padding: 4px 12px;
-            background: var(--accent-gradient);
-            color: white;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-right: 6px;
-            margin-bottom: 6px;
-        }
-
-        .tag-outline {
-            background: transparent;
-            border: 1px solid var(--accent-primary);
-            color: var(--accent-primary);
-        }
-
-        /* ===== LOADING ANIMATION ===== */
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--accent-primary);
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-primary);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: pulse-dot 2s infinite;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        /* ===== RESPONSIVE ===== */
+        /* Responsive */
         @media (max-width: 768px) {
-            .hero-content {
+            .terminal-header {
                 flex-direction: column;
-                text-align: center;
+                align-items: stretch;
             }
 
-            .controls-container {
-                width: 100%;
+            .header-left, .header-right {
                 justify-content: center;
             }
 
-            .logo-container {
-                flex-direction: column;
+            .control-group {
+                flex-wrap: wrap;
+                justify-content: center;
             }
 
-            .content-area {
-                padding: 1.5rem;
+            .terminal-container {
+                padding: 10px;
             }
 
-            .engine-btn {
-                width: 100%;
+            .terminal-output {
+                padding: 15px;
+                font-size: 13px;
             }
         }
 
-        /* ===== ASCII ART DISPLAY ===== */
-        .ascii-preview {
-            background: #000;
-            color: #0f0;
-            padding: 2rem;
-            border-radius: 12px;
-            font-family: 'Fira Code', monospace;
-            font-size: 10px;
-            line-height: 1.1;
-            overflow-x: auto;
-            text-shadow: 0 0 5px #0f0;
+        /* Cyber mode extras */
+        [data-theme="cyber"] .terminal-header {
+            animation: cyber-glow-border 3s linear infinite;
         }
 
-        [data-theme="cyber"] .ascii-preview {
-            color: #00ff88;
-            text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
-            animation: ascii-flicker 0.1s infinite;
+        @keyframes cyber-glow-border {
+            0%, 100% { border-bottom-color: #00ff88; box-shadow: 0 2px 20px rgba(0,255,136,0.3); }
+            33% { border-bottom-color: #ff00ff; box-shadow: 0 2px 20px rgba(255,0,255,0.3); }
+            66% { border-bottom-color: #00ffff; box-shadow: 0 2px 20px rgba(0,255,255,0.3); }
         }
 
-        @keyframes ascii-flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.97; }
-        }
-
-        /* ===== TOOLTIP ===== */
-        .tooltip {
-            position: relative;
-        }
-
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
+        [data-theme="cyber"] .status-dot {
             background: var(--text-primary);
-            color: var(--bg-primary);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+            box-shadow: 0 0 10px var(--text-primary);
+        }
+
+        /* Typing animation */
+        .typing-effect {
+            overflow: hidden;
+            border-right: 2px solid var(--text-primary);
             white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-            pointer-events: none;
-            margin-bottom: 8px;
+            animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
         }
 
-        .tooltip:hover::after {
-            opacity: 1;
-            visibility: visible;
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
         }
 
-        /* ===== STATS BAR ===== */
-        .stats-bar {
-            display: flex;
-            gap: 2rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stat-value {
-            font-family: 'Orbitron', monospace;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--accent-primary);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
         }
     </style>
 </head>
-<body data-theme="light">
-    <!-- ===== HERO SECTION ===== -->
-    <header class="hero-section">
-        <div class="hero-content">
-            <div class="logo-container">
-                <div class="logo-icon">🧠</div>
-                <div class="logo-text">
-                    <h1>Mr. Prompt</h1>
-                    <p>Ingeniero de Prompts & Planificador Estratégico</p>
-                </div>
+<body data-theme="amoled">
+
+    <!-- ===== HEADER CON HORA Y CONTROLES ===== -->
+    <header class="terminal-header">
+        <div class="header-left">
+            <div class="terminal-title">
+                🧠 <span>MR.PROMPT</span>_TERMINAL.exe v2.0
+            </div>
+            <div class="clock-display" id="clockDisplay">
+                00:00:00
+            </div>
+        </div>
+
+        <div class="header-right">
+            <!-- Control de Tema -->
+            <div class="control-group">
+                <span class="control-label">THEME:</span>
+                <button class="theme-btn" data-theme="day" onclick="setTheme('day')">☀ DAY</button>
+                <button class="theme-btn active" data-theme="amoled" onclick="setTheme('amoled')">🌙 AMOLED</button>
+                <button class="theme-btn" data-theme="cyber" onclick="setTheme('cyber')">⚡ CYBER</button>
             </div>
 
-            <div class="controls-container">
-                <!-- Selector de Tema -->
-                <div class="theme-switcher">
-                    <button class="theme-btn active" data-theme="light" onclick="setTheme('light')">
-                        ☀️ Día
-                    </button>
-                    <button class="theme-btn" data-theme="amoled" onclick="setTheme('amoled')">
-                        🌙 AMOLED
-                    </button>
-                    <button class="theme-btn" data-theme="cyber" onclick="setTheme('cyber')">
-                        ⚡ Cyber
-                    </button>
-                </div>
-
-                <!-- Selector de Motor IA -->
-                <div class="engine-selector">
-                    <button class="engine-btn" id="currentEngine" onclick="toggleEngineDropdown()">
-                        <span id="engineNameDisplay">Aristarco 1.0</span>
-                        <span>▼</span>
-                    </button>
-                    <div class="engine-dropdown" id="engineDropdown">
-                        <div class="engine-option selected" data-engine="gemini" data-name="Aristarco" data-version="1.0" onclick="selectEngine(this)">
-                            <div>
-                                <div class="engine-name">⚡ Aristarco 1.0</div>
-                                <div class="engine-desc">Motor de razonamiento avanzado y creatividad</div>
-                            </div>
-                            <span class="engine-version">v1.0</span>
-                        </div>
-                        <div class="engine-option" data-engine="deepseek" data-name="Géminides" data-version="2.0" onclick="selectEngine(this)">
-                            <div>
-                                <div class="engine-name">🔮 Géminides 2.0</div>
-                                <div class="engine-desc">Motor de análisis profundo y lógica</div>
-                            </div>
-                            <span class="engine-version">v2.0</span>
-                        </div>
+            <!-- Control de Motor IA -->
+            <div class="control-group engine-selector-wrapper">
+                <span class="control-label">ENGINE:</span>
+                <button class="engine-btn active" id="currentEngineBtn" onclick="toggleEngineMenu()">
+                    ⚡ ARISTARCO 1.0 ▼
+                </button>
+                <div class="engine-dropdown" id="engineDropdown">
+                    <div class="engine-option selected" data-engine="gemini" data-name="ARISTARCO" data-ver="1.0" onclick="selectEngine(this)">
+                        <div class="engine-option-name">⚡ ARISTARCO 1.0</div>
+                        <div class="engine-option-desc">Motor Gemini - Creatividad & Razonamiento</div>
+                    </div>
+                    <div class="engine-option" data-engine="deepseek" data-name="GEMINIDES" data-ver="2.0" onclick="selectEngine(this)">
+                        <div class="engine-option-name">🔮 GEMINIDES 2.0</div>
+                        <div class="engine-option-desc">Motor DeepSeek - Análisis Profundo & Lógica</div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ===== CONTENIDO PRINCIPAL ===== -->
-    <main class="main-container">
-        <!-- SIDEBAR DE HERRAMIENTAS -->
-        <aside class="sidebar">
-            <div class="tool-card active" data-tool="prompt-engineer" onclick="switchTool('prompt-engineer')">
-                <div class="tool-icon">🔧</div>
-                <div class="tool-title">Ingeniero de Prompts</div>
-                <div class="tool-description">Crea prompts optimizados con estructura profesional y técnicas avanzadas</div>
-            </div>
-
-            <div class="tool-card" data-tool="planner" onclick="switchTool('planner')">
-                <div class="tool-icon">📋</div>
-                <div class="tool-title">Planificador Estratégico</div>
-                <div class="tool-description">Planifica proyectos, tareas y objetivos con metodologías probadas</div>
-            </div>
-
-            <div class="tool-card" data-tool="ascii-art" onclick="switchTool('ascii-art')">
-                <div class="tool-icon">🎨</div>
-                <div class="tool-title">Generador ASCII</div>
-                <div class="tool-description">Crea arte, diagramas y dibujos en formato texto ASCII</div>
-            </div>
-
-            <div class="tool-card" data-tool="flowchart" onclick="switchTool('flowchart')">
-                <div class="tool-icon">🔄</div>
-                <div class="tool-title">Creador de Flujogramas</div>
-                <div class="tool-description">Diseña flujogramas visuales para procesos y sistemas</div>
-            </div>
-
-            <div class="tool-card" data-tool="analyzer" onclick="switchTool('analyzer')">
-                <div class="tool-icon">🔍</div>
-                <div class="tool-title">Analizador de Contexto</div>
-                <div class="tool-description">Analiza y optimiza tus ideas antes de generar el prompt final</div>
-            </div>
-        </aside>
-
-        <!-- ÁREA DE CONTENIDO -->
-        <section class="content-area">
+    <!-- ===== TERMINAL PRINCIPAL ===== -->
+    <main class="terminal-container">
+        <div class="terminal-screen">
             
-            <!-- === INGENIERO DE PROMPTS === -->
-            <div class="section active" id="section-prompt-engineer">
-                <div class="content-header">
-                    <h2 class="content-title">Ingeniero de Prompts Avanzado</h2>
-                    <div class="stats-bar" style="border: none; padding: 0; margin: 0;">
-                        <span class="tag">Prompt Engineering</span>
-                        <span class="tag tag-outline">Chain-of-Thought</span>
-                        <span class="tag tag-outline">Few-Shot</span>
+            <!-- Área de Output/Salida -->
+            <div class="terminal-output" id="terminalOutput">
+                
+                <!-- MENÚ PRINCIPAL -->
+                <div class="section-content active" id="section-menu">
+                    <div class="output-line text-green text-bold ascii-art">
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║   ██████╗ ██╗   ██╗ █████╗ ███╗   ██╗████████╗ █████╗  ██████╗     ║
+║  ██╔════╝ ██║   ██║██╔══██╗████╗  ██║╚══██╔══╝██╔══██╗██╔════╝     ║
+║  ██║  ███╗██║   ██║███████║██╔██╗ ██║   ██║   ███████║██║  ███╗    ║
+║  ██║   ██║██║   ██║██╔══██║██║╚██╗██║   ██║   ██╔══██║██║   ██║    ║
+║  ╚██████╔╝╚██████╔╝██║  ██║██║ ╚████║   ██║   ██║  ██║╚██████╔╝    ║
+║   ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝     ║
+║                                                                   ║
+║              ██████╗ ███████╗██╗   ██╗██╗ ██████╗                 ║
+║             ██╔══██╗██╔════╝██║   ██║██║██╔═══██╗                ║
+║             ██║  ██║█████╗  ██║   ██║██║██║   ██║                ║
+║             ██║  ██║██╔══╝  ╚██╗ ██╔╝██║██║   ██║                ║
+║             ██████╔╝███████╗ ╚████╔╝ ██║╚██████╔╝                ║
+║             ╚═════╝ ╚══════╝  ╚═══╝  ╚═╝ ╚═════╝                 ║
+║                                                                   ║
+╠═══════════════════════════════════════════════════════════════════╣
+║  [SYSTEM] Ingeniero de Prompts & Planificador Estratégico         ║
+║  [ENGINE] Motor activo: <span class="text-cyan" id="menuEngineDisplay">ARISTARCO 1.0</span>                        ║
+║  [STATUS] Todos los sistemas operativos                            ║
+╚═══════════════════════════════════════════════════════════════════╝
+                    </div>
+
+                    <br><br>
+
+                    <div class="output-line text-yellow text-bold">┌─[ MENÚ PRINCIPAL ]──────────────────────────────────────┐</div><br>
+
+                    <div class="menu-item" onclick="navigateTo('prompt')">
+                        <span class="menu-number text-cyan">[01]</span>
+                        <span class="menu-icon">🔧</span>
+                        <span class="text-green text-bold">INGENIERO DE PROMPTS</span>
+                        <span class="menu-desc">| Generación avanzada de prompts optimizados</span>
+                    </div>
+
+                    <div class="menu-item" onclick="navigateTo('plan')">
+                        <span class="menu-number text-cyan">[02]</span>
+                        <span class="menu-icon">📋</span>
+                        <span class="text-green text-bold">PLANIFICADOR ESTRATÉGICO</span>
+                        <span class="menu-desc">| Planificación SMART y gestión de proyectos</span>
+                    </div>
+
+                    <div class="menu-item" onclick="navigateTo('ascii')">
+                        <span class="menu-number text-cyan">[03]</span>
+                        <span class="menu-icon">🎨</span>
+                        <span class="text-green text-bold">GENERADOR ASCII ART</span>
+                        <span class="menu-desc">| Arte, diagramas y dibujos en texto</span>
+                    </div>
+
+                    <div class="menu-item" onclick="navigateTo('flowchart')">
+                        <span class="menu-number text-cyan">[04]</span>
+                        <span class="menu-icon">🔄</span>
+                        <span class="text-green text-bold">CREADOR DE FLUJOGRAMAS</span>
+                        <span class="menu-desc">| Diagramación visual de procesos</span>
+                    </div>
+
+                    <div class="menu-item" onclick="navigateTo('analyzer')">
+                        <span class="menu-number text-cyan">[05]</span>
+                        <span class="menu-icon">🔍</span>
+                        <span class="text-green text-bold">ANALIZADOR DE CONTEXTO</span>
+                        <span class="menu-desc">| Pre-análisis y optimización de ideas</span>
+                    </div>
+
+                    <br>
+                    <div class="output-line text-yellow text-bold">└────────────────────────────────────────────────────────┘</div>
+
+                    <br><br>
+                    <div class="output-line text-dim">
+                        > Selecciona una opción escribiendo el número o haz clic<br>
+                        > Comandos disponibles: help, clear, back, exit, theme, engine<br>
+                        > Escribe tu comando abajo...
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">¿Qué deseas lograr? (Objetivo Principal)</label>
-                    <textarea class="form-textarea" id="promptObjective" placeholder="Ejemplo: Crear un sistema de chatbot para atención al cliente que pueda manejar consultas técnicas sobre productos electrónicos..."></textarea>
-                </div>
+                <!-- SECCIÓN: INGENIERO DE PROMPTS -->
+                <div class="section-content" id="section-prompt">
+                    <div class="output-line text-cyan text-bold">>>> MÓDULO: INGENIERO DE PROMPTS AVANZADO <<<</div>
+                    <div class="output-line text-dim">===============================================</div>
+                    <br>
 
-                <div class="form-group">
-                    <label class="form-label">Contexto y Requisitos Adicionales</label>
-                    <textarea class="form-textarea" id="promptContext" placeholder="Agrega detalles específicos: audiencia objetivo, tono deseado, restricciones, formato de salida, ejemplos de comportamiento esperado..."></textarea>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div class="form-group">
-                        <label class="form-label">Rol de la IA</label>
-                        <select class="form-select" id="promptRole">
-                            <option value="">Seleccionar rol...</option>
-                            <option value="experto">Experto Técnico Especializado</option>
-                            <option value="creativo">Director Creativo</option>
-                            <option value="analista">Analista de Datos Senior</option>
-                            <option value="profesor">Educador/Mentor Experto</option>
-                            <option value="desarrollador">Ingeniero de Software</option>
-                            <option value="estratega">Consultor Estratégico</option>
-                            <option value="personalizado">Personalizado (especificar abajo)</option>
-                        </select>
+                    <div class="term-form">
+                        <label class="form-prompt">OBJETIVO PRINCIPAL ¿Qué deseas lograr?</label>
+                        <textarea class="term-textarea" id="promptObjective" placeholder="Describe detalladamente lo que quieres que la IA genere..."></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Complejidad del Prompt</label>
-                        <select class="form-select" id="promptComplexity">
-                            <option value="basico">Básico - Directo y conciso</option>
-                            <option value="intermedio" selected>Intermedio - Estructurado</option>
-                            <option value="avanzado">Avanzado - Multi-capa</option>
-                            <option value="experto">Experto - Optimización máxima</option>
-                        </select>
+                    <div class="term-form">
+                        <label class="form-prompt">CONTEXTO ADICIONAL (requisitos, restricciones, ejemplos)</label>
+                        <textarea class="term-textarea" id="promptContext" placeholder="Agrega contexto extra para refinar el prompt..."></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Formato de Salida</label>
-                        <select class="form-select" id="promptOutput">
-                            <option value="texto">Texto estructurado</option>
-                            <option value="markdown">Markdown formateado</option>
-                            <option value="codigo">Código/JSON</option>
-                            <option value="lista">Lista numerada</option>
-                            <option value="tabla">Tabla comparativa</option>
-                        </select>
-                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="term-form">
+                            <label class="form-prompt">ROL DE LA IA</label>
+                            <select class="term-select" id="promptRole">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="experto">Experto Técnico Especializado</option>
+                                <option value="creativo">Director Creativo</option>
+                                <option value="analista">Analista de Datos Senior</option>
+                                <option value="profesor">Educador/Mentor Experto</option>
+                                <option value="desarrollador">Ingeniero de Software</option>
+                                <option value="estratega">Consultor Estratégico</option>
+                            </select>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Tono y Estilo</label>
-                        <select class="form-select" id="promptTone">
-                            <option value="profesional">Profesional y formal</option>
-                            <option value="amigable">Amigable y accesible</option>
-                            <option value="tecnico">Técnico y detallado</option>
-                            <option value="creativo">Creativo e innovador</option>
-                            <option value="persuasivo">Persuasivo y convincente</option>
-                        </select>
-                    </div>
-                </div>
+                        <div class="term-form">
+                            <label class="form-prompt">COMPLEJIDAD</label>
+                            <select class="term-select" id="promptComplexity">
+                                <option value="basico">Básico - Directo</option>
+                                <option value="intermedio" selected>Intermedio - Estructurado</option>
+                                <option value="avanzado">Avanzado - Multi-capa</option>
+                                <option value="experto">Experto - Máxima Optimización</option>
+                            </select>
+                        </div>
 
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="generateAdvancedPrompt()">
-                        ⚡ Generar Prompt Profesional
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearForm('prompt')">
-                        🗑️ Limpiar Campos
-                    </button>
-                </div>
-
-                <div class="output-area" id="promptOutputArea" style="display: none;">
-                    <div class="output-header">
-                        <span class="output-title">📝 Prompt Optimizado</span>
-                        <button class="copy-btn" onclick="copyToClipboard('promptResult')">📋 Copiar</button>
-                    </div>
-                    <pre class="output-content" id="promptResult"></pre>
-                </div>
-            </div>
-
-            <!-- === PLANIFICADOR ESTRATÉGICO === -->
-            <div class="section" id="section-planner">
-                <div class="content-header">
-                    <h2 class="content-title">Planificador Estratégico</h2>
-                    <span class="tag">Metodología SMART</span>
-                    <span class="tag tag-outline">GTD</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Proyecto o Objetivo a Planificar</label>
-                    <textarea class="form-textarea" id="projectGoal" placeholder="Describe tu proyecto o objetivo principal: ¿Qué quieres lograr? ¿Para qué? ¿Cuándo lo necesitas?"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Recursos Disponibles</label>
-                    <textarea class="form-textarea" id="projectResources" placeholder="Equipo, presupuesto, herramientas, tiempo disponible, conocimientos previos..."></textarea>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-                    <div class="form-group">
-                        <label class="form-label">Tipo de Proyecto</label>
-                        <select class="form-select" id="projectType">
-                            <option value="software">Desarrollo de Software</option>
-                            <option value="marketing">Marketing/Campaña</option>
-                            <option value="negocio">Plan de Negocio</option>
-                            <option value="educacion">Proyecto Educativo</option>
-                            <option value="investigacion">Investigación</option>
-                            <option value="evento">Organización de Evento</option>
-                            <option value="personal">Desarrollo Personal</option>
-                            <option value="otro">Otro</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Plazo Estimado</label>
-                        <select class="form-select" id="projectTimeline">
-                            <option value="diario">Diario</option>
-                            <option value="semanal">Semanal</option>
-                            <option value="mensual">Mensual</option>
-                            <option value="trimestral">Trimestral</option>
-                            <option value="semestral">Semestral</option>
-                            <option value="anual">Anual</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="generatePlan()">
-                        📊 Generar Plan Estratégico
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearForm('plan')">
-                        🗑️ Limpiar
-                    </button>
-                </div>
-
-                <div class="output-area" id="planOutputArea" style="display: none;">
-                    <div class="output-header">
-                        <span class="output-title">📋 Plan Detallado</span>
-                        <button class="copy-btn" onclick="copyToClipboard('planResult')">📋 Copiar</button>
-                    </div>
-                    <div class="output-content" id="planResult"></div>
-                </div>
-            </div>
-
-            <!-- === GENERADOR ASCII ART === -->
-            <div class="section" id="section-ascii-art">
-                <div class="content-header">
-                    <h2 class="content-title">Generador de Arte ASCII</h2>
-                    <span class="tag">ASCII Art</span>
-                    <span class="tag tag-outline">Diagramas</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">¿Qué deseas crear?</label>
-                    <input type="text" class="form-input" id="asciiSubject" placeholder="Ejemplo: Un robot futurista, un gato, un cohete espacial, logo corporativo...">
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div class="form-group">
-                        <label class="form-label">Estilo de Arte</label>
-                        <select class="form-select" id="asciiStyle">
-                            <option value="figlet">Figlet (Texto grande)</option>
-                            <option value="dibujo">Dibujo/Diagrama</option>
-                            <option value="logo">Logo/Emblema</option>
-                            <option value="personaje">Personaje/Criatura</option>
-                            <option value="objeto">Objeto/Máquina</option>
-                            <option value="paisaje">Paisaje/Escena</option>
-                            <option value="interfaz">Interfaz/UI Mockup</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Complejidad</label>
-                        <select class="form-select" id="asciiComplexity">
-                            <option value="simple">Simple (pequeño)</option>
-                            <option value="medium" selected>Mediano (detallado)</option>
-                            <option value="complex">Complejo (elaborado)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Ancho Aproximado</label>
-                        <select class="form-select" id="asciiWidth">
-                            <option value="40">40 caracteres</option>
-                            <option value="60" selected>60 caracteres</option>
-                            <option value="80">80 caracteres</option>
-                            <option value="100">100 caracteres</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="generateASCII()">
-                        🎨 Generar ASCII Art
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearForm('ascii')">
-                        🗑️ Limpiar
-                    </button>
-                </div>
-
-                <div class="output-area" id="asciiOutputArea" style="display: none;">
-                    <div class="output-header">
-                        <span class="output-title">🖼️ Arte ASCII Generado</span>
-                        <button class="copy-btn" onclick="copyToClipboard('asciiResult')">📋 Copiar</button>
-                    </div>
-                    <pre class="output-content ascii-art" id="asciiResult"></pre>
-                </div>
-            </div>
-
-            <!-- === CREADOR DE FLUJOGRAMAS === -->
-            <div class="section" id="section-flowchart">
-                <div class="content-header">
-                    <h2 class="content-title">Creador de Flujogramas</h2>
-                    <span class="tag">Flujo Visual</span>
-                    <span class="tag tag-outline">Procesos</span>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Proceso o Sistema a Diagramar</label>
-                    <textarea class="form-textarea" id="flowProcess" placeholder="Describe el proceso paso a paso: inicio, decisiones, acciones, condiciones, fin...&#10;&#10;Ejemplo: Sistema de login de usuario → Verificar credenciales → ¿Son correctas? → SI: Acceder al dashboard | NO: Mostrar error y reintentar"></textarea>
-                </div>
-
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div class="form-group">
-                        <label class="form-label">Tipo de Flujo</label>
-                        <select class="form-select" id="flowType">
-                            <option value="secuencial">Secuencial (lineal)</option>
-                            <option value="decision">Con Decisiones (si/no)</option>
-                            <option value="bucle">Con Bucles/Repeticiones</option>
-                            <option value="paralelo">Paralelo (múltiples caminos)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Nivel de Detalle</label>
-                        <select class="form-select" id="flowDetail">
-                            <option value="alto">Alto nivel (resumen)</option>
-                            <option value="medio" selected>Medio (estándar)</option>
-                            <option value="bajo">Bajo nivel (detallado)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="generateFlowchart()">
-                        🔄 Generar Flujograma
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearForm('flow')">
-                        🗑️ Limpiar
-                    </button>
-                </div>
-
-                <div class="output-area" id="flowOutputArea" style="display: none;">
-                    <div class="output-header">
-                        <span class="output-title">📊 Flujograma Visual</span>
-                        <div>
-                            <button class="copy-btn" onclick="copyToClipboard('flowAscii')">📋 Copiar ASCII</button>
-                            <button class="copy-btn" onclick="toggleFlowView()">👁️ Cambiar Vista</button>
+                        <div class="term-form">
+                            <label class="form-prompt">FORMATO SALIDA</label>
+                            <select class="term-select" id="promptOutput">
+                                <option value="texto">Texto Estructurado</option>
+                                <option value="markdown">Markdown</option>
+                                <option value="codigo">Código/JSON</option>
+                                <option value="lista">Lista Numerada</option>
+                            </select>
                         </div>
                     </div>
-                    
-                    <!-- Vista Visual -->
-                    <div class="flowchart-container" id="flowVisualView" style="display: block;"></div>
-                    
-                    <!-- Vista ASCII -->
-                    <pre class="output-content ascii-art" id="flowAscii" style="display: none;"></pre>
-                </div>
-            </div>
 
-            <!-- === ANALIZADOR DE CONTEXTO === -->
-            <div class="section" id="section-analyzer">
-                <div class="content-header">
-                    <h2 class="content-title">Analizador de Contexto</h2>
-                    <span class="tag">Pre-Análisis</span>
-                    <span class="tag tag-outline">Optimización</span>
-                </div>
+                    <button class="term-btn primary" onclick="generatePrompt()">⚡ GENERAR PROMPT</button>
+                    <button class="term-btn" onclick="clearSection('prompt')">🗑 LIMPIAR</button>
+                    <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
 
-                <div class="form-group">
-                    <label class="form-label">Tu Idea o Concepto (sin procesar)</label>
-                    <textarea class="form-textarea" id="analyzeInput" placeholder="Escribe tu idea tal como se te ocurrió, sin preocuparte por la estructura...&#10;&#10;Ejemplo: Quiero hacer una app que ayude a la gente a organizarse mejor, tipo calendario pero más inteligente que aprenda de mis hábitos..."></textarea>
-                </div>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="analyzeContext()">
-                        🔍 Analizar y Optimizar
-                    </button>
-                    <button class="btn btn-secondary" onclick="clearForm('analyze')">
-                        🗑️ Limpiar
-                    </button>
-                </div>
-
-                <div class="output-area" id="analyzeOutputArea" style="display: none;">
-                    <div class="output-header">
-                        <span class="output-title">📈 Análisis de Contexto</span>
-                        <button class="copy-btn" onclick="copyToClipboard('analyzeResult')">📋 Copiar Análisis</button>
+                    <div class="result-box" id="promptResultBox" style="display:none;">
+                        <pre id="promptResult"></pre>
+                        <div class="copy-hint" onclick="copyResult('promptResult')">[ Click para copiar al portapapeles ]</div>
                     </div>
-                    <div class="output-content" id="analyzeResult"></div>
                 </div>
+
+                <!-- SECCIÓN: PLANIFICADOR -->
+                <div class="section-content" id="section-plan">
+                    <div class="output-line text-cyan text-bold">>>> MÓDULO: PLANIFICADOR ESTRATÉGICO <<<</div>
+                    <div class="output-line text-dim">==============================================</div>
+                    <br>
+
+                    <div class="term-form">
+                        <label class="form-prompt">PROYECTO U OBJETIVO A PLANIFICAR</label>
+                        <textarea class="term-textarea" id="planGoal" placeholder="¿Qué quieres lograr? ¿Para qué? ¿Cuándo?"></textarea>
+                    </div>
+
+                    <div class="term-form">
+                        <label class="form-prompt">RECURSOS DISPONIBLES</label>
+                        <textarea class="term-textarea" id="planResources" placeholder="Equipo, presupuesto, herramientas, tiempo..."></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div class="term-form">
+                            <label class="form-prompt">TIPO PROYECTO</label>
+                            <select class="term-select" id="planType">
+                                <option value="software">Desarrollo Software</option>
+                                <option value="marketing">Marketing/Campaña</option>
+                                <option value="negocio">Plan de Negocio</option>
+                                <option value="educacion">Proyecto Educativo</option>
+                                <option value="personal">Desarrollo Personal</option>
+                            </select>
+                        </div>
+
+                        <div class="term-form">
+                            <label class="form-prompt">PLAZO</label>
+                            <select class="term-select" id="planTimeline">
+                                <option value="semanal">Semanal</option>
+                                <option value="mensual" selected>Mensual</option>
+                                <option value="trimestral">Trimestral</option>
+                                <option value="anual">Anual</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="term-btn primary" onclick="generatePlan()">📊 GENERAR PLAN</button>
+                    <button class="term-btn" onclick="clearSection('plan')">🗑 LIMPIAR</button>
+                    <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
+
+                    <div class="result-box" id="planResultBox" style="display:none;">
+                        <pre id="planResult"></pre>
+                        <div class="copy-hint" onclick="copyResult('planResult')">[ Click para copiar al portapapeles ]</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: ASCII ART -->
+                <div class="section-content" id="section-ascii">
+                    <div class="output-line text-cyan text-bold">>>> MÓDULO: GENERADOR ASCII ART <<<</div>
+                    <div class="output-line text-dim">========================================</div>
+                    <br>
+
+                    <div class="term-form">
+                        <label class="form-prompt">¿QUÉ DESEAS CREAR?</label>
+                        <input type="text" class="term-input" id="asciiSubject" placeholder="Ejemplo: Un robot, un gato, un cohete, logo...">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                        <div class="term-form">
+                            <label class="form-prompt">ESTILO</label>
+                            <select class="term-select" id="asciiStyle">
+                                <option value="figlet">Figlet (Texto Grande)</option>
+                                <option value="dibujo">Dibujo/Diagrama</option>
+                                <option value="logo">Logo/Emblema</option>
+                                <option value="personaje">Personaje</option>
+                                <option value="objeto">Objeto/Máquina</option>
+                            </select>
+                        </div>
+
+                        <div class="term-form">
+                            <label class="form-prompt">COMPLEJIDAD</label>
+                            <select class="term-select" id="asciiComplexity">
+                                <option value="simple">Simple</option>
+                                <option value="medium" selected>Mediano</option>
+                                <option value="complex">Complejo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="term-btn primary" onclick="generateASCII()">🎨 GENERAR ASCII</button>
+                    <button class="term-btn" onclick="clearSection('ascii')">🗑 LIMPIAR</button>
+                    <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
+
+                    <div class="result-box" id="asciiResultBox" style="display:none;">
+                        <pre class="ascii-art" id="asciiResult"></pre>
+                        <div class="copy-hint" onclick="copyResult('asciiResult')">[ Click para copiar al portapapeles ]</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: FLUJOGRAMAS -->
+                <div class="section-content" id="section-flowchart">
+                    <div class="output-line text-cyan text-bold">>>> MÓDULO: CREADOR DE FLUJOGRAMAS <<<</div>
+                    <div class="output-line text-dim">===========================================</div>
+                    <br>
+
+                    <div class="term-form">
+                        <label class="form-prompt">PROCESO O SISTEMA A DIAGRAMAR</label>
+                        <textarea class="term-textarea" id="flowProcess" placeholder="Describe los pasos: inicio → acciones → decisiones → fin..."></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
+                        <div class="term-form">
+                            <label class="form-prompt">TIPO FLUJO</label>
+                            <select class="term-select" id="flowType">
+                                <option value="secuencial">Secuencial (Lineal)</option>
+                                <option value="decision">Con Decisiones</option>
+                                <option value="bucle">Con Bucles</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="term-btn primary" onclick="generateFlowchart()">🔄 GENERAR FLUJOGRAMA</button>
+                    <button class="term-btn" onclick="clearSection('flowchart')">🗑 LIMPIAR</button>
+                    <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
+
+                    <div class="result-box" id="flowResultBox" style="display:none;">
+                        <pre class="ascii-art" id="flowResult"></pre>
+                        <div class="copy-hint" onclick="copyResult('flowResult')">[ Click para copiar al portapapeles ]</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: ANALIZADOR -->
+                <div class="section-content" id="section-analyzer">
+                    <div class="output-line text-cyan text-bold">>>> MÓDULO: ANALIZADOR DE CONTEXTO <<<</div>
+                    <div class="output-line text-dim">==========================================</div>
+                    <br>
+
+                    <div class="term-form">
+                        <label class="form-prompt">TU IDEA O CONCEPTO (sin procesar)</label>
+                        <textarea class="term-textarea" id="analyzeInput" placeholder="Escribe tu idea tal como se te ocurrió..."></textarea>
+                    </div>
+
+                    <button class="term-btn primary" onclick="analyzeContext()">🔍 ANALIZAR Y OPTIMIZAR</button>
+                    <button class="term-btn" onclick="clearSection('analyzer')">🗑 LIMPIAR</button>
+                    <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
+
+                    <div class="result-box" id="analyzeResultBox" style="display:none;">
+                        <pre id="analyzeResult"></pre>
+                        <div class="copy-hint" onclick="copyResult('analyzeResult')">[ Click para copiar al portapapeles ]</div>
+                    </div>
+                </div>
+
             </div>
 
-        </section>
+            <!-- INPUT DE COMANDOS -->
+            <div class="input-area">
+                <span class="prompt-symbol">MR:PROMPT~$</span>
+                <input type="text" class="command-input" id="cmdInput" 
+                       placeholder="Escribe comando o selecciona opción..." 
+                       onkeypress="handleCommand(event)"
+                       autofocus>
+                <span class="cursor"></span>
+            </div>
+
+            <!-- STATUS BAR -->
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="status-dot"></span>
+                    <span>SYSTEM: ONLINE</span>
+                </div>
+                <div class="status-item">
+                    <span>ENGINE: <span class="text-cyan" id="statusEngine">ARISTARCO 1.0</span></span>
+                </div>
+                <div class="status-item">
+                    <span>MODULE: <span class="text-yellow" id="statusModule">MENU</span></span>
+                </div>
+                <div class="status-item">
+                    <span>v2.0 | © MR.PROMPT</span>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- ===== JAVASCRIPT ===== -->
     <script>
         // ===== CONFIGURACIÓN GLOBAL =====
-        let currentTheme = 'light';
-        let currentEngine = { name: 'Aristarco', version: '1.0', type: 'gemini' };
-        let currentTool = 'prompt-engineer';
+        let currentTheme = 'amoled';
+        let currentEngine = { name: 'ARISTARCO', version: '1.0', type: 'gemini' };
+        let currentModule = 'MENU';
+
+        // ===== RELOJ EN TIEMPO REAL =====
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const timeString = `${hours}:${minutes}:${seconds}`;
+            
+            document.getElementById('clockDisplay').textContent = timeString;
+        }
+        
+        setInterval(updateClock, 1000);
+        updateClock();
 
         // ===== SISTEMA DE TEMAS =====
         function setTheme(theme) {
             currentTheme = theme;
             document.body.setAttribute('data-theme', theme);
             
-            // Actualizar botones activos
             document.querySelectorAll('.theme-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.theme === theme);
             });
-
-            // Guardar preferencia
+            
             localStorage.setItem('mrprompt-theme', theme);
+            printSystemMessage(`[SYSTEM] Tema cambiado a: ${theme.toUpperCase()}`);
         }
 
         // ===== SELECTOR DE MOTOR IA =====
-        function toggleEngineDropdown() {
-            const dropdown = document.getElementById('engineDropdown');
-            dropdown.classList.toggle('show');
+        function toggleEngineMenu() {
+            document.getElementById('engineDropdown').classList.toggle('show');
         }
 
         function selectEngine(option) {
-            const engineName = option.dataset.name;
-            const engineVersion = option.dataset.version;
-            const engineType = option.dataset.engine;
+            const name = option.dataset.name;
+            const ver = option.dataset.ver;
+            const type = option.dataset.engine;
 
-            currentEngine = {
-                name: engineName,
-                version: engineVersion,
-                type: engineType
-            };
+            currentEngine = { name, version: ver, type };
+            
+            document.getElementById('currentEngineBtn').textContent = 
+                `${type === 'gemini' ? '⚡' : '🔮'} ${name} ${ver} ▼`;
+            document.getElementById('menuEngineDisplay').textContent = `${name} ${ver}`;
+            document.getElementById('statusEngine').textContent = `${name} ${ver}`;
 
-            document.getElementById('engineNameDisplay').textContent = `${engineName} ${engineVersion}`;
-            document.getElementById('currentEngine').innerHTML = `
-                <span>${engineName} ${engineVersion}</span>
-                <span>▼</span>
-            `;
-
-            // Actualizar selección visual
             document.querySelectorAll('.engine-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
             option.classList.add('selected');
 
-            // Cerrar dropdown
-            toggleEngineDropdown();
-
-            // Guardar preferencia
+            toggleEngineMenu();
             localStorage.setItem('mrprompt-engine', JSON.stringify(currentEngine));
+            
+            printSystemMessage(`[ENGINE] Motor activado: ${name} ${ver} (${type === 'gemini' ? 'Gemini' : 'DeepSeek'})`);
         }
 
         // Cerrar dropdown al hacer clic fuera
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('.engine-selector')) {
+            if (!e.target.closest('.engine-selector-wrapper')) {
                 document.getElementById('engineDropdown').classList.remove('show');
             }
         });
 
-        // ===== NAVEGACIÓN DE HERRAMIENTAS =====
-        function switchTool(toolId) {
-            currentTool = toolId;
-
-            // Actualizar cards activas
-            document.querySelectorAll('.tool-card').forEach(card => {
-                card.classList.toggle('active', card.dataset.tool === toolId);
+        // ===== NAVEGACIÓN ENTRE SECCIONES =====
+        function navigateTo(section) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section-content').forEach(s => {
+                s.classList.remove('active');
             });
-
-            // Mostrar sección correspondiente
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(`section-${toolId}`).classList.add('active');
+            
+            // Mostrar sección objetivo
+            const targetId = section === 'menu' ? 'section-menu' : `section-${section}`;
+            document.getElementById(targetId).classList.add('active');
+            
+            // Actualizar estado
+            currentModule = section.toUpperCase();
+            document.getElementById('statusModule').textContent = currentModule;
+            
+            // Scroll al inicio del output
+            document.getElementById('terminalOutput').scrollTop = 0;
         }
 
-        // ===== GENERADOR DE PROMPTS AVANZADO =====
-        function generateAdvancedPrompt() {
+        // ===== MANEJO DE COMANDOS DEL INPUT =====
+        function handleCommand(event) {
+            if (event.key === 'Enter') {
+                const input = event.target.value.trim().toLowerCase();
+                
+                if (input === '') return;
+
+                // Procesar comandos
+                switch(input) {
+                    case '1':
+                    case '01':
+                    case 'prompt':
+                        navigateTo('prompt');
+                        break;
+                    case '2':
+                    case '02':
+                    case 'plan':
+                        navigateTo('plan');
+                        break;
+                    case '3':
+                    case '03':
+                    case 'ascii':
+                        navigateTo('ascii');
+                        break;
+                    case '4':
+                    case '04':
+                    case 'flowchart':
+                    case 'flow':
+                        navigateTo('flowchart');
+                        break;
+                    case '5':
+                    case '05':
+                    case 'analyze':
+                    case 'analyzer':
+                        navigateTo('analyzer');
+                        break;
+                    case 'menu':
+                    case 'home':
+                    case 'back':
+                        navigateTo('menu');
+                        break;
+                    case 'help':
+                        showHelp();
+                        break;
+                    case 'clear':
+                    case 'cls':
+                        clearTerminal();
+                        break;
+                    case 'exit':
+                        printSystemMessage('[SYSTEM] ¡Gracias por usar Mr. Prompt! Hasta pronto.');
+                        break;
+                    default:
+                        if (input.startsWith('theme ')) {
+                            const theme = input.split(' ')[1];
+                            setTheme(theme);
+                        } else if (input.startsWith('engine ')) {
+                            const eng = input.split(' ')[1];
+                            if (eng === '1' || eng === 'aristarco' || eng === 'gemini') {
+                                selectEngine(document.querySelector('[data-engine="gemini"]'));
+                            } else if (eng === '2' || eng === 'geminides' || eng === 'deepseek') {
+                                selectEngine(document.querySelector('[data-engine="deepseek"]'));
+                            }
+                        } else {
+                            printError(`Comando no reconocido: "${event.target.value}". Escribe "help" para ayuda.`);
+                        }
+                }
+                
+                event.target.value = '';
+            }
+        }
+
+        function showHelp() {
+            alert(`╔═══════════════════════════════════════╗
+║       MR.PROMPT - AYUDA DE COMANDOS      ║
+╠═══════════════════════════════════════╣
+║  NAVEGACIÓN:                           ║
+║    1/prompt  → Ingeniero de Prompts    ║
+║    2/plan     → Planificador           ║
+║    3/ascii    → Generador ASCII        ║
+║    4/flow     → Flujogramas            ║
+║    5/analyze  → Analizador             ║
+║    menu/back  → Volver al menú         ║
+║                                       ║
+║  SISTEMA:                              ║
+║    clear/cls  → Limpiar pantalla       ║
+║    help       → Esta ayuda             ║
+║    exit       → Salir                  ║
+║    theme X    → Cambiar tema           ║
+║    engine X   → Cambiar motor          ║
+╚═══════════════════════════════════════╝`);
+        }
+
+        function clearTerminal() {
+            // Podríamos limpiar el output, pero mejor recargar a menu
+            navigateTo('menu');
+        }
+
+        // ===== FUNCIONES DE SALIDA EN TERMINAL =====
+        function printSystemMessage(msg) {
+            console.log(`%c${msg}`, 'color: #00ff00;');
+        }
+
+        function printError(msg) {
+            console.error(msg);
+            alert(`[ERROR] ${msg}`);
+        }
+
+        // ===== GENERADOR DE PROMPTS =====
+        function generatePrompt() {
             const objective = document.getElementById('promptObjective').value.trim();
             const context = document.getElementById('promptContext').value.trim();
             const role = document.getElementById('promptRole').value;
             const complexity = document.getElementById('promptComplexity').value;
-            const output = document.getElementById('promptOutput').value;
-            const tone = document.getElementById('promptTone').value;
+            const outputFormat = document.getElementById('promptOutput').value;
 
             if (!objective) {
-                alert('Por favor, describe el objetivo principal de tu prompt.');
+                alert('[ERROR] Por favor, ingresa el objetivo principal.');
                 return;
             }
 
-            // Construir prompt optimizado según configuración
             let prompt = '';
-            const timestamp = new Date().toLocaleString();
 
-            prompt += `╔══════════════════════════════════════════════════════════════╗\n`;
-            prompt += `║           PROMPT OPTIMIZADO - MR. PROMPT ENGINEER            ║\n`;
-            prompt += `║              Motor: ${currentEngine.name} v${currentEngine.version.padEnd(19)}║\n`;
-            prompt += `╚══════════════════════════════════════════════════════════════╝\n\n`;
+            prompt += `╔${'═'.repeat(58)}╗\n`;
+            prompt += `║     PROMPT OPTIMIZADO - MR.PROMPT ENGINEER v2.0      ║\n`;
+            prompt += `║     Motor: ${currentEngine.name.padEnd(10)} v${currentEngine.version.padEnd(37)}║\n`;
+            prompt += `╚${'═'.repeat(58)}╝\n\n`;
 
-            // Rol del sistema
-            prompt += `【 CONFIGURACIÓN DEL SISTEMA 】\n`;
-            prompt += `┌─────────────────────────────────────────────────────────────┐\n`;
+            // Configuración del sistema
+            prompt += `[CONFIGURACIÓN DEL SISTEMA]\n`;
+            prompt += `${'─'.repeat(56)}\n`;
             
             const roles = {
-                'experto': 'Eres un EXPERTO TÉCNICO ESPECIALIZADO con 20+ años de experiencia',
-                'creativo': 'Eres un DIRECTOR CREATIVO galardonado con visión innovadora',
-                'analista': 'Eres un ANALISTA DE DATOS SENIOR con metodología rigurosa',
-                'profesor': 'Eres un EDUCADOR/MENTOR EXPerto en pedagogía moderna',
-                'desarrollador': 'Eres un INGENIERO DE SOFTWARE con arquitectura de sistemas',
-                'estratega': 'Eres un CONSULTOR ESTRATÉGICO de nivel ejecutivo',
-                'personalizado': ''
+                'experto': 'EXPERTO TÉCNICO ESPECIALIZADO (20+ años experiencia)',
+                'creativo': 'DIRECTOR CREATIVO galardonado',
+                'analista': 'ANALISTA DE DATOS SENIOR',
+                'profesor': 'EDUCADOR/MENTOR EXPERTO',
+                'desarrollador': 'INGENIERO DE SOFTWARE',
+                'estratega': 'CONSULTOR ESTRATÉGICO'
             };
 
             if (role && roles[role]) {
                 prompt += `│ ROL ASIGNADO: ${roles[role]}\n`;
             }
-            prompt += `│ TONO: ${tone.toUpperCase()}\n`;
-            prompt += `│ FORMATO DE SALIDA: ${output.toUpperCase()}\n`;
-            prompt += `│ NIVEL DE COMPLEJIDAD: ${complexity.toUpperCase()}\n`;
-            prompt += `└─────────────────────────────────────────────────────────────┘\n\n`;
+            prompt += `│ COMPLEJIDAD: ${complexity.toUpperCase()}\n`;
+            prompt += `│ FORMATO: ${outputFormat.toUpperCase()}\n`;
+            prompt += `${'─'.repeat(56)}\n\n`;
 
-            // Instrucciones base según complejidad
+            // Instrucciones según complejidad
             const instructions = {
                 'basico': [
-                    'Responde de manera directa y concisa.',
-                    'Enfócate en el objetivo principal.'
+                    '▸ Responde de manera directa y concisa',
+                    '▸ Enfócate en el objetivo principal'
                 ],
                 'intermedio': [
-                    'Aplica razonamiento paso a paso (Chain-of-Thought).',
-                    'Estructura tu respuesta de forma lógica.',
-                    'Incluye ejemplos cuando sea relevante.',
-                    'Verifica la coherencia de tu respuesta.'
+                    '▸ Aplica razonamiento paso a paso (Chain-of-Thought)',
+                    '▸ Estructura tu respuesta de forma lógica',
+                    '▸ Incluye ejemplos cuando sea relevante',
+                    '▸ Verifica coherencia antes de responder'
                 ],
                 'avanzado': [
-                    'Aplica Chain-of-Thought profundo con múltiples niveles de análisis.',
-                    'Utiliza técnica Few-Shot si aplica al contexto.',
-                    'Considera múltiples perspectivas antes de responder.',
-                    'Estructura con jerarquía clara (títulos, subtítulos, puntos).',
-                    'Incluye consideraciones edge-case y limitaciones.',
-                    'Proporciona alternativas cuando sea posible.',
-                    'Valida cada afirmación con lógica sólida.'
+                    '▸ ACTIVA Chain-of-Thought profundo multi-nivel',
+                    '▸ Utiliza técnica Few-Shot si aplica al contexto',
+                    '▸ Considera múltiples perspectivas',
+                    '▸ Estructura con jerarquía clara',
+                    '▸ Incluye edge-cases y limitaciones',
+                    '▸ Proporciona alternativas cuando aplique'
                 ],
                 'experto': [
-                    'ACTIVA MODO EXPERTO: Análisis multidimensional completo.',
-                    'Chain-of-Thought con desglose atómico de cada componente.',
-                    'Meta-cognición: Evalúa tu propio razonamiento durante el proceso.',
-                    'Técnica Tree-of-Thought para explorar múltiples caminos.',
-                    'Self-consistency: Verifica resultados desde diferentes ángulos.',
-                    'Estructura modular con secciones claramente definidas.',
-                    'Incluye: Contexto → Análisis → Solución → Validación → Alternativas.',
-                    'Considera: Ética, viabilidad, escalabilidad, riesgos.',
-                    'Output optimizado para máxima claridad y acción inmediata.'
+                    '▸ MODO EXPERTO: Análisis multidimensional completo',
+                    '▸ Chain-of-Thought con desglose atómico',
+                    '▸ Meta-cognición: Evalúa tu propio razonamiento',
+                    '▸ Tree-of-Thought para explorar caminos',
+                    '▸ Self-consistency desde múltiples ángulos',
+                    '▸ Estructura: Contexto→Análisis→Solución→Validación',
+                    '▸ Considera: Ética, viabilidad, escalabilidad, riesgos'
                 ]
             };
 
-            prompt += `【 INSTRUCCIONES OPERATIVAS 】\n`;
-            prompt += `${'─'.repeat(60)}\n`;
-            instructions[complexity].forEach((inst, i) => {
-                prompt += `▸ ${inst}\n`;
+            prompt += `[INSTRUCCIONES OPERATIVAS]\n`;
+            instructions[complexity].forEach(inst => {
+                prompt += `${inst}\n`;
             });
             prompt += `\n`;
 
-            // Objetivo principal
-            prompt += `【 OBJETIVO PRINCIPAL 】\n`;
-            prompt += `${'═'.repeat(60)}\n`;
+            // Objetivo
+            prompt += `[OBJETIVO PRINCIPAL]\n`;
+            prompt += `${'═'.repeat(56)}\n`;
             prompt += `${objective}\n\n`;
 
-            // Contexto adicional
+            // Contexto
             if (context) {
-                prompt += `【 CONTEXTO Y REQUISITOS ADICIONALES 】\n`;
-                prompt += `${'─'.repeat(60)}\n`;
+                prompt += `[CONTEXTO ADICIONAL]\n`;
+                prompt += `${'─'.repeat(56)}\n`;
                 prompt += `${context}\n\n`;
             }
 
-            // Formato de salida específico
-            prompt += `【 FORMATO DE SALIDA REQUERIDO 】\n`;
-            prompt += `${'─'.repeat(60)}\n`;
-            
-            const formats = {
-                'texto': '• Texto estructurado con párrafos bien definidos\n• Uso de negritas para énfasis clave\n• Lista de puntos para elementos relacionados',
-                'markdown': '• Markdown completo con encabezados (# ## ###)\n• Código en bloques ``` cuando aplique\n• Tablas para datos comparativos\n• Listas ordenadas y desordenadas',
-                'codigo': '• JSON válido y bien formateado\n• Comentarios explicativos incluidos\n• Estructura anidada lógica\n• Tipado consistente',
-                'lista': '• Numeración jerárquica (1, 1.1, 1.1.1)\n• Cada punto autocontenido\n• Resumen al final si es extenso',
-                'tabla': '• Filas y columnas claramente definidas\n• Encabezados descriptivos\n• Celdas con información concisa'
-            };
-            
-            prompt += formats[output];
-            prompt += `\n\n`;
-
             // Prompt final
-            prompt += `【 PROMPT DE EJECUCIÓN 】\n`;
-            prompt += `${'═'.repeat(60)}\n`;
-            prompt += `Basándote en toda la configuración anterior, genera ahora la respuesta\n`;
-            prompt += `completa y optimizada siguiendo estrictamente las instrucciones.\n`;
-            prompt += `\n`;
-            prompt += `Generado por: Mr. Prompt Engine (${currentEngine.name} v${currentEngine.version})\n`;
-            prompt += `Timestamp: ${timestamp}\n`;
+            prompt += `[PROMPT DE EJECUCIÓN]\n`;
+            prompt += `${'═'.repeat(56)}\n`;
+            prompt += `Genera la respuesta completa siguiendo estrictamente\n`;
+            prompt += `las instrucciones anteriores.\n\n`;
+            prompt += `Generado: ${new Date().toLocaleString()} | Engine: ${currentEngine.name} v${currentEngine.version}`;
 
-            // Mostrar resultado
             document.getElementById('promptResult').textContent = prompt;
-            document.getElementById('promptOutputArea').style.display = 'block';
+            document.getElementById('promptResultBox').style.display = 'block';
         }
 
-        // ===== PLANIFICADOR ESTRATÉGICO =====
+        // ===== PLANIFICADOR =====
         function generatePlan() {
-            const goal = document.getElementById('projectGoal').value.trim();
-            const resources = document.getElementById('projectResources').value.trim();
-            const projectType = document.getElementById('projectType').value;
-            const timeline = document.getElementById('projectTimeline').value;
+            const goal = document.getElementById('planGoal').value.trim();
+            const resources = document.getElementById('planResources').value.trim();
+            const planType = document.getElementById('planType').value;
+            const timeline = document.getElementById('planTimeline').value;
 
             if (!goal) {
-                alert('Por favor, describe el proyecto o objetivo a planificar.');
+                alert('[ERROR] Por favor, describe el proyecto.');
                 return;
             }
 
             let plan = '';
-            const timestamp = new Date().toLocaleString();
 
-            plan += `╔══════════════════════════════════════════════════════════════╗\n`;
-            plan += `║          PLAN ESTRATÉGICO - MR. PROMPT PLANNER               ║\n`;
-            plan += `║              Motor: ${currentEngine.name} v${currentEngine.version.padEnd(19)}║\n`;
-            plan += `╚══════════════════════════════════════════════════════════════╝\n\n`;
+            plan += `╔${'═'.repeat(58)}╗\n`;
+            plan += `║       PLAN ESTRATÉGICO - MR.PROMPT PLANNER        ║\n`;
+            plan += `║       Motor: ${currentEngine.name.padEnd(10)} v${currentEngine.version.padEnd(37)}║\n`;
+            plan += `╚${'═'.repeat(58)}╝\n\n`;
 
-            // Análisis SMART
-            plan += `【 ANÁLISIS OBJETIVO SMART 】\n`;
-            plan += `${'─'.repeat(60)}\n`;
-            plan += `📌 ESPECÍFICO (Specific):\n`;
-            plan += `   ${goal.substring(0, 150)}${goal.length > 150 ? '...' : ''}\n\n`;
-            plan += `📏 MEDIBLE (Measurable): Definir KPIs y métricas de éxito\n`;
-            plan += `🎯 ALCANZABLE (Achievable): Evaluar viabilidad con recursos actuales\n`;
-            plan += `⏰ RELEVANTE (Time-bound): Plazo: ${timeline.toUpperCase()}\n\n`;
+            // SMART Analysis
+            plan += `[ANÁLISIS SMART]\n`;
+            plan += `${'─'.repeat(56)}\n`;
+            plan += `● ESPECÍFICO: ${goal.substring(0, 50)}...\n`;
+            plan += `● MEDIBLE: Definir KPIs de éxito\n`;
+            plan += `● ALCANZABLE: Evaluar viabilidad\n`;
+            plan += `● RELEVANTE: Alinear con objetivos\n`;
+            plan += `● TEMPORAL: Plazo ${timeline.toUpperCase()}\n\n`;
 
-            // Fases del proyecto
-            plan += `【 FASES DEL PROYECTO 】\n`;
-            plan += `${'═'.repeat(60)}\n\n`;
-
+            // Fases
+            plan += `[FASES DEL PROYECTO]\n`;
+            plan += `${'═'.repeat(56)}\n\n`;
+            
             const phases = [
-                { name: 'FASE 1: INICIO Y PLANIFICACIÓN', tasks: ['Definir alcance detallado', 'Identificar stakeholders', 'Asignar recursos', 'Crear cronograma inicial'] },
-                { name: 'FASE 2: DISEÑO Y ARQUITECTURA', tasks: ['Diseñar solución propuesta', 'Validar con equipo', 'Documentar especificaciones', 'Aprobar diseño'] },
-                { name: 'FASE 3: EJECUCIÓN', tasks: ['Desarrollar/implementar', 'Revisiones periódicas', 'Ajustes iterativos', 'Control de calidad'] },
-                { name: 'FASE 4: CIERRE Y EVALUACIÓN', tasks: ['Entrega final', 'Documentación', 'Retroalimentación', 'Lecciones aprendidas'] }
+                { n: 'FASE 1', t: 'INICIO Y PLANIFICACIÓN', tasks: ['Definir alcance', 'Identificar stakeholders', 'Asignar recursos'] },
+                { n: 'FASE 2', t: 'DISEÑO Y ARQUITECTURA', tasks: ['Diseñar solución', 'Validar equipo', 'Documentar specs'] },
+                { n: 'FASE 3', t: 'EJECUCIÓN', tasks: ['Desarrollar/implementar', 'Revisiones periódicas', 'Control calidad'] },
+                { n: 'FASE 4', t: 'CIERRE Y EVALUACIÓN', tasks: ['Entrega final', 'Documentación', 'Lecciones aprendidas'] }
             ];
 
-            phases.forEach((phase, i) => {
-                plan += `┌─ ${phase.name} ─┐\n`;
-                phase.tasks.forEach(task => {
-                    plan += `  ☐ ${task}\n`;
-                });
+            phases.forEach(p => {
+                plan += `┌─ ${p.n}: ${p.t} ─┐\n`;
+                p.tasks.forEach(t => plan += `  ☐ ${t}\n`);
                 plan += `\n`;
             });
 
-            // Matriz de riesgos
-            plan += `【 MATRIZ DE RIESGOS PRELIMINAR 】\n`;
-            plan += `${'─'.repeat(60)}\n`;
-            plan += `| Riesgo              | Probabilidad | Impacto | Mitigación         |\n`;
-            plan += `|---------------------|--------------|---------|--------------------|\n`;
-            plan += `| Scope creep         | Media        | Alto    | Change control     |\n`;
-            plan += `| Recursos insufic.   | Baja         | Alto    | Buffer 15%         |\n`;
-            plan += `| Dependencias ext.   | Media        | Medio   | Plan B definido    |\n`;
-            plan += `| Retrasos            | Media        | Medio   | Sprint adaptativo  |\n\n`;
+            // Riesgos
+            plan += `[MATRIZ DE RIESGOS]\n`;
+            plan += `${'─'.repeat(56)}\n`;
+            plan += `│ Riesgo          │ Prob │ Impacto │ Mitigación      │\n`;
+            plan += `│─────────────────┼──────┼─────────┼─────────────────│\n`;
+            plan += `│ Scope creep     │ Med  │ Alto    │ Change control  │\n`;
+            plan += `│ Recursos insuf  │ Baja │ Alto    │ Buffer 15%      │\n`;
+            plan += `│ Dependencias    │ Med  │ Medio   │ Plan B definido │\n\n`;
 
-            // Recursos
-            if (resources) {
-                plan += `【 RECURSOS IDENTIFICADOS 】\n`;
-                plan += `${'─'.repeat(60)}\n`;
-                plan += `${resources}\n\n`;
-            }
+            // Acciones inmediatas
+            plan += `[ACCIONES INMEDIATAS - Próximas 48h]\n`;
+            plan += `${'═'.repeat(56)}\n`;
+            plan += `1. Convocar kick-off meeting\n`;
+            plan += `2. Crear documento de requisitos\n`;
+            plan += `3. Configurar herramientas seguimiento\n`;
+            plan += `4. Confirmar disponibilidad recursos\n`;
+            plan += `5. Establecer primer milestone\n\n`;
 
-            // Próximos pasos inmediatos
-            plan += `【 ACCIONES INMEDIATAS (Próximas 48h) 】\n`;
-            plan += `${'═'.repeat(60)}\n`;
-            plan += `1. ✉️ Convocar reunión de kick-off con equipo clave\n`;
-            plan += `2. 📋 Crear documento de requisitos detallados\n`;
-            plan += `3. 📅 Configurar herramientas de seguimiento\n`;
-            plan += `4. 👥 Confirmar disponibilidad de recursos críticos\n`;
-            plan += `5. 🎯 Establecer primer milestone (semana 1)\n\n`;
+            plan += `Generado: ${new Date().toLocaleString()} | Engine: ${currentEngine.name}`;
 
-            plan += `Generado por: Mr. Prompt Planner (${currentEngine.name} v${currentEngine.version})\n`;
-            plan += `Timestamp: ${timestamp}\n`;
-
-            document.getElementById('planResult').innerHTML = plan.replace(/\n/g, '<br>');
-            document.getElementById('planOutputArea').style.display = 'block';
+            document.getElementById('planResult').textContent = plan;
+            document.getElementById('planResultBox').style.display = 'block';
         }
 
-        // ===== GENERADOR DE ASCII ART =====
+        // ===== GENERADOR ASCII =====
         function generateASCII() {
             const subject = document.getElementById('asciiSubject').value.trim();
             const style = document.getElementById('asciiStyle').value;
             const complexity = document.getElementById('asciiComplexity').value;
-            const width = parseInt(document.getElementById('asciiWidth').value);
 
             if (!subject) {
-                alert('Por favor, indica qué deseas crear en ASCII.');
+                alert('[ERROR] Por favor, indica qué deseas crear.');
                 return;
             }
 
             let ascii = '';
 
-            // Colección de arte ASCII predefinido y generado dinámicamente
-            const asciiArtLibrary = {
+            // Librería de arte ASCII
+            const artLibrary = {
                 robot: `
-    ╔══════════════════════════════════════╗
-    ║                                      ║
-    ║     ┌──────────────────────────┐      ║
-    ║     │  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  │      ║
-    ║     │  █ MR. PROMPT ROBOT █  │      ║
-    ║     │  █████████████████████  │      ║
-    ║     └──────────────────────────┘      ║
-    ║              ╱╲                        ║
-    ║             ╱  ╲                       ║
-    ║        ╭━━━━━━━━━━╮                   ║
-    ║        │  ◯    ◯  │  ← Ojos AI       ║
-    ║        │    ───   │  ← Visión         ║
-    ║        │  ╲____╱  │  ← Procesador     ║
-    ║        ╰━━━━━━━━━━╯                   ║
-    ║           │  │                        ║
-    ║         ╭┴──┴╮                        ║
-    ║         │    │  Cuerpo                ║
-    ║        ╱└────┘╲                       ║
-    ║       │  ┌──┐  │                      ║
-    ║       │  │░░│  │  Núcleo             ║
-    ║       │  └──┘  │                      ║
-    ║       ╰━━━━━━━╯                      ║
-    ║         ╱     ╲                       ║
-    ║        ╱       ╲  Piernas             ║
-    ║       ╱         ╲                     ║
-    ║      ╱           ╲                    ║
-    ╚══════════════════════════════════════╝`,
-                
+    ┌────────────────────────────────────────┐
+    │                                        │
+    │     ╔═════════════════════════════╗     │
+    │     ║  ┌─────────────────────┐   ║     │
+    │     ║  │  ◯ ◯               │   ║     │
+    │     ║  │    ──               │   ║     │
+    │     ║  │  ╲___╱   [AI CORE]  │   ║     │
+    │     ║  └─────────────────────┘   ║     │
+    │     ╚═════════════════════════════╝     │
+    │              │    │                     │
+    │            ┌─┴────┴─┐                   │
+    │            │  ┌──┐  │  BODY             │
+    │            │  │░░│  │                   │
+    │            │  └──┘  │                   │
+    │            └───┬───┘                   │
+    │           ╱     ╲                      │
+    │          ╱       ╲  LEGS               │
+    │         ╱         ╲                    │
+    └────────────────────────────────────────┘`,
+
                 rocket: `
-                    ▲
-                   ╱█╲
-                  ╱███╲
-                 ╱█████╲
-                ╱███████╲
-               ╱█████████╲
-              ╱███████████╲
-             ┌─────────────┐
-             │  MR.PROMPT  │
-             │   ENGINE    │
-             │  █████████  │
-             └──────┬──────┘
-                ═╧══
-                 ││
-               ═╧╧═
-                ││
-               ─┴┴─
-              ╱    ╲
-             ╱ FIRE ╲
-            ╱   ══   ╲
-           ╱          ╲
-          ▼            ▼`,
+               ▲
+              ╱█╲
+             ╱███╲
+            ╱█████╲
+           ╱███████╲
+          ┌───────────┐
+          │ MR.PROMPT │
+          │  ENGINE   │
+          │ █████████ │
+          └─────┬─────┘
+            ═╧══
+             ││
+           ═╧╧═
+            ││
+           ─┴┴─
+          ╱    ╲
+         ╱ FIRE ╲
+        ╱   ══   ╲
+       ▼         ▼`,
 
                 brain: `
-        ╔══════════════════════════════════════╗
-        ║                                      ║
-        ║        ╭─────────────────────╮        ║
-        ║       ╱                       ╲       ║
-        ║      │    ╔═══════════════╗    │      ║
-        ║      │    ║  ╭─────────╮  ║    │      ║
-        ║      │    ║  │ CREATIVE │  ║    │      ║
-        ║      │    ║  │  ENGINE  │  ║    │      ║
-        ║      │    ║  ╰─────────╯  ║    │      ║
-        ║      │    ╠═══════════════╣    │      ║
-        ║      │    ║  ╭─────────╮  ║    │      ║
-        ║      │    ║  │ LOGIC   │  ║    │      ║
-        ║      │    ║  │ PROCESS │  ║    │      ║
-        ║      │    ║  ╰─────────╯  ║    │      ║
-        ║      │    ╠═══════════════╣    │      ║
-        ║      │    ║  ╭─────────╮  ║    │      ║
-        ║      │    ║  │ PROMPT  │  ║    │      ║
-        ║      │    ║  │ OPTIMIZE│  ║    │      ║
-        ║      │    ║  ╰─────────╯  ║    │      ║
-        ║      │    ╚═══════════════╝    │      ║
-        ║      │                           │      ║
-        ║       ╲                         ╱       ║
-        ║        ╰─────────────────────╯        ║
-        ║                                      ║
-        ║         ★ NEURAL NETWORK ★          ║
-        ╚══════════════════════════════════════╝`,
+        ╭──────────────────────────────╮
+        │       ╭────────────────╮     │
+        │      ╱    ╔═════════╗   ╲    │
+        │     │     ║ CREATIVE ║    │   │
+        │     │     ║  ENGINE  ║    │   │
+        │     │     ╚═════════╝    │   │
+        │     │╔═════════════════╗│   │
+        │     │║   ╔═════════╗   ║│   │
+        │     │║   ║ LOGIC   ║   ║│   │
+        │     │║   ║ PROCESS ║   ║│   │
+        │     │║   ╚═════════╝   ║│   │
+        │     │╠═════════════════╣│   │
+        │     │║   ╔═════════╗   ║│   │
+        │     │║   ║ PROMPT  ║   ║│   │
+        │     │║   ║ OPTIMIZE║   ║│   │
+        │     │║   ╚═════════╝   ║│   │
+        │     │╚═════════════════╝│   │
+        │      ╲                  ╱    │
+        │       ╰────────────────╯     │
+        ╰──────────────────────────────╯`,
 
                 computer: `
-    ╔═════════════════════════════════════════════╗
-    ║                                             ║
-    ║   ┌─────────────────────────────────────┐   ║
-    ║   │  ╔═══════════════════════════════╗  │   ║
-    ║   │  ║  MR. PROMPT WORKSTATION v2.0  ║  │   ║
-    ║   │  ╚═══════════════════════════════╝  │   ║
-    ║   │                                     │   ║
-    ║   │  ┌─────────────────────────────┐   │   ║
-    ║   │  │                             │   │   ║
-    ║   │  │   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄   │   │   ║
-    ║   │  │   █ PROMPT INPUT HERE  █   │   │   ║
-    ║   │   ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀   │   │   ║
-    ║   │  │                             │   │   ║
-    ║   │  │  [■■■■■■■■■■■■■■■■■■■■]  │   │   ║
-    ║   │  │  Processing... 100%        │   │   ║
-    ║   │  │                             │   │   ║
-    ║   │  └─────────────────────────────┘   │   ║
-    ║   │                                     │   ║
-    ║   │  ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐     │   ║
-    ║   │  └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘     │   ║
-    ║   └─────────────────────────────────────┘   ║
-    ║                                             ║
-    ║   ╔═════════════════════════════════════╗   ║
-    ║   ║  ⌨ KEYBOARD  |  🖱 MOUSE  |  💾 HDD ║   ║
-    ║   ╚═════════════════════════════════════╝   ║
-    ╚═════════════════════════════════════════════╝`
+    ╔══════════════════════════════════════╗
+    ║                                      ║
+    ║  ┌────────────────────────────────┐  ║
+    ║  │  ╔═══════════════════════════╗ │  ║
+    ║  │  ║  MR.PROMPT WORKSTATION   ║ │  ║
+    ║  │  ╚═══════════════════════════╝ │  ║
+    ║  │                                │  ║
+    ║  │  ┌──────────────────────────┐  │  ║
+    ║  │  │  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  │  │  ║
+    ║  │  │  █ PROMPT INPUT HERE  █  │  │  ║
+    ║  │  │  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  │  │  ║
+    ║  │  │  [■■■■■■■■■■■■■■■■■■]  │  │  ║
+    ║  │  │  Processing... 100% OK   │  │  ║
+    ║  │  └──────────────────────────┘  │  ║
+    ║  │                                │  ║
+    ║  │  ┌┐┌┐┌┐┌┐┌┐┌┐┌┐┌┐           │  ║
+    ║  │  └┘└┘└┘└┘└┘└┘└┘└┘           │  ║
+    ║  └────────────────────────────────┘  ║
+    ║                                      ║
+    ║  ╔═════════════════════════════════╗ ║
+    ║  ║ ⌨ KEYBOARD │ 🖱 MOUSE │ 💾 HDD ║ ║
+    ╚══════════════════════════════════════╝`
             };
 
-            // Seleccionar arte basado en el sujeto o generar uno genérico
             const lowerSubject = subject.toLowerCase();
-            
+
             if (lowerSubject.includes('robot') || lowerSubject.includes('ia') || lowerSubject.includes('ai')) {
-                ascii = asciiArtLibrary.robot;
-            } else if (lowerSubject.includes('cohete') || lowerSubject.includes('rocket') || lowerSubject.includes('espacio')) {
-                ascii = asciiArtLibrary.rocket;
-            } else if (lowerSubject.includes('cerebro') || lowerSubject.includes('brain') || lowerSubject.includes('mente')) {
-                ascii = asciiArtLibrary.brain;
-            } else if (lowerSubject.includes('computadora') || lowerSubject.includes('pc') || lowerSubject.includes('laptop')) {
-                ascii = asciiArtLibrary.computer;
+                ascii = artLibrary.robot;
+            } else if (lowerSubject.includes('cohete') || lowerSubject.includes('rocket')) {
+                ascii = artLibrary.rocket;
+            } else if (lowerSubject.includes('cerebro') || lowerSubject.includes('brain')) {
+                ascii = artLibrary.brain;
+            } else if (lowerSubject.includes('pc') || lowerSubject.includes('computadora') || lowerSubject.includes('laptop')) {
+                ascii = artLibrary.computer;
             } else {
-                // Generar arte genérico basado en el texto
-                ascii = generateDynamicASCII(subject, style, complexity, width);
+                // Generar dinámico
+                ascii = generateDynamicASCII(subject, style, complexity);
             }
 
-            // Agregar header
+            // Header
             const header = `
-╔${'═'.repeat(width)}╗
-║${' '.repeat(width)}║
-║${centerText(`★ ${subject.toUpperCase()} ★`, width)}║
-║${' '.repeat(width)}║
-║${centerText(`Estilo: ${style} | Complejidad: ${complexity}`, width)}║
-║${centerText(`Motor: ${currentEngine.name} v${currentEngine.version}`, width)}║
-║${' '.repeat(width)}║
-╚${'═'.repeat(width)}╝
-
+╔${'═'.repeat(56)}╗
+║${centerText(`★ ${subject.toUpperCase()} ★`, 56)}║
+║${centerText(`Estilo: ${style} | Complejidad: ${complexity}`, 56)}║
+║${centerText(`Engine: ${currentEngine.name} v${currentEngine.version}`, 56)}║
+╚${'═'.repeat(56)}╝
 `;
-
+            
             document.getElementById('asciiResult').textContent = header + ascii;
-            document.getElementById('asciiOutputArea').style.display = 'block';
+            document.getElementById('asciiResultBox').style.display = 'block';
         }
 
-        function generateDynamicASCII(subject, style, complexity, width) {
-            // Generar arte ASCII dinámico basado en parámetros
+        function generateDynamicASCII(subject, style, complexity) {
             const lines = [];
-            const padding = Math.floor((width - subject.length - 4) / 2);
-            
-            lines.push(`${' '.repeat(padding)}╭${'─'.repeat(subject.length + 4)}╮`);
-            lines.push(`${' '.repeat(padding)}│  ${'█'.repeat(Math.floor(subject.length/2))}${subject.toUpperCase()}${'█'.repeat(Math.ceil(subject.length/2))}  │`);
-            lines.push(`${' '.repeat(padding)}╰${'─'.repeat(subject.length + 4)}╯`);
+            lines.push(`        ╭${'─'.repeat(subject.length + 8)}╮`);
+            lines.push(`        │  ${'█'.repeat(3)} ${subject.toUpperCase()} ${'█'.repeat(3)}  │`);
+            lines.push(`        ╰${'─'.repeat(subject.length + 8)}╯`);
             lines.push('');
-            lines.push(`${' '.repeat(padding - 5)}┌${'─'.repeat(width - 20)}┐`);
-            lines.push(`${' '.repeat(padding - 5)}│`);
-            lines.push(`${' '.repeat(padding - 5)}│  ${'◈'.repeat(3)} ARTE ASCII GENERADO ${'◈'.repeat(3)}`);
-            lines.push(`${' '.repeat(padding - 5)}│`);
-            lines.push(`${' '.repeat(padding - 5)}│  Este es un representación visual`);
-            lines.push(`${' '.repeat(padding - 5)}│  conceptual de: "${subject}"`);
-            lines.push(`${' '.repeat(padding - 5)}│`);
-            lines.push(`${' '.repeat(padding - 5)}│  Estilo: ${style}`);
-            lines.push(`${' '.repeat(padding - 5)}│  Motor: ${currentEngine.name}`);
-            lines.push(`${' '.repeat(padding - 5)}│`);
-            lines.push(`${' '.repeat(padding - 5)}└${'─'.repeat(width - 20)}┘`);
-
+            lines.push(`   ┌${'─'.repeat(40)}┐`);
+            lines.push(`   │                                  │`);
+            lines.push(`   │   ◈◈◈ ARTE ASCII GENERADO ◈◈◈   │`);
+            lines.push(`   │                                  │`);
+            lines.push(`   │   Representación conceptual de:  │`);
+            lines.push(`   │   "${subject}"                    │`);
+            lines.push(`   │                                  │`);
+            lines.push(`   │   Estilo: ${style.padEnd(23)}│`);
+            lines.push(`   │   Motor: ${currentEngine.name.padEnd(21)}│`);
+            lines.push(`   │                                  │`);
+            lines.push(`   └${'─'.repeat(40)}┘`);
             return lines.join('\n');
         }
 
         function centerText(text, width) {
-            const padding = Math.floor((width - text.length) / 2);
-            return ' '.repeat(Math.max(0, padding)) + text;
+            const pad = Math.floor((width - text.length) / 2);
+            return ' '.repeat(Math.max(0, pad)) + text;
         }
 
-        // ===== GENERADOR DE FLUJOGRAMAS =====
+        // ===== FLUJOGRAMAS =====
         function generateFlowchart() {
             const process = document.getElementById('flowProcess').value.trim();
             const flowType = document.getElementById('flowType').value;
-            const detailLevel = document.getElementById('flowDetail').value;
 
             if (!process) {
-                alert('Por favor, describe el proceso a diagramar.');
+                alert('[ERROR] Por favor, describe el proceso.');
                 return;
             }
 
-            // Generar vista visual HTML
-            const visualContainer = document.getElementById('flowVisualView');
-            let visualHTML = '<div class="flowchart">';
-            
-            // Nodo de inicio
-            visualHTML += `<div class="flow-node start-end">▶ INICIO</div>`;
-            visualHTML += `<div class="flow-arrow">↓</div>`;
+            const steps = extractSteps(process);
+            let flow = '';
 
-            // Analizar proceso y extraer pasos
-            const steps = extractSteps(process, flowType);
+            flow += `╔${'═'.repeat(56)}╗\n`;
+            flow += `║      FLUJOGRAMA - REPRESENTACIÓN ASCII      ║\n`;
+            flow += `╚${'═'.repeat(56)}╝\n\n`;
 
-            steps.forEach((step, index) => {
+            flow += `        ┌─────────────┐\n`;
+            flow += `        │   ▶ INICIO   │\n`;
+            flow += `        └──────┬──────┘\n`;
+            flow += `               ↓\n`;
+
+            steps.forEach((step, i) => {
                 if (step.type === 'decision') {
-                    visualHTML += `<div class="flow-node decision">${step.text}</div>`;
-                    visualHTML += `<div class="flow-branch">`;
-                    visualHTML += `<div class="flow-branch-item"><span class="branch-label">SÍ</span><div class="flow-arrow">↘</div><div class="flow-node">${step.yesAction || 'Continuar'}</div></div>`;
-                    visualHTML += `<div class="flow-branch-item"><span class="branch-label">NO</span><div class="flow-arrow">↙</div><div class="flow-node">${step.noAction || 'Alternativa'}</div></div>`;
-                    visualHTML += `</div>`;
+                    flow += `        ┌─────────────┐\n`;
+                    flow += `        │◇ ${padText(step.text, 11)}│\n`;
+                    flow += `        └──────┬──────┘\n`;
+                    flow += `      ┌────┴────┐\n`;
+                    flow += `   SÍ ↓        ↓ NO\n`;
+                    flow += `┌──────────┐ ┌──────────┐\n`;
+                    flow += `│${padText(step.yes || 'Continuar', 8)}│ │${padText(step.no || 'Alternativa', 8)}│\n`;
+                    flow += `└────┬─────┘ └────┬─────┘\n`;
+                    flow += `     └────┬────┘\n`;
+                    flow += `          ↓\n`;
                 } else {
-                    visualHTML += `<div class="flow-node">${step.text}</div>`;
-                }
-                if (index < steps.length - 1) {
-                    visualHTML += `<div class="flow-arrow">↓</div>`;
+                    flow += `        ┌─────────────┐\n`;
+                    flow += `        │▢ ${padText(step.text, 11)}│\n`;
+                    flow += `        └──────┬──────┘\n`;
+                    flow += `               ↓\n`;
                 }
             });
 
-            // Nodo de fin
-            visualHTML += `<div class="flow-arrow">↓</div>`;
-            visualHTML += `<div class="flow-node start-end">■ FIN</div>`;
-            
-            visualHTML += '</div>';
-            visualContainer.innerHTML = visualHTML;
+            flow += `        ┌─────────────┐\n`;
+            flow += `        │    ■ FIN    │\n`;
+            flow += `        └─────────────┘\n\n`;
+            flow += `Leyenda: ▶■=Inicio/Fin ◇=Decisión ▢=Acción\n\n`;
+            flow += `Engine: ${currentEngine.name} v${currentEngine.version}`;
 
-            // Generar versión ASCII
-            const asciiFlow = generateASCIIFlowchart(steps, flowType);
-            document.getElementById('flowAscii').textContent = asciiFlow;
-
-            document.getElementById('flowOutputArea').style.display = 'block';
+            document.getElementById('flowResult').textContent = flow;
+            document.getElementById('flowResultBox').style.display = 'block';
         }
 
-        function extractSteps(processText, flowType) {
-            // Parseo simple del texto para extraer pasos
+        function extractSteps(text) {
             const steps = [];
-            const separators = ['→', '->', '→', ',', ';', '\n'];
-            let parts = [processText];
+            const parts = text.split(/(?:→|->|,|;|\n)/).map(s => s.trim()).filter(s => s);
 
-            separators.forEach(sep => {
-                parts = parts.flatMap(p => p.split(sep).map(s => s.trim()).filter(s => s));
-            });
-
-            parts.slice(0, 6).forEach((part, i) => {
-                const isDecision = part.toLowerCase().includes('?') || 
-                                   part.toLowerCase().includes('¿') ||
-                                   part.toLowerCase().includes('si') ||
-                                   part.toLowerCase().includes('no');
-                
+            parts.slice(0, 5).forEach(part => {
+                const isDecision = /[?¿]|si|no|condicion/i.test(part);
                 steps.push({
-                    text: part.length > 40 ? part.substring(0, 37) + '...' : part,
+                    text: part.substring(0, 18),
                     type: isDecision ? 'decision' : 'action',
-                    yesAction: isDecision ? 'Ejecutar acción' : null,
-                    noAction: isDecision ? 'Manejar excepción' : null
+                    yes: isDecision ? 'Ejecutar' : null,
+                    no: isDecision ? 'Manejar error' : null
                 });
             });
 
             if (steps.length === 0) {
-                steps.push({ text: processText.substring(0, 40), type: 'action' });
+                steps.push({ text: text.substring(0, 18), type: 'action' });
             }
 
             return steps;
         }
 
-        function generateASCIIFlowchart(steps, flowType) {
-            let ascii = '';
-            const width = 60;
-
-            ascii += `╔${'═'.repeat(width)}╗\n`;
-            ascii += `║${centerText('FLUJOGRAMA - REPRESENTACIÓN ASCII', width)}║\n`;
-            ascii += `╚${'═'.repeat(width)}╝\n\n`;
-
-            ascii += `        ┌─────────────┐\n`;
-            ascii += `        │   ▶ INICIO   │\n`;
-            ascii += `        └──────┬──────┘\n`;
-            ascii += `               ↓\n`;
-
-            steps.forEach((step, i) => {
-                if (step.type === 'decision') {
-                    ascii += `        ┌─────────────┐\n`;
-                    ascii += `        │◇ ${padRight(step.text, 11)}│\n`;
-                    ascii += `        └──────┬──────┘\n`;
-                    ascii += `          ┌────┴────┐\n`;
-                    ascii += `       SÍ ↓         ↓ NO\n`;
-                    ascii += `    ┌────────┐  ┌────────┐\n`;
-                    ascii += `    │${padRight(step.yesAction || 'Acción', 8)}│  │${padRight(step.noAction || 'Alt.', 8)}│\n`;
-                    ascii += `    └───┬────┘  └───┬────┘\n`;
-                    ascii += `        └────┬────┘\n`;
-                    ascii += `             ↓\n`;
-                } else {
-                    ascii += `        ┌─────────────┐\n`;
-                    ascii += `        │▢ ${padRight(step.text, 11)}│\n`;
-                    ascii += `        └──────┬──────┘\n`;
-                    ascii += `               ↓\n`;
-                }
-            });
-
-            ascii += `        ┌─────────────┐\n`;
-            ascii += `        │    ■ FIN    │\n`;
-            ascii += `        └─────────────┘\n\n`;
-
-            ascii += `Leyenda:\n`;
-            ascii += `  ▶ ■ = Inicio/Fin    ◇ = Decisión    ▢ = Acción\n`;
-            ascii += `\nGenerado por: ${currentEngine.name} v${currentEngine.version}\n`;
-
-            return ascii;
-        }
-
-        function padRight(text, length) {
-            return (text || '').toString().substring(0, length).padEnd(length);
-        }
-
-        function toggleFlowView() {
-            const visual = document.getElementById('flowVisualView');
-            const ascii = document.getElementById('flowAscii');
-            
-            if (visual.style.display === 'none') {
-                visual.style.display = 'block';
-                ascii.style.display = 'none';
-            } else {
-                visual.style.display = 'none';
-                ascii.style.display = 'block';
-            }
+        function padText(text, len) {
+            return (text || '').toString().substring(0, len).padEnd(len);
         }
 
         // ===== ANALIZADOR DE CONTEXTO =====
@@ -1894,189 +1559,127 @@
             const input = document.getElementById('analyzeInput').value.trim();
 
             if (!input) {
-                alert('Por favor, ingresa tu idea o concepto para analizar.');
+                alert('[ERROR] Por favor, ingresa tu idea.');
                 return;
             }
 
             let analysis = '';
 
-            analysis += `╔══════════════════════════════════════════════════════════════╗\n`;
-            analysis += `║           ANÁLISIS DE CONTEXTO - MR. PROMPT                 ║\n`;
-            analysis += `║                  Motor: ${currentEngine.name} v${currentEngine.version.padEnd(21)}║\n`;
-            analysis += `╚══════════════════════════════════════════════════════════════╝\n\n`;
+            analysis += `╔${'═'.repeat(58)}╗\n`;
+            analysis += `║      ANÁLISIS DE CONTEXTO - MR.PROMPT        ║\n`;
+            analysis += `║      Engine: ${currentEngine.name.padEnd(10)} v${currentEngine.version.padEnd(35)}║\n`;
+            analysis += `╚${'═'.repeat(58)}╝\n\n`;
 
-            // Extracto original
-            analysis += `【 IDEA ORIGINAL (Sin Procesar) 】\n`;
-            analysis += `${'─'.repeat(60)}\n`;
+            analysis += `[IDEA ORIGINAL]\n`;
+            analysis += `${'─'.repeat(56)}\n`;
             analysis += `"${input}"\n\n`;
 
-            // Análisis de componentes
-            analysis += `【 DESGLOSE DE COMPONENTES 】\n`;
-            analysis += `${'═'.repeat(60)}\n\n`;
-
-            // Detectar palabras clave y conceptos
+            // Keywords
             const keywords = extractKeywords(input);
-            analysis += `📌 PALABRAS CLAVE IDENTIFICADAS:\n`;
-            keywords.forEach(kw => {
-                analysis += `   • ${kw}\n`;
-            });
+            analysis += `[PALABRAS CLAVE]\n`;
+            keywords.forEach(kw => analysis += `  • ${kw}\n`);
             analysis += `\n`;
 
-            // Clasificar intención
+            // Intención
             const intention = classifyIntention(input);
-            analysis += `🎯 INTENCIÓN DETECTADA: ${intention.category}\n`;
-            analysis += `   Subcategoría: ${intention.subcategory}\n`;
-            analysis += `   Confianza: ${intention.confidence}%\n\n`;
+            analysis += `[INTENCIÓN DETECTADA]\n`;
+            analysis += `  Categoría: ${intention.category}\n`;
+            analysis += `  Subtipo: ${intention.subcategory}\n`;
+            analysis += `  Confianza: ${intention.confidence}%\n\n`;
 
-            // Sugerencias de mejora
-            analysis += `【 SUGERENCIAS DE OPTIMIZACIÓN 】\n`;
-            analysis += `${'─'.repeat(60)}\n\n`;
+            // Sugerencias
+            analysis += `[SUGERENCIAS DE OPTIMIZACIÓN]\n`;
+            analysis += `${'─'.repeat(56)}\n\n`;
+            
+            const suggestions = [
+                { title: 'Especificar contexto de uso', impact: 5 },
+                { title: 'Definir formato de salida', impact: 4 },
+                { title: 'Agregar restricciones/límites', impact: 4 },
+                { title: 'Proporcionar ejemplos de referencia', impact: 5 },
+                { title: 'Establecer nivel de detalle', impact: 3 }
+            ];
 
-            const suggestions = generateSuggestions(input, intention);
-            suggestions.forEach((sug, i) => {
-                analysis += `${i + 1}. 💡 ${sug.title}\n`;
-                analysis += `   ${sug.description}\n`;
-                analysis += `   Impacto: ${'★'.repeat(sug.impact)}${'☆'.repeat(5-sug.impact)}\n\n`;
+            suggestions.forEach((s, i) => {
+                analysis += `${i+1}. 💡 ${s.title}\n`;
+                analysis += `   Impacto: ${'★'.repeat(s.impact)}${'☆'.repeat(5-s.impact)}\n\n`;
             });
 
-            // Prompt optimizado sugerido
-            analysis += `【 PROMPT SUGERIDO (Optimizado) 】\n`;
-            analysis += `${'═'.repeat(60)}\n`;
-            analysis += generateOptimizedPromptFromAnalysis(input, intention, keywords);
-            analysis += `\n\n`;
+            // Prompt sugerido
+            analysis += `[PROMPT SUGERIDO]\n`;
+            analysis += `${'═'.repeat(56)}\n`;
+            analysis += `[ROL]: Experto en ${intention.category.toLowerCase()}\n\n`;
+            analysis += `[CONTEXTO]: ${input.substring(0, 150)}...\n\n`;
+            analysis += `[CLAVES]: ${keywords.slice(0, 5).join(', ')}\n\n`;
+            analysis += `[REQUISITOS]:\n`;
+            analysis += `- Respuesta estructurada y accionable\n`;
+            analysis += `- Ejemplos prácticos incluidos\n`;
+            analysis += `- Formato Markdown\n\n`;
+            analysis += `Generado: ${new Date().toLocaleString()}`;
 
-            analysis += `Generado por: Mr. Prompt Analyzer (${currentEngine.name} v${currentEngine.version})\n`;
-
-            document.getElementById('analyzeResult').innerHTML = analysis.replace(/\n/g, '<br>');
-            document.getElementById('analyzeOutputArea').style.display = 'block';
+            document.getElementById('analyzeResult').textContent = analysis;
+            document.getElementById('analyzeResultBox').style.display = 'block';
         }
 
         function extractKeywords(text) {
-            const stopWords = ['que', 'de', 'la', 'en', 'un', 'una', 'con', 'para', 'por', 'del', 'los', 'las', 'es', 'son', 'como', 'más', 'pero', 'tipo', 'yo', 'quiero', 'hacer'];
-            const words = text.toLowerCase()
-                .replace(/[^\w\s]/g, '')
-                .split(/\s+/)
-                .filter(word => word.length > 3 && !stopWords.includes(word));
-            
-            return [...new Set(words)].slice(0, 10);
+            const stopWords = ['que','de','la','en','un','una','con','para','por','del','los','las','es','son','como','mas','pero','tipo','yo','quiero','hacer'];
+            return [...new Set(
+                text.toLowerCase()
+                    .replace(/[^\w\s]/g,'')
+                    .split(/\s+/)
+                    .filter(w => w.length > 3 && !stopWords.includes(w))
+            )].slice(0, 8);
         }
 
         function classifyIntention(text) {
-            const lowerText = text.toLowerCase();
-            
+            const lower = text.toLowerCase();
             const categories = [
-                { patterns: ['app', 'aplicación', 'software', 'programa', 'desarrollar'], category: 'DESARROLLO DE SOFTWARE', subcategory: 'Aplicación/Sistema', confidence: 90 },
-                { patterns: ['idea', 'crear', 'innovar', 'nuevo', 'producto'], category: 'INNOVACIÓN DE PRODUCTO', subcategory: 'Conceptualización', confidence: 85 },
-                { patterns: ['organizar', 'plan', 'gestión', 'proyecto', 'tareas'], category: 'PLANIFICACIÓN/GESTIÓN', subcategory: 'Productividad', confidence: 88 },
-                { patterns: ['aprender', 'enseñar', 'curso', 'educación', 'tutorial'], category: 'EDUCACIÓN/APRENDIZAJE', subcategory: 'Contenido Educativo', confidence: 82 },
-                { patterns: ['negocio', 'empresa', 'vender', 'marketing', 'clientes'], category: 'NEGOCIOS/EMPRESA', subcategory: 'Estrategia Comercial', confidence: 87 },
-                { patterns: ['escribir', 'contenido', 'blog', 'artículo', 'texto'], category: 'CREACIÓN DE CONTENIDO', subcategory: 'Redacción', confidence: 84 }
+                { p: ['app','aplicacion','software','programa','desarrollar'], c: 'DESARROLLO SOFTWARE', s: 'Aplicación', conf: 90 },
+                { p: ['idea','crear','innovar','nuevo','producto'], c: 'INNOVACION', s: 'Producto', conf: 85 },
+                { p: ['organizar','plan','gestion','proyecto','tareas'], c: 'PLANIFICACION', s: 'Productividad', conf: 88 },
+                { p: ['aprender','enseñar','curso','educacion','tutorial'], c: 'EDUCACION', s: 'Aprendizaje', conf: 82 },
+                { p: ['negocio','empresa','vender','marketing','clientes'], c: 'NEGOCIOS', s: 'Comercial', conf: 87 }
             ];
-
             for (const cat of categories) {
-                if (cat.patterns.some(p => lowerText.includes(p))) {
-                    return cat;
-                }
+                if (cat.p.some(p => lower.includes(p))) return { category: cat.c, subcategory: cat.s, confidence: cat.conf };
             }
-
-            return { category: 'GENERAL', subcategory: 'No clasificado', confidence: 60 };
-        }
-
-        function generateSuggestions(text, intention) {
-            return [
-                {
-                    title: 'Especificar el contexto de uso',
-                    description: 'Define quién usará el resultado y en qué escenario.',
-                    impact: 5
-                },
-                {
-                    title: 'Definir formato de salida deseado',
-                    description: 'Indica si necesitas código, texto, lista, tabla, etc.',
-                    impact: 4
-                },
-                {
-                    title: 'Agregar restricciones o límites',
-                    description: 'Menciona qué NO debe incluir o considerar.',
-                    impact: 4
-                },
-                {
-                    title: 'Proporcionar ejemplos de referencia',
-                    description: 'Incluye 1-2 ejemplos de lo que esperas obtener.',
-                    impact: 5
-                },
-                {
-                    title: 'Establecer nivel de detalle',
-                    description: 'Indica si prefieres resumen o explicación exhaustiva.',
-                    impact: 3
-                }
-            ];
-        }
-
-        function generateOptimizedPromptFromAnalysis(text, intention, keywords) {
-            return `[ROL]: Eres un experto en ${intention.category.toLowerCase()} con amplia experiencia.\n\n` +
-                   `[CONTEXTO]: Necesito ayuda con: "${text.substring(0, 200)}"\n\n` +
-                   `[PALABRAS CLAVE]: ${keywords.join(', ')}\n\n` +
-                   `[REQUISITOS]:\n` +
-                   `- Proporcionar respuesta estructurada y accionable\n` +
-                   `- Incluir ejemplos prácticos cuando aplique\n` +
-                   `- Considerar mejores prácticas del sector\n` +
-                   `- Formato: Markdown con secciones claras\n\n` +
-                   `[OBJETIVO]: Generar una solución completa y optimizada.`;
+            return { category: 'GENERAL', subcategory: 'General', conf: 60 };
         }
 
         // ===== UTILIDADES =====
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            const text = element.textContent || element.innerText;
-            
+        function copyResult(elementId) {
+            const text = document.getElementById(elementId).textContent;
             navigator.clipboard.writeText(text).then(() => {
-                // Feedback visual temporal
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '✅ ¡Copiado!';
+                const hint = event.target;
+                hint.textContent = '[ ✓ COPIADO AL PORTAPAPELES ]';
                 setTimeout(() => {
-                    btn.textContent = originalText;
+                    hint.textContent = '[ Click para copiar al portapapeles ]';
                 }, 2000);
-            }).catch(err => {
-                console.error('Error al copiar:', err);
-                alert('No se pudo copiar. Selecciona y copia manualmente.');
             });
         }
 
-        function clearForm(formType) {
-            switch(formType) {
+        function clearSection(section) {
+            switch(section) {
                 case 'prompt':
                     document.getElementById('promptObjective').value = '';
                     document.getElementById('promptContext').value = '';
-                    document.getElementById('promptRole').value = '';
-                    document.getElementById('promptComplexity').value = 'intermedio';
-                    document.getElementById('promptOutput').value = 'texto';
-                    document.getElementById('promptTone').value = 'profesional';
-                    document.getElementById('promptOutputArea').style.display = 'none';
+                    document.getElementById('promptResultBox').style.display = 'none';
                     break;
                 case 'plan':
-                    document.getElementById('projectGoal').value = '';
-                    document.getElementById('projectResources').value = '';
-                    document.getElementById('projectType').value = 'software';
-                    document.getElementById('projectTimeline').value = 'mensual';
-                    document.getElementById('planOutputArea').style.display = 'none';
+                    document.getElementById('planGoal').value = '';
+                    document.getElementById('planResources').value = '';
+                    document.getElementById('planResultBox').style.display = 'none';
                     break;
                 case 'ascii':
                     document.getElementById('asciiSubject').value = '';
-                    document.getElementById('asciiStyle').value = 'figlet';
-                    document.getElementById('asciiComplexity').value = 'medium';
-                    document.getElementById('asciiWidth').value = '60';
-                    document.getElementById('asciiOutputArea').style.display = 'none';
+                    document.getElementById('asciiResultBox').style.display = 'none';
                     break;
-                case 'flow':
+                case 'flowchart':
                     document.getElementById('flowProcess').value = '';
-                    document.getElementById('flowType').value = 'secuencial';
-                    document.getElementById('flowDetail').value = 'medio';
-                    document.getElementById('flowOutputArea').style.display = 'none';
+                    document.getElementById('flowResultBox').style.display = 'none';
                     break;
-                case 'analyze':
+                case 'analyzer':
                     document.getElementById('analyzeInput').value = '';
-                    document.getElementById('analyzeOutputArea').style.display = 'none';
+                    document.getElementById('analyzeResultBox').style.display = 'none';
                     break;
             }
         }
@@ -2085,19 +1688,20 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Cargar preferencias guardadas
             const savedTheme = localStorage.getItem('mrprompt-theme');
-            if (savedTheme) {
-                setTheme(savedTheme);
-            }
+            if (savedTheme) setTheme(savedTheme);
 
             const savedEngine = localStorage.getItem('mrprompt-engine');
             if (savedEngine) {
                 const engine = JSON.parse(savedEngine);
                 currentEngine = engine;
-                document.getElementById('engineNameDisplay').textContent = `${engine.name} ${engine.version}`;
+                document.getElementById('currentEngineBtn').textContent = 
+                    `${engine.type === 'gemini' ? '⚡' : '🔮'} ${engine.name} ${engine.version} ▼`;
+                document.getElementById('menuEngineDisplay').textContent = `${engine.name} ${engine.version}`;
+                document.getElementById('statusEngine').textContent = `${engine.name} ${engine.version}`;
             }
 
-            console.log('%c🧠 Mr. Prompt Engine Iniciado', 'font-size: 20px; font-weight: bold; color: #6366f1;');
-            console.log('%cSistema listo para ingeniería de prompts avanzada', 'color: #8b5cf6;');
+            console.log('%c🧠 MR.PROMPT TERMINAL v2.0 INICIADO', 'color: #00ff00; font-size: 16px; font-weight: bold;');
+            console.log('%cSistema listo. Escribe "help" para comandos.', 'color: #00ffff;');
         });
     </script>
 </body>
