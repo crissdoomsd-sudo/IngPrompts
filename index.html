@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>promptforge.sh</title>
+    <title>promptforge.sh // CYBER TERMINAL</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
@@ -13,14 +13,17 @@
         }
 
         :root {
-            --bg-black: #0a0a0a;
-            --text-white: #e0e0e0;
-            --text-gray: #888888;
-            --green-ok: #4ec9b0;
-            --amber-warn: #d7ba7d;
-            --red-error: #f44747;
-            --cyan-acce: #9cdcfe;
-            --yellow-text: #dcdcaa;
+            --bg-black: #050a05;
+            --bg-dark: #0a140a;
+            --green-bright: #00ff41;
+            --green-neon: #39ff14;
+            --green-dim: #00cc33;
+            --green-glow: rgba(57, 255, 20, 0.5);
+            --cyan-green: #00ffc8;
+            --lime-warn: #adff2f;
+            --text-white: #e0ffe0;
+            --text-gray: #6b9b6b;
+            --red-error: #ff3860;
         }
 
         html, body {
@@ -29,14 +32,33 @@
         }
 
         body {
-            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
             background: var(--bg-black);
-            color: var(--text-white);
+            color: var(--green-bright);
             font-size: 14px;
             line-height: 1.5;
         }
 
-        /* Terminal Container */
+        /* Efecto scanlines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 255, 65, 0.02) 2px,
+                rgba(0, 255, 65, 0.02) 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Terminal */
         .terminal {
             display: flex;
             flex-direction: column;
@@ -45,39 +67,80 @@
             overflow: hidden;
         }
 
-        /* Status Bar */
+        /* Status Bar - Cyber Style */
         .status-bar {
-            background: rgba(255, 255, 255, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 8px 16px;
+            background: linear-gradient(180deg, rgba(0, 255, 65, 0.08) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(0, 255, 65, 0.25);
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 13px;
             flex-shrink: 0;
+            box-shadow: 0 2px 20px rgba(0, 255, 65, 0.15);
         }
 
         .status-left {
-            color: var(--cyan-acce);
+            color: var(--green-neon);
+            font-weight: 600;
+            text-shadow: 0 0 10px var(--green-glow);
+            letter-spacing: 1px;
         }
 
         .status-right {
             color: var(--text-gray);
             display: flex;
-            gap: 20px;
+            gap: 24px;
+            font-size: 12px;
         }
 
-        .status-right span {
-            opacity: 0.8;
+        .status-item {
+            opacity: 0.85;
         }
 
         .status-highlight {
-            color: var(--amber-warn);
+            color: var(--green-bright);
+            text-shadow: 0 0 8px var(--green-glow);
         }
 
         .status-time {
-            color: var(--text-gray);
+            color: var(--green-dim);
             font-variant-numeric: tabular-nums;
+        }
+
+        .ai-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ai-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--red-error);
+            animation: pulse-red 2s infinite;
+        }
+
+        .ai-dot.connected {
+            background: var(--green-neon);
+            animation: pulse-green 1.5s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 5px var(--red-error); }
+            50% { box-shadow: 0 0 15px var(--red-error); }
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { 
+                box-shadow: 0 0 5px var(--green-glow), 0 0 10px var(--green-glow);
+                opacity: 1;
+            }
+            50% { 
+                box-shadow: 0 0 15px var(--green-glow), 0 0 25px var(--green-glow), 0 0 35px var(--green-glow);
+                opacity: 0.7;
+            }
         }
 
         /* Output Area */
@@ -85,109 +148,126 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 16px 20px;
+            padding: 20px 24px;
             scroll-behavior: smooth;
         }
 
         .output-area::-webkit-scrollbar {
-            width: 8px;
+            width: 10px;
         }
 
         .output-area::-webkit-scrollbar-track {
-            background: transparent;
+            background: var(--bg-black);
+            border-left: 1px solid rgba(0, 255, 65, 0.1);
         }
 
         .output-area::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 0;
+            background: rgba(0, 255, 65, 0.2);
+            border-left: 1px solid rgba(0, 255, 65, 0.3);
         }
 
         .output-area::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(0, 255, 65, 0.35);
         }
 
-        /* Boot Messages */
+        /* Boot Lines */
         .boot-line {
-            margin: 2px 0;
+            margin: 3px 0;
             white-space: pre-wrap;
         }
 
         .boot-ok {
-            color: var(--green-ok);
+            color: var(--green-bright);
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.4);
         }
 
         .boot-warn {
-            color: var(--amber-warn);
+            color: var(--lime-warn);
         }
 
-        /* Box/Border Style */
-        .term-box {
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 16px 20px;
-            margin: 20px 0;
+        /* Box Cyber Style */
+        .cyber-box {
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            padding: 20px 24px;
+            margin: 24px 0;
             position: relative;
+            background: rgba(0, 255, 65, 0.02);
+            box-shadow: 
+                inset 0 0 30px rgba(0, 255, 65, 0.03),
+                0 0 20px rgba(0, 255, 65, 0.08);
         }
 
-        .term-box::before,
-        .term-box::after {
+        .cyber-box::before,
+        .cyber-box::after {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
-            border-color: rgba(255, 255, 255, 0.15);
+            width: 20px;
+            height: 20px;
+            border-color: var(--green-bright);
             border-style: solid;
         }
 
-        .term-box::before {
+        .cyber-box::before {
             top: -1px;
             left: -1px;
             border-width: 2px 0 0 2px;
+            box-shadow: -2px -2px 10px rgba(0, 255, 65, 0.3);
         }
 
-        .term-box::after {
+        .cyber-box::after {
             bottom: -1px;
             right: -1px;
             border-width: 0 2px 2px 0;
+            box-shadow: 2px 2px 10px rgba(0, 255, 65, 0.3);
         }
 
         .box-title {
-            color: var(--amber-warn);
-            font-weight: 500;
-            margin-bottom: 12px;
+            color: var(--green-neon);
+            font-weight: 700;
+            margin-bottom: 16px;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--green-glow);
         }
 
         .box-content {
             color: var(--text-white);
-            line-height: 1.8;
+            line-height: 1.9;
         }
 
         .box-content p {
-            margin: 6px 0;
+            margin: 8px 0;
         }
 
         .cmd-hint {
-            color: var(--yellow-text);
+            color: var(--cyan-green);
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(0, 255, 200, 0.5);
         }
 
         /* Input Line */
         .input-line {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(0, 0, 0, 0.3);
+            padding: 14px 24px;
+            border-top: 1px solid rgba(0, 255, 65, 0.15);
+            background: linear-gradient(180deg, rgba(0, 255, 65, 0.03) 0%, transparent 100%);
             flex-shrink: 0;
         }
 
         .prompt-prefix {
-            color: var(--cyan-acce);
-            margin-right: 8px;
+            color: var(--cyan-green);
+            margin-right: 10px;
             white-space: nowrap;
             user-select: none;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(0, 255, 200, 0.4);
         }
 
         .prompt-user {
-            color: var(--green-ok);
+            color: var(--green-neon);
+            font-weight: 700;
         }
 
         .prompt-path {
@@ -195,8 +275,9 @@
         }
 
         .prompt-symbol {
-            color: var(--text-white);
-            margin-right: 10px;
+            color: var(--green-bright);
+            margin-right: 12px;
+            font-weight: bold;
         }
 
         .terminal-input {
@@ -204,111 +285,27 @@
             background: transparent;
             border: none;
             outline: none;
-            color: var(--text-white);
+            color: var(--green-bright);
             font-family: inherit;
             font-size: inherit;
-            caret-color: var(--green-ok);
+            caret-color: var(--green-neon);
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
         }
 
         .terminal-input::placeholder {
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(0, 255, 65, 0.25);
         }
 
-        /* Output Lines */
-        .output-line {
-            margin: 3px 0;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .line-error {
-            color: var(--red-error);
-        }
-
-        .line-success {
-            color: var(--green-ok);
-        }
-
-        .line-info {
-            color: var(--cyan-acce);
-        }
-
-        .line-warn {
-            color: var(--amber-warn);
-        }
-
-        .line-dim {
-            color: var(--text-gray);
-        }
-
-        .line-cmd {
-            color: var(--yellow-text);
-        }
-
-        /* Help/Man Page Style */
-        .man-page {
-            margin: 16px 0;
-        }
-
-        .man-section {
-            margin: 14px 0;
-        }
-
-        .man-title {
-            color: var(--cyan-acce);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 13px;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .man-content {
-            color: var(--text-white);
-            padding-left: 0;
-            line-height: 1.7;
-        }
-
-        .man-content code {
-            color: var(--yellow-text);
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2px 5px;
-            font-family: inherit;
-        }
-
-        /* Generated Prompt Display */
-        .prompt-output {
-            border: 1px solid rgba(78, 201, 176, 0.3);
-            background: rgba(78, 201, 176, 0.03);
-            padding: 16px;
-            margin: 16px 0;
-            font-size: 13px;
-            line-height: 1.7;
-            color: var(--cyan-acce);
-            position: relative;
-        }
-
-        .prompt-output::before {
-            content: '[ OUTPUT ]';
-            position: absolute;
-            top: -10px;
-            left: 12px;
-            background: var(--bg-black);
-            padding: 0 6px;
-            font-size: 11px;
-            color: var(--text-gray);
-            letter-spacing: 1px;
-        }
-
-        /* Cursor */
-        .cursor-block {
+        /* Cursor Cyber */
+        .cursor-cyber {
             display: inline-block;
-            width: 8px;
-            height: 17px;
-            background: var(--green-ok);
-            animation: blink-cursor 1s step-end infinite;
+            width: 10px;
+            height: 18px;
+            background: var(--green-neon);
+            animation: blink-cursor 0.8s step-end infinite;
             vertical-align: middle;
-            margin-left: 2px;
+            margin-left: 3px;
+            box-shadow: 0 0 10px var(--green-glow), 0 0 20px var(--green-glow);
         }
 
         @keyframes blink-cursor {
@@ -316,9 +313,167 @@
             51%, 100% { opacity: 0; }
         }
 
+        /* Output Lines */
+        .output-line {
+            margin: 4px 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .line-error {
+            color: var(--red-error);
+            text-shadow: 0 0 8px rgba(255, 56, 96, 0.4);
+        }
+
+        .line-success {
+            color: var(--green-bright);
+            text-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .line-info {
+            color: var(--cyan-green);
+        }
+
+        .line-warn {
+            color: var(--lime-warn);
+        }
+
+        .line-dim {
+            color: var(--text-gray);
+        }
+
+        .line-ai {
+            color: var(--green-neon);
+            border-left: 2px solid var(--green-bright);
+            padding-left: 12px;
+            margin: 12px 0;
+        }
+
+        .line-cmd {
+            color: var(--cyan-green);
+            font-weight: 600;
+        }
+
+        /* AI Response Box */
+        .ai-response {
+            border: 1px solid rgba(0, 255, 200, 0.25);
+            background: rgba(0, 255, 200, 0.03);
+            padding: 16px 20px;
+            margin: 16px 0;
+            position: relative;
+            box-shadow: 
+                inset 0 0 40px rgba(0, 255, 200, 0.04),
+                0 0 30px rgba(0, 255, 200, 0.06);
+        }
+
+        .ai-response::before {
+            content: '[ GEMINI_RESPONSE ]';
+            position: absolute;
+            top: -11px;
+            left: 16px;
+            background: var(--bg-black);
+            padding: 0 10px;
+            font-size: 11px;
+            color: var(--cyan-green);
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .ai-response-content {
+            color: var(--text-white);
+            line-height: 1.8;
+            font-size: 13px;
+        }
+
+        /* Prompt Output */
+        .prompt-output {
+            border: 1px solid rgba(0, 255, 65, 0.35);
+            background: rgba(0, 255, 65, 0.03);
+            padding: 18px 22px;
+            margin: 18px 0;
+            font-size: 13px;
+            line-height: 1.75;
+            color: var(--green-bright);
+            position: relative;
+            box-shadow: 
+                inset 0 0 50px rgba(0, 255, 65, 0.04),
+                0 0 30px rgba(0, 255, 65, 0.1);
+        }
+
+        .prompt-output::before {
+            content: '[ PROMPT_GENERADO ]';
+            position: absolute;
+            top: -11px;
+            left: 16px;
+            background: var(--bg-black);
+            padding: 0 10px;
+            font-size: 11px;
+            color: var(--green-neon);
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        /* Man Page Style */
+        .man-page {
+            margin: 18px 0;
+        }
+
+        .man-section {
+            margin: 16px 0;
+        }
+
+        .man-title {
+            color: var(--green-neon);
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 0 12px var(--green-glow);
+        }
+
+        .man-content {
+            color: var(--text-white);
+            padding-left: 0;
+            line-height: 1.8;
+        }
+
+        .man-content code {
+            color: var(--cyan-green);
+            background: rgba(0, 255, 200, 0.08);
+            padding: 2px 7px;
+            font-family: inherit;
+            border-radius: 2px;
+        }
+
+        /* Step Indicator */
+        .step-indicator {
+            color: var(--green-neon);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 1px;
+            margin: 14px 0 10px 0;
+            padding: 8px 14px;
+            background: rgba(0, 255, 65, 0.05);
+            border-left: 3px solid var(--green-bright);
+            text-shadow: 0 0 10px var(--green-glow);
+        }
+
+        /* Typing Animation */
+        .typing-text {
+            overflow: hidden;
+            animation: typing 0.5s steps(40, end);
+        }
+
+        @keyframes typing {
+            from { max-height: 0; opacity: 0; }
+            to { max-height: 1000px; opacity: 1; }
+        }
+
         /* Selection */
         ::selection {
-            background: var(--green-ok);
+            background: var(--green-bright);
             color: var(--bg-black);
         }
 
@@ -329,34 +484,44 @@
             }
 
             .status-bar {
-                padding: 6px 12px;
+                padding: 8px 14px;
                 font-size: 11px;
                 flex-wrap: wrap;
                 gap: 8px;
             }
 
             .status-right {
-                gap: 10px;
+                gap: 12px;
                 font-size: 10px;
             }
 
             .output-area {
-                padding: 12px;
+                padding: 14px 16px;
             }
 
             .input-line {
-                padding: 10px 12px;
+                padding: 12px 16px;
             }
 
-            .term-box {
-                padding: 12px 14px;
-                margin: 14px 0;
+            .cyber-box {
+                padding: 16px 18px;
+                margin: 18px 0;
+            }
+
+            .box-title {
+                font-size: 13px;
             }
         }
 
-        /* Hidden utility */
+        /* Hidden */
         .hidden {
             display: none !important;
+        }
+
+        /* Glow effects on hover for interactive elements */
+        .interactive:hover {
+            text-shadow: 0 0 15px var(--green-glow);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -364,24 +529,27 @@
     <div class="terminal">
         <!-- Status Bar -->
         <div class="status-bar">
-            <span class="status-left">user@promptforge <span style="color:var(--text-gray)">pmd:</span> ~</span>
+            <span class="status-left">⬡ promptforge.sh <span style="color:var(--text-gray)">//</span> CYBER_TERMINAL v4.0</span>
             <span class="status-right">
-                <span>theme: <span class="status-highlight">amber</span></span>
-                <span>crt: <span class="status-highlight">on</span></span>
-                <span>sound: off</span>
+                <span class="status-item">theme: <span class="status-highlight">LECHUGA_CYBER</span></span>
+                <span class="status-item ai-status">
+                    ia: <span id="aiStatusText">DESCONECTADA</span>
+                    <span class="ai-dot" id="aiDot"></span>
+                </span>
+                <span class="status-item">crt: <span class="status-highlight">ON</span></span>
                 <span class="status-time" id="clock">00:00:00</span>
             </span>
         </div>
 
         <!-- Terminal Output -->
         <div class="output-area" id="outputArea">
-            <!-- Content loaded via JS -->
+            <!-- Content via JS -->
         </div>
 
         <!-- Input -->
         <div class="input-line">
             <span class="prompt-prefix">
-                <span class="prompt-user">user</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-path">~</span><span class="prompt-symbol">$</span>
+                <span class="prompt-user">cyber</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-path">~</span><span class="prompt-symbol">$</span>
             </span>
             <input 
                 type="text" 
@@ -392,470 +560,801 @@
                 spellcheck="false"
                 autofocus
             >
-            <span class="cursor-block"></span>
+            <span class="cursor-cyber"></span>
         </div>
     </div>
 
     <script>
         // =============================================
-        // STATE
+        // ESTADO GLOBAL
         // =============================================
         const state = {
             step: 1,
             totalSteps: 5,
             questionsCount: 0,
             promptsCreated: 0,
+            aiConnected: false,
+            apiKey: localStorage.getItem('pf_gemini_key') || '',
             data: {
-                objective: '',
-                context: '',
-                audience: '',
-                format: '',
-                tone: '',
-                constraints: [],
-                examples: ''
+                objetivo: '',
+                contexto: '',
+                audiencia: '',
+                formato: '',
+                tono: '',
+                restricciones: [],
+                ejemplos: ''
             },
             savedPrompts: JSON.parse(localStorage.getItem('pf_prompts') || '[]'),
             currentPrompt: '',
-            history: []
+            history: [],
+            conversationHistory: []
+        };
+
+        // Configuración Gemini
+        const GEMINI_CONFIG = {
+            endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+            model: 'gemini-pro'
         };
 
         // =============================================
-        // BOOT SEQUENCE
+        // MENSAJES DE INICIO (BOOT SEQUENCE)
         // =============================================
         const bootMessages = [
-            { type: 'ok', text: '[ OK ] promptforge.sh v3.1.0 starting...' },
-            { type: 'ok', text: '[ OK ] loading prompt engineering modules' },
-            { type: 'ok', text: '[ OK ] mounting /prompts (' + state.savedPrompts.length + ' entries)' },
-            { type: 'ok', text: '[ OK ] mounting /templates (12 templates)' },
-            { type: 'ok', text: '[ OK ] initializing ai subsystem [amber]' },
-            { type: 'warn', text: "[ WARN ] clipboard subsystem inactive (type 'save' to enable)" },
-            { type: 'ok', text: '[ OK ] reading history (' + state.questionsCount + ' commands)' }
+            { type: 'ok', text: '[ OK ] inicializando promptforge.sh v4.0 CYBER_EDITION...' },
+            { type: 'ok', text: '[ OK ] cargando módulos de ingeniería de prompts...' },
+            { type: 'ok', text: '[ OK ] montando /prompts (' + state.savedPrompts.length + ' entradas)' },
+            { type: 'ok', text: '[ OK ] montando /templates (15 plantillas)' },
+            { type: 'ok', text: '[ OK ] activando subsistema visual LECHUGA_CYBER' },
+            { type: 'warn', text: "[ WARN ] IA no conectada (usa 'conectar' + tu API KEY)" },
+            { type: 'ok', text: '[ OK ] leyendo historial (' + state.questionsCount + ' comandos)' },
+            { type: 'ok', text: '[ OK ] sistema listo. esperando comandos...' }
         ];
 
         const welcomeBox = `
-<div class="term-box">
-    <div class="box-title">promptforge.sh — a robust prompt generator that thinks it is a terminal.</div>
+<div class="cyber-box">
+    <div class="box-title">// promptforge.sh — generador de prompts robustos con IA integrada</div>
     <div class="box-content">
-        <p>type <span class="cmd-hint">help</span> to see commands.</p>
-        <p>type <span class="cmd-hint">ls</span> to look around.</p>
-        <p>type <span class="cmd-hint">new</span> or just start typing to begin.</p>
-        <p>type <span class="cmd-hint">cat README.md</span> for fun.</p>
+        <p><span class="cmd-hint">conectar [tu_api_key]</span> — conectar con Gemini AI</p>
+        <p><span class="cmd-hint">ayuda</span> — ver todos los comandos disponibles</p>
+        <p><span class="cmd-hint">ls</span> — explorar directorio</p>
+        <p><span class="cmd-hint">nuevo</span> — iniciar nueva sesión (o escribe directamente)</p>
+        <p><span class="cmd-hint">chat [tu mensaje]</span> — hablar con la IA</p>
+        <p><span class="cmd-hint">generar</span> — crear prompt con asistencia de IA</p>
     </div>
 </div>`;
 
         // =============================================
-        // QUESTIONS FLOW
+        // FLUJO DE PREGUNTAS
         // =============================================
-        const flow = [
+        const flujoPreguntas = [
             {
-                step: 1,
-                ask: () => print(`<div class="man-section"><div class="man-title">// STEP 01 — OBJECTIVE</div><div class="man-content">What is the <strong>primary objective</strong> of your prompt?<br><br>Be specific about:<br>• What should the AI do exactly?<br>• What result do you expect?<br>• What will you use this prompt for?</div></div>`)
+                paso: 1,
+                titulo: 'PASO 01 — OBJETIVO PRINCIPAL',
+                pregunta: () => imprimir(`
+<div class="step-indicator">▶ PASO 01 DE 05 — DEFINIENDO OBJETIVO</div>
+<div class="man-section">
+<div class="man-content">
+¿Cuál es el <strong>objetivo principal</strong> de tu prompt?<br><br>
+Sé específico sobre:<br>
+• ¿Qué quieres que la IA haga exactamente?<br>
+• ¿Qué resultado esperas obtener?<br>
+• ¿Para qué vas a usar este prompt?<br><br>
+<span style="color:var(--green-neon)">[Escribe tu respuesta y presiona ENTER]</span>
+</div></div>`)
             },
             {
-                step: 2,
-                ask: () => print(`<div class="man-section"><div class="man-title">// STEP 02 — CONTEXT & AUDIENCE</div><div class="man-content">Define the context and target audience:<br><br>• Who is the audience? (age, expertise level, interests)<br>• What background info should the AI know?<br>• Any specific domain or field?</div></div>`)
+                paso: 2,
+                titulo: 'PASO 02 — CONTEXTO Y AUDIENCIA',
+                pregunta: () => imprimir(`
+<div class="step-indicator">▶ PASO 02 DE 05 — CONTEXTO Y AUDIENCIA</div>
+<div class="man-section">
+<div class="man-content">
+Define el contexto y la audiencia objetivo:<br><br>
+• ¿Quién es la audiencia? (edad, nivel de experiencia, intereses)<br>
+• ¿Qué antecedentes debe conocer la IA?<br>
+• ¿Algún dominio o campo específico?<br><br>
+<span style="color:var(--green-neon)">[Continúa describiendo...]</span>
+</div></div>`)
             },
             {
-                step: 3,
-                ask: () => print(`<div class="man-section"><div class="man-title">// STEP 03 — FORMAT & STYLE</div><div class="man-content">Specify output format and tone:<br><br>• Format: list, paragraphs, code, table, json...<br>• Tone: formal, casual, technical, persuasive...<br>• Any specific writing style?</div></div>`)
+                paso: 3,
+                titulo: 'PASO 03 — FORMATO Y ESTILO',
+                pregunta: () => imprimir(`
+<div class="step-indicator">▶ PASO 03 DE 05 — FORMATO Y ESTILO</div>
+<div class="man-section">
+<div class="man-content">
+Especifica el formato y tono de salida:<br><br>
+• Formato deseado: lista, párrafos, código, tabla, JSON...<br>
+• Tono: formal, casual, técnico, persuasivo, creativo...<br>
+• ¿Algún estilo de escritura particular?<br><br>
+<span style="color:var(--green-neon)">[Describe las especificaciones...]</span>
+</div></div>`)
             },
             {
-                step: 4,
-                ask: () => print(`<div class="man-section"><div class="man-title">// STEP 04 — CONSTRAINTS</div><div class="man-content">Set limitations and final details:<br><br>• Max/min length<br>• Words or concepts to avoid<br>• Examples for reference<br>• Special instructions</div></div>`)
+                paso: 4,
+                titulo: 'PASO 04 — RESTRICCIONES',
+                pregunta: () => imprimir(`
+<div class="step-indicator">▶ PASO 04 DE 05 — RESTRICCIONES Y DETALLES</div>
+<div class="man-section">
+<div class="man-content">
+Establece limitaciones y detalles finales:<br><br>
+• Longitud máxima/mínima<br>
+• Palabras o conceptos a evitar<br>
+• Ejemplos de referencia (entrada/salida)<br>
+• Instrucciones especiales adicionales<br><br>
+<span style="color:var(--green-neon)">[Agrega restricciones...]</span>
+</div></div>`)
             },
             {
-                step: 5,
-                action: 'generate'
+                paso: 5,
+                accion: 'generar'
             }
         ];
 
         // =============================================
-        // INITIALIZATION
+        // INICIALIZACIÓN
         // =============================================
         document.addEventListener('DOMContentLoaded', () => {
-            bootSequence();
-            startClock();
+            secuenciaInicio();
+            iniciarReloj();
             
             document.getElementById('cmdInput').addEventListener('keydown', e => {
-                if (e.key === 'Enter') execute();
+                if (e.key === 'Enter') ejecutarComando();
             });
         });
 
-        function bootSequence() {
-            const output = document.getElementById('outputArea');
+        function secuenciaInicio() {
             let i = 0;
 
-            function showNext() {
+            function mostrarSiguiente() {
                 if (i < bootMessages.length) {
                     const msg = bootMessages[i];
-                    const cls = msg.type === 'ok' ? 'boot-ok' : 'boot-warn';
-                    appendLine(`<span class="${cls}">${msg.text}</span>`, 'boot-line');
+                    const clase = msg.type === 'ok' ? 'boot-ok' : 'boot-warn';
+                    agregarLinea(`<span class="${clase}">${msg.text}</span>`, 'boot-line');
                     i++;
-                    setTimeout(showNext, 80 + Math.random() * 60);
+                    setTimeout(mostrarSiguiente, 70 + Math.random() * 50);
                 } else {
                     setTimeout(() => {
-                        appendLine(welcomeBox);
-                        appendLine('');
-                        flow[0].ask();
-                        scrollToBottom();
+                        agregarLinea(welcomeBox);
+                        agregarLinea('');
+                        if (state.apiKey) {
+                            conectarAutomaticamente();
+                        } else {
+                            flujoPreguntas[0].pregunta();
+                        }
+                        scrollAlFinal();
                     }, 300);
                 }
             }
 
-            showNext();
+            mostrarSiguiente();
         }
 
-        function startClock() {
-            function update() {
-                const now = new Date();
-                const h = String(now.getHours()).padStart(2, '0');
-                const m = String(now.getMinutes()).padStart(2, '0');
-                const s = String(now.getSeconds()).padStart(2, '0');
+        function iniciarReloj() {
+            function actualizar() {
+                const ahora = new Date();
+                const h = String(ahora.getHours()).padStart(2, '0');
+                const m = String(ahora.getMinutes()).padStart(2, '0');
+                const s = String(ahora.getSeconds()).padStart(2, '0');
                 document.getElementById('clock').textContent = `${h}:${m}:${s}`;
             }
-            update();
-            setInterval(update, 1000);
+            actualizar();
+            setInterval(actualizar, 1000);
+        }
+
+        function conectarAutomaticamente() {
+            state.aiConnected = true;
+            actualizarEstadoAI(true);
+            agregarLinea('<span class="line-success">[ OK ] reconectado automáticamente con Gemini (key guardada)</span>');
+            agregarLinea('');
+            flujoPreguntas[0].pregunta();
+        }
+
+        function actualizarEstadoAI(conectado) {
+            state.aiConnected = conectado;
+            const dot = document.getElementById('aiDot');
+            const text = document.getElementById('aiStatusText');
+            
+            if (conectado) {
+                dot.classList.add('connected');
+                text.textContent = 'CONECTADA';
+                text.style.color = 'var(--green-neon)';
+            } else {
+                dot.classList.remove('connected');
+                text.textContent = 'DESCONECTADA';
+                text.style.color = 'var(--red-error)';
+            }
         }
 
         // =============================================
-        // CORE FUNCTIONS
+        // EJECUCIÓN DE COMANDOS
         // =============================================
-        function execute() {
+        function ejecutarComando() {
             const input = document.getElementById('cmdInput');
             const cmd = input.value.trim();
             if (!cmd) return;
 
-            // Show command
-            appendLine(`<span class="prompt-prefix"><span class="prompt-user">user</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-path">~</span><span class="prompt-symbol">$</span></span>${escapeHtml(cmd)}`);
+            // Mostrar comando escrito
+            agregarLinea(`<span class="prompt-prefix"><span class="prompt-user">cyber</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-path">~</span><span class="prompt-symbol">$</span></span>${escaparHtml(cmd)}`);
             
             state.history.push(cmd);
             state.questionsCount++;
 
             input.value = '';
 
-            // Process
-            processCommand(cmd);
-            scrollToBottom();
+            procesarComando(cmd);
+            scrollAlFinal();
         }
 
-        function processCommand(cmd) {
+        async function procesarComando(cmd) {
             const c = cmd.toLowerCase().trim();
 
-            // System commands
-            if (c === 'help' || c === '--help' || c === '-h') {
-                showHelp();
+            // Comandos del sistema
+            if (c === 'ayuda' || c === 'help' || c === '--help' || c === '-h') {
+                mostrarAyuda();
                 return;
             }
-            if (c === 'clear' || c === 'cls') {
-                clearScreen();
+            if (c === 'limpiar' || c === 'clear' || c === 'cls') {
+                limpiarPantalla();
                 return;
             }
-            if (c === 'new' || c === 'reset') {
-                newSession();
+            if (c === 'nuevo' || c === 'reset' || c === 'new') {
+                nuevaSesion();
                 return;
             }
             if (c === 'ls' || c === 'dir') {
-                listFiles();
+                listarArchivos();
                 return;
             }
-            if (c === 'cat readme.md' || c === 'readme') {
-                showReadme();
+            if (c === 'readme' || c === 'cat readme.md') {
+                mostrarReadme();
                 return;
             }
-            if (c === 'save') {
-                savePrompt();
+            
+            // Comandos de IA
+            if (c.startsWith('conectar ') || c.startsWith('connect ')) {
+                await conectarAI(c.split(' ').slice(1).join(' '));
                 return;
             }
-            if (c === 'list' || c === 'saved') {
-                listSaved();
+            if (c.startsWith('chat ') || c.startsWith('hablar ')) {
+                await chatConAI(cmd.substring(cmd.indexOf(' ') + 1));
                 return;
             }
-            if (c === 'export') {
-                exportAll();
+            if (c === 'desconectar' || c === 'disconnect') {
+                desconectarAI();
                 return;
             }
-            if (c === 'copy' || c === 'cp') {
-                copyPrompt();
-                return;
-            }
-            if (c === 'download' || c === 'dl') {
-                downloadPrompt();
-                return;
-            }
-            if (c === 'about' || c === 'version' || c === '-v') {
-                showAbout();
-                return;
-            }
-            if (c.startsWith('load ') || c.startsWith('open ')) {
-                loadPrompt(c.split(' ')[1]);
-                return;
-            }
-            if (c === '' || c === 'exit' || c === 'quit') {
-                appendLine('<span class="line-dim">use Ctrl+W to close this tab. or just stay forever.</span>');
+            if (c === 'estado' || c === 'status') {
+                mostrarEstado();
                 return;
             }
 
-            // Treat as answer to current question
-            handleAnswer(cmd);
+            // Comandos de prompts
+            if (c === 'guardar' || c === 'save') {
+                guardarPrompt();
+                return;
+            }
+            if (c === 'lista' || c === 'list' || c === 'saved') {
+                listarGuardados();
+                return;
+            }
+            if (c.startsWith('cargar ') || c.startsWith('load ')) {
+                cargarPrompt(c.split(' ')[1]);
+                return;
+            }
+            if (c === 'copiar' || c === 'copy' || c === 'cp') {
+                copiarPrompt();
+                return;
+            }
+            if (c === 'descargar' || c === 'download' || c === 'dl') {
+                descargarPrompt();
+                return;
+            }
+            if (c === 'exportar' || c === 'export') {
+                exportarTodo();
+                return;
+            }
+            if (c === 'about' || c === 'version' || c === '-v' || c === '--version') {
+                mostrarAbout();
+                return;
+            }
+            if (c === '' || c === 'exit' || c === 'quit' || c === 'salir') {
+                agregarLinea('<span class="line-dim">usa Ctrl+W para cerrar esta pestaña. o quédate para siempre.</span>');
+                return;
+            }
+
+            // Si no es comando conocido, tratar como respuesta
+            await manejarRespuesta(cmd);
         }
 
-        function handleAnswer(answer) {
+        // =============================================
+        // COMANDOS DE IA (GEMINI)
+        // =============================================
+        async function conectarAI(apiKey) {
+            if (!apiKey || apiKey.length < 10) {
+                agregarLinea('<span class="line-error">error: se requiere una API Key válida de Gemini.</span>');
+                agregarLinea('<span class="line-dim">obtén una gratis en: https://aistudio.google.com/app/apikey</span>');
+                return;
+            }
+
+            state.apiKey = apiKey;
+            localStorage.setItem('pf_gemini_key', apiKey);
+
+            agregarLinea('<span class="line-info">[ ... ] conectando con Gemini AI...</span>');
+
+            // Probar conexión
+            try {
+                const respuesta = await llamarGemini('Responde solo con: CONEXIÓN EXITOSA', []);
+                
+                if (respuesta.includes('CONEXIÓN EXITOSA') || respuesta.includes('exitosa') || respuesta.includes('éxito')) {
+                    actualizarEstadoAI(true);
+                    agregarLinea('<span class="line-success">[ OK ] ¡Conexión establecida con Gemini!</span>');
+                    agregarLinea('<span class="line-info">[ INFO ] IA lista para asistir en generación de prompts</span>');
+                    agregarLinea('');
+                    agregarLinea('<span class="line-dim">comandos disponibles:</span> <span class="cmd-hint">chat [mensaje]</span> | <span class="cmd-hint">generar</span> | <span class="cmd-hint">desconectar</span>');
+                } else {
+                    throw new Error('Respuesta inesperada');
+                }
+            } catch (error) {
+                actualizarEstadoAI(false);
+                agregarLinea('<span class="line-error">error: no se pudo conectar. verifica tu API Key.</span>');
+                agregarLinea('<span class="line-dim">detalle: ' + error.message + '</span>');
+            }
+        }
+
+        async function chatConAI(mensaje) {
+            if (!state.aiConnected) {
+                agregarLinea('<span class="line-error">error: IA no conectada. usa <span class="cmd-hint">conectar [tu_api_key]</span> primero.</span>');
+                return;
+            }
+
+            if (!mensaje || mensaje.trim().length === 0) {
+                agregarLinea('<span class="line-error">error: escribe un mensaje. uso: <span class="cmd-hint">chat [tu mensaje]</span></span>');
+                return;
+            }
+
+            agregarLinea(`<span class="line-ai"><span style="color:var(--cyan-green)">[TÚ]</span> ${escaparHtml(mensaje)}</span>`);
+            agregarLinea('<span class="line-info">[ GEMINI ] pensando...</span>');
+
+            try {
+                const respuesta = await llamarGemini(mensaje, state.conversationHistory.slice(-10));
+                
+                state.conversationHistory.push(
+                    { role: 'user', parts: [{ text: mensaje }] },
+                    { role: 'model', parts: [{ text: respuesta }] }
+                );
+
+                agregarLinea('');
+                agregarLinea(`<div class="ai-response"><div class="ai-response-content">${formatearRespuestaAI(respuesta)}</div></div>`);
+                agregarLinea('');
+
+            } catch (error) {
+                agregarLinea('<span class="line-error">error al comunicarse con Gemini: ' + error.message + '</span>');
+            }
+        }
+
+        async function llamarGemini(prompt, historial = []) {
+            const url = `${GEMINI_CONFIG.endpoint}?key=${state.apiKey}`;
+            
+            const requestBody = {
+                contents: [
+                    ...historial,
+                    {
+                        role: 'user',
+                        parts: [{ text: prompt }]
+                    }
+                ],
+                generationConfig: {
+                    temperature: 0.8,
+                    topK: 40,
+                    topP: 0.95,
+                    maxOutputTokens: 2048,
+                },
+                safetySettings: [
+                    { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+                    { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+                ]
+            };
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'Error en la API');
+            }
+
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sin respuesta';
+        }
+
+        function desconectarAI() {
+            state.aiConnected = false;
+            state.apiKey = '';
+            localStorage.removeItem('pf_gemini_key');
+            actualizarEstadoAI(false);
+            agregarLinea('<span class="line-success">[ OK ] desconectado de Gemini AI.</span>');
+            agregarLinea('<span class="line-dim">la key ha sido eliminada del almacenamiento local.</span>');
+        }
+
+        async function mostrarEstado() {
+            agregarLinea(`
+<span class="line-info">╔══════════════════════════════════════════════════╗</span>
+<span class="line-info">║         ESTADO DEL SISTEMA — PROMPFORGE.SH       ║</span>
+<span class="line-info">╠══════════════════════════════════════════════════╣</span>
+<span class="line-info">║ Versión:     4.0 CYBER_EDITION                   ║</span>
+<span class="line-info">║ Tema:        LECHUGA_CYBER                       ║</span>
+<span class="line-info">║ IA Gemini:   ${state.aiConnected ? 'CONECTADA ✓' : 'DESCONECTADA ✗'}                  ║</span>
+<span class="line-info">║ Prompts:     ${state.promptsCreated.toString().padStart(4)} creados                          ║</span>
+<span class="line-info">║ Guardados:   ${state.savedPrompts.length.toString().padStart(4)} en almacenamiento                 ║</span>
+<span class="line-info">║ Comandos:    ${state.questionsCount.toString().padStart(4)} ejecutados                        ║</span>
+<span class="line-info">║ Paso actual: ${state.step.toString().padStart(4)} de 5                              ║</span>
+<span class="line-info">╚══════════════════════════════════════════════════╝</span>`);
+        }
+
+        // =============================================
+        // MANEJO DE RESPUESTAS DEL USUARIO
+        // =============================================
+        async function manejarRespuesta(respuesta) {
             switch(state.step) {
                 case 1:
-                    state.data.objective = answer;
+                    state.data.objetivo = respuesta;
                     break;
                 case 2:
-                    state.data.context = answer;
+                    state.data.contexto = respuesta;
                     break;
                 case 3:
-                    state.data.format = answer;
+                    state.data.formato = respuesta;
                     break;
                 case 4:
-                    state.data.constraints.push(answer);
+                    state.data.restricciones.push(respuesta);
                     break;
+            }
+
+            // Si hay IA conectada, pedir sugerencias
+            if (state.aiConnected && state.step < state.totalSteps) {
+                agregarLinea('<span class="line-info">[ GEMINI ] analizando respuesta...</span>');
+                
+                try {
+                    const contexto = `Estoy ayudando a crear un prompt robusto. El usuario está en el paso ${state.step} de 5.
+                    
+Información recopilada hasta ahora:
+- Objetivo: ${state.data.objetivo || 'pendiente'}
+- Contexto: ${state.data.contexto || 'pendiente'}
+- Formato: ${state.data.formato || 'pendiente'}
+
+Última respuesta del usuario: "${respuesta}"
+
+Responde en ESPAÑOL de forma muy breve (máximo 2 líneas), confirmando que entendiste y dando un pequeño consejo para el siguiente paso.`;
+
+                    const sugerencia = await llamarGemini(contexto, []);
+                    agregarLinea(`<span class="line-ai"><span style="color:var(--cyan-green)">[ GEMINI ]</span> ${sugerencia}</span>`);
+                } catch (e) {
+                    // Continuar sin sugerencia si falla
+                }
             }
 
             if (state.step < state.totalSteps) {
                 state.step++;
-                flow[state.step - 1].ask();
+                setTimeout(() => flujoPreguntas[state.step - 1].pregunta(), 300);
             } else {
-                generatePrompt();
+                await generarPromptConIA();
             }
         }
 
-        function generatePrompt() {
+        async function generarPromptConIA() {
             const d = state.data;
-            
-            let prompt = `# ROLE\n`;
-            prompt += `You are an expert AI assistant specialized in: ${d.objective}\n\n`;
-            prompt += `# OBJECTIVE\n${d.objective}\n\n`;
-            
-            if (d.context) {
-                prompt += `# CONTEXT & AUDIENCE\n${d.context}\n\n`;
-            }
-            
-            if (d.format) {
-                prompt += `# FORMAT & STYLE\nFormat: ${d.format}\n\n`;
-            }
-            
-            if (d.constraints.length > 0) {
-                prompt += `# CONSTRAINTS\n`;
-                d.constraints.forEach(c => prompt += `- ${c}\n`);
-                prompt += `\n`;
-            }
-            
-            prompt += `# EXECUTION PROTOCOL\n`;
-            prompt += `1. Analyze the request thoroughly\n`;
-            prompt += `2. Consider all provided context\n`;
-            prompt += `3. Generate output following specifications\n`;
-            prompt += `4. Verify against constraints\n`;
-            prompt += `5. Deliver polished result\n\n`;
-            prompt += `--- Execute now ---`;
 
-            state.currentPrompt = prompt;
+            // Generar prompt base
+            let promptBase = `# ROL\n`;
+            promptBase += `Eres un asistente de IA experto especializado en: ${d.objetivo}\n\n`;
+            promptBase += `# OBJETIVO PRINCIPAL\n${d.objetivo}\n\n`;
+            
+            if (d.contexto) {
+                promptBase += `# CONTEXTO Y AUDIENCIA\n${d.contexto}\n\n`;
+            }
+            
+            if (d.formato) {
+                promptBase += `# FORMATO Y ESTILO\nFormato: ${d.formato}\n\n`;
+            }
+            
+            if (d.restricciones.length > 0) {
+                promptBase += `# RESTRICCIONES\n`;
+                d.restricciones.forEach(r => promptBase += `- ${r}\n`);
+                promptBase += `\n`;
+            }
+            
+            promptBase += `# PROTOCOLO DE EJECUCIÓN\n`;
+            promptBase += `1. Analizar la solicitud detalladamente\n`;
+            promptBase += `2. Considerar todo el contexto proporcionado\n`;
+            promptBase += `3. Generar salida siguiendo especificaciones\n`;
+            promptBase += `4. Verificar contra restricciones\n`;
+            promptBase += `5. Entregar resultado pulido\n\n`;
+            promptBase += `--- Ejecutar ahora ---`;
+
+            // Si hay IA, mejorar el prompt
+            if (state.aiConnected) {
+                agregarLinea('<span class="line-info">[ GEMINI ] optimizando prompt con IA...</span>');
+                
+                try {
+                    const instruccionIA = `Eres un experto en ingeniería de prompts. Tengo esta información para crear un prompt robusto:
+
+OBJETIVO: ${d.objetivo}
+CONTEXTO: ${d.contexto || 'No especificado'}
+FORMATO: ${d.formato || 'No especificado'}
+RESTRICCIONES: ${d.restricciones.join(', ') || 'Ninguna'}
+
+Genera un PROMPT PROFESIONAL Y OPTIMIZADO en inglés (para mejor rendimiento con IAs) que incluya:
+1. Definición clara del rol
+2. Instrucciones específicas y accionables
+3. Formato de salida estructurado
+4. Ejemplos si aplica
+5. Criterios de calidad
+
+Responde SOLO con el prompt generado, sin explicaciones adicionales.`;
+
+                    const promptMejorado = await llamarGemini(instruccionIA, []);
+                    state.currentPrompt = promptMejorado;
+                } catch (error) {
+                    state.currentPrompt = promptBase;
+                    agregarLinea('<span class="line-warn">[ WARN ] usando modo plantilla (IA no disponible)</span>');
+                }
+            } else {
+                state.currentPrompt = promptBase;
+            }
+
             state.promptsCreated++;
 
-            appendLine('<span class="line-success">[ OK ] prompt generated successfully.</span>');
-            appendLine('');
-            appendLine(`<div class="prompt-output">${escapeHtml(prompt)}</div>`);
-            appendLine('');
-            appendLine('<span class="line-info">commands:</span> <span class="cmd-hint">save</span> | <span class="cmd-hint">copy</span> | <span class="cmd-hint">download</span>');
-            appendLine('<span class="line-dim">type <span class="cmd-hint">new</span> to create another prompt.</span>');
+            agregarLinea('<span class="line-success">[ OK ] ════════════════════════════════════════</span>');
+            agregarLinea('<span class="line-success">[ OK ] ¡PROMPT ROBUSTO GENERADO EXITOSAMENTE!</span>');
+            agregarLinea('<span class="line-success">[ OK ] ════════════════════════════════════════</span>');
+            agregarLinea('');
+            agregarLinea(`<div class="prompt-output">${escaparHtml(state.currentPrompt)}</div>`);
+            agregarLinea('');
+            agregarLinea('<span class="line-info">comandos:</span> <span class="cmd-hint">guardar</span> | <span class="cmd-hint">copiar</span> | <span class="cmd-hint">descargar</span>');
+            agregarLinea('<span class="line-dim">escribe <span class="cmd-hint">nuevo</span> para crear otro prompt.</span>');
 
-            // Reset
+            // Resetear para siguiente
             setTimeout(() => {
                 state.step = 1;
-                state.data = { objective:'', context:'', audience:'', format:'', tone:'', constraints:[], examples:'' };
+                state.data = { objetivo:'', contexto:'', audiencia:'', formato:'', tono:'', restricciones:[], ejemplos:'' };
             }, 100);
         }
 
         // =============================================
-        // COMMAND IMPLEMENTATIONS
+        // COMANDOS DE SISTEMA
         // =============================================
-        function showHelp() {
-            appendLine(`
+        function mostrarAyuda() {
+            agregarLinea(`
 <div class="man-page">
 <div class="man-section">
-<div class="man-title">NAME</div>
-<div class="man-content">promptforge.sh — a robust prompt generator, in terminal form</div>
+<div class="man-title">Nombre</div>
+<div class="man-content">promptforge.sh — generador de prompts robustos con IA, en formato terminal</div>
 </div>
 
 <div class="man-section">
-<div class="man-title">SYNOPSIS</div>
-<div class="man-content"><code>&lt;command&gt;</code> [arguments]</div>
+<div class="man-title">Sintaxis</div>
+<div class="man-content"><code>&lt;comando&gt;</code> [argumentos]</div>
 </div>
 
 <div class="man-section">
-<div class="man-title">DESCRIPTION</div>
+<div class="man-title">Descripción</div>
 <div class="man-content">
-You are using a prompt generator by typing at a prompt. There is no other interface.
-This is the entire interface.
-
-Type your answers when asked, and a robust prompt will be generated.
+Estás usando un generador de prompts escribiendo comandos en una terminal.
+Esta es la única interfaz. No hay GUI. Solo código.<br><br>
+<strong>Modo con IA:</strong> Conecta Gemini para generación inteligente de prompts.<br>
+<strong>Modo sin IA:</strong> Usa plantillas predefinidas (funcionalidad básica).
 </div>
 </div>
 
 <div class="man-section">
-<div class="man-title">COMMANDS</div>
+<div class="man-title">Comandos de IA</div>
 <div class="man-content">
-  <code>help</code>          Show this help message<br>
-  <code>new</code>           Start new prompt session<br>
-  <code>save</code>          Save current prompt<br>
-  <code>list</code>          List saved prompts<br>
-  <code>load [id]</code>     Load a saved prompt<br>
-  <code>copy</code>          Copy to clipboard<br>
-  <code>download</code>      Download as .txt file<br>
-  <code>export</code>        Export all prompts as JSON<br>
-  <code>ls</code>            List directory contents<br>
-  <code>clear</code>         Clear screen<br>
-  <code>readme</code>        Show README<br>
-  <code>about</code>         About this system
+  <code>conectar [api_key]</code>   Conectar con Gemini AI<br>
+  <code>chat [mensaje]</code>      Hablar directamente con la IA<br>
+  <code>desconectar</code>          Desconectar de la IA<br>
+  <code>estado</code>               Ver estado del sistema
 </div>
 </div>
 
 <div class="man-section">
-<div class="man-title">EXAMPLES</div>
+<div class="man-title">Comandos de Prompts</div>
 <div class="man-content">
-  user@promptforge:~$ I want a prompt for technical writing<br>
-  user@promptforge:~$ save<br>
-  user@promptforge:~$ list<br>
-  user@promptforge:~$ load 1
+  <code>nuevo</code>                Iniciar nueva sesión<br>
+  <code>guardar</code>              Guardar prompt actual<br>
+  <code>lista</code>                Ver prompts guardados<br>
+  <code>cargar [id]</code>          Cargar un prompt guardado<br>
+  <code>copiar</code>               Copiar al portapapeles<br>
+  <code>descargar</code>            Descargar como .txt<br>
+  <code>exportar</code>             Exportar todo como JSON
+</div>
+</div>
+
+<div class="man-section">
+<div class="man-title">Comandos del Sistema</div>
+<div class="man-content">
+  <code>ayuda</code>                 Mostrar esta ayuda<br>
+  <code>ls</code>                   Listar directorio<br>
+  <code>limpiar</code>              Limpiar pantalla<br>
+  <code>readme</code>               Ver README.md<br>
+  <code>about</code>                Información del sistema
+</div>
+</div>
+
+<div class="man-section">
+<div class="man-title">Ejemplos</div>
+<div class="man-content">
+  cyber@promptforge:~$ conectar AIzaSyC...tu-api-key-aqui<br>
+  cyber@promptforge:~$ Quiero un prompt para escribir artículos técnicos<br>
+  cyber@promptforge:~$ guardar<br>
+  cyber@promptforge:~$ chat ¿cómo mejoro este prompt?<br>
+  cyber@promptforge:~$ cargar 1
 </div>
 </div>
 </div>`);
         }
 
-        function showReadme() {
-            appendLine(`
+        function mostrarReadme() {
+            agregarLinea(`
 <div class="man-page">
 <div class="man-section">
-<div class="man-title"># PROMPFORGE.SH</div>
+<div class="man-title"># PROMPFORGE.SH V4.0 — CYBER_EDITION</div>
 <div class="man-content">
-A terminal-style prompt generator inspired by retro.sh and old-school terminals.<br><br>
+Una terminal de generación de prompts con estética cyberpunk/Matrix.<br><br>
 
-## WHY TERMINAL?<br>
-Because dashboards are overrated. Real engineers use terminals.<br><br>
+## ¿POR QUÉ TERMINAL?<br>
+Porque los dashboards están sobrevalorados. Los verdaderos ingenieros usan terminales.<br><br>
 
-## FEATURES<br>
-- Pure terminal interface (no GUI clutter)<br>
-- Robust prompt generation in 5 guided steps<br>
-- Local storage persistence<br>
-- Export/import functionality<br>
-- CRT aesthetic with amber theme<br><br>
+## CARACTERÍSTICAS<br>
+• Interfaz 100% terminal (sin GUI)<br>
+• Integración real con Gemini AI<br>
+• Generación de prompts en 5 pasos guiados<br>
+• Almacenamiento local persistente<br>
+• Tema LECHUGA_CYBER (verde neón)<br>
+• Chat directo con la IA<br>
+• Exportación/importación de prompts<br><br>
 
-## KEYBOARD SHORTCUTS<br>
-- Enter: Execute command<br>
-- (no other shortcuts needed)<br><br>
+## COLORES (PALETA CYBER)<br>
+• Verde neón (#39ff14) — Principal<br>
+• Verde bright (#00ff41) — Éxito<br>
+• Cyan verde (#00ffc8) — Info/comandos<br>
+• Lima (#adff22) — Advertencias<br>
+• Rojo (#ff3860) — Errores<br><br>
 
-## LICENSE<br>
-MIT — Use it, break it, fix it, love it.
+## OBTENER API KEY DE GEMINI<br>
+1. Ve a https://aistudio.google.com/app/apikey<br>
+2. Inicia sesión con tu cuenta Google<br>
+3. Crea una nueva API Key<br>
+4. Cópiala y úsala: <code>conectar tu-key-aquí</code><br><br>
+
+## LICENCIA<br>
+MIT — Úsalo, rómpelo, arrégalo, ámalo.
 </div>
 </div>
 </div>`);
         }
 
-        function showAbout() {
-            appendLine(`
-<span class="line-info">╔══════════════════════════════════════╗</span>
-<span class="line-info">║     PROMPFORGE.SH v3.1.0             ║</span>
-<span class="line-info">╠══════════════════════════════════════╣</span>
-<span class="line-info">║  Engine: PromptForge Core            ║</span>
-<span class="line-info">║  Theme: Amber                        ║</span>
-<span class="line-info">║  Status: OPERATIONAL                 ║</span>
-<span class="line-info">║  Prompts Created: ${state.promptsCreated.toString().padStart(4)}               ║</span>
-<span class="line-info">║  Saved: ${state.savedPrompts.length.toString().padStart(4)}                         ║</span>
-<span class="line-info">╚══════════════════════════════════════╝</span>`);
+        function mostrarAbout() {
+            agregarLinea(`
+<span class="line-info">╔══════════════════════════════════════════════════════╗</span>
+<span class="line-info">║                                                      ║</span>
+<span class="line-info">║     ⬡ PROMPFORGE.SH v4.0 — CYBER_EDITION             ║</span>
+<span class="line-info">║                                                      ║</span>
+<span class="line-info">╠══════════════════════════════════════════════════════╣</span>
+<span class="line-info">║  Motor:        PromptForge Core + Gemini AI           ║</span>
+<span class="line-info">║  Tema:         LECHUGA_CYBER (verde neón)              ║</span>
+<span class="line-info">║  Estado:       OPERACIONAL                           ║</span>
+<span class="line-info">║  IA:           ${state.aiConnected ? 'CONECTADA ✓' : 'DESCONECTADA ✗'}                           ║</span>
+<span class="line-info">║  Prompts:      ${state.promptsCreated.toString().padStart(4)} creados                             ║</span>
+<span class="line-info">║  Guardados:    ${state.savedPrompts.length.toString().padStart(4)} en storage                           ║</span>
+<span class="line-info">║  Comandos:     ${state.questionsCount.toString().padStart(4)} ejecutados                           ║</span>
+<span class="line-info">║                                                      ║</span>
+<span class="line-info">║  Hecho con ████ por @cyber_forge                     ║</span>
+<span class="line-info">║  2024 — Todos los derechos reservados                ║</span>
+<span class="line-info">║                                                      ║</span>
+<span class="line-info">╚══════════════════════════════════════════════════════╝</span>`);
         }
 
-        function newSession() {
+        function nuevaSesion() {
             state.step = 1;
-            state.data = { objective:'', context:'', audience:'', format:'', tone:'', constraints:[], examples:'' };
-            appendLine('<span class="line-success">[ OK ] new session started.</span>');
-            appendLine('');
-            flow[0].ask();
+            state.data = { objetivo:'', contexto:'', audiencia:'', formato:'', tono:'', restricciones:[], ejemplos:'' };
+            agregarLinea('<span class="line-success">[ OK ] nueva sesión iniciada.</span>');
+            agregarLinea('');
+            flujoPreguntas[0].pregunta();
         }
 
-        function clearScreen() {
+        function limpiarPantalla() {
             document.getElementById('outputArea').innerHTML = '';
-            appendLine('<span class="line-dim">[screen cleared]</span>');
+            agregarLinea('<span class="line-dim">[pantalla limpiada]</span>');
         }
 
-        function listFiles() {
-            appendLine(`
-<span class="line-info">drwxr-xr-x  2 user staff  4096 Jan 01 00:00 <span class="cmd-hint">./</span></span>
-<span class="line-info">drwxr-xr-x  4 user staff  4096 Jan 01 00:00 <span class="cmd-hint">../</span></span>
-<span class="line-info">-rw-r--r--  1 user staff   256 Jan 01 00:00 <span class="cmd-hint">README.md</span></span>
-<span class="line-info">-rw-r--r--  1 user staff  1024 Jan 01 00:00 <span class="cmd-hint">prompts.json</span> (${state.savedPrompts.length} entries)</span>
-<span class="line-info">drwx------  2 user staff  4096 Jan 01 00:00 <span class="cmd-hint">.cache/</span></span>`);
+        function listarArchivos() {
+            agregarLinea(`
+<span class="line-info">drwxr-xr-x  2 cyber  staff  4096 ene 01 00:00 <span class="cmd-hint">./</span></span>
+<span class="line-info">drwxr-xr-x  4 cyber  staff  4096 ene 01 00:00 <span class="cmd-hint">../</span></span>
+<span class="line-info">-rw-r--r--  1 cyber  staff   512 ene 01 00:00 <span class="cmd-hint">README.md</span></span>
+<span class="line-info">-rw-r--r--  1 cyber  staff  2048 ene 01 00:00 <span class="cmd-hint">prompts.json</span> (${state.savedPrompts.length} entradas)</span>
+<span class="line-info">drwx------  2 cyber  staff  4096 ene 01 00:00 <span class="cmd-hint">.config/</span></span>
+<span class="line-info">-rw-------  1 cyber  staff   256 ene 01 00:00 <span class="cmd-hint">.gemini_key</span> ${state.apiKey ? '(presente)' : '(ausente)'}</span>`);
         }
 
-        function savePrompt() {
+        // =============================================
+        // FUNCIONES DE ALMACENAMIENTO
+        // =============================================
+        function guardarPrompt() {
             if (!state.currentPrompt) {
-                appendLine('<span class="line-error">error: nothing to save. generate a prompt first.</span>');
+                agregarLinea('<span class="line-error">error: nada que guardar. genera un prompt primero.</span>');
                 return;
             }
 
-            const entry = {
+            const entrada = {
                 id: state.savedPrompts.length + 1,
-                title: state.data.objective.substring(0, 40) || 'untitled',
-                content: state.currentPrompt,
-                date: new Date().toISOString()
+                titulo: state.data.objetivo.substring(0, 45) || 'sin_título',
+                contenido: state.currentPrompt,
+                fecha: new Date().toISOString(),
+                metadata: {...state.data}
             };
 
-            state.savedPrompts.push(entry);
+            state.savedPrompts.push(entrada);
             localStorage.setItem('pf_prompts', JSON.stringify(state.savedPrompts));
 
-            appendLine(`<span class="line-success">[ OK ] prompt saved as #${entry.id} — "${entry.title}"</span>`);
+            agregarLinea(`<span class="line-success">[ OK ] prompt guardado como #${entrada.id} — "${entrada.titulo}"</span>`);
         }
 
-        function listSaved() {
+        function listarGuardados() {
             if (state.savedPrompts.length === 0) {
-                appendLine('<span class="line-dim">no prompts saved yet.</span>');
+                agregarLinea('<span class="line-dim">no hay prompts guardados aún.</span>');
                 return;
             }
 
-            appendLine('<span class="line-info">SAVED PROMPTS:</span>');
-            appendLine('');
+            agregarLinea('<span class="line-info">═══ PROMPTS GUARDADOS ═══</span>');
+            agregarLinea('');
             state.savedPrompts.forEach(p => {
-                appendLine(`  <span class="line-success">#${p.id}</span>  ${p.title}  <span class="line-dim">[${new Date(p.date).toLocaleDateString()}]</span>`);
+                const fecha = new Date(p.fecha).toLocaleDateString('es-ES');
+                agregarLinea(`  <span class="line-success">#${p.id}</span>  ${p.titulo}  <span class="line-dim">[${fecha}]</span>`);
             });
-            appendLine('');
-            appendLine('<span class="line-dim">use <span class="cmd-hint">load [id]</span> to view a prompt.</span>');
+            agregarLinea('');
+            agregarLinea('<span class="line-dim">usa <span class="cmd-hint">cargar [id]</span> para ver un prompt.</span>');
         }
 
-        function loadPrompt(idStr) {
+        function cargarPrompt(idStr) {
             const id = parseInt(idStr);
             if (!id || isNaN(id)) {
-                appendLine('<span class="line-error">error: specify an id. usage: load [number]</span>');
+                agregarLinea('<span class="line-error">error: especifica un ID. uso: cargar [número]</span>');
                 return;
             }
 
             const p = state.savedPrompts.find(x => x.id === id);
             if (!p) {
-                appendLine(`<span class="line-error">error: prompt #${id} not found.</span>`);
+                agregarLinea(`<span class="line-error">error: prompt #${id} no encontrado.</span>`);
                 return;
             }
 
-            state.currentPrompt = p.content;
-            appendLine(`<span class="line-info">[ LOADED ] #${id} — ${p.title}</span>`);
-            appendLine('');
-            appendLine(`<div class="prompt-output">${escapeHtml(p.content)}</div>`);
-            appendLine('');
-            appendLine('<span class="line-info">commands:</span> <span class="cmd-hint">copy</span> | <span class="cmd-hint">download</span>');
+            state.currentPrompt = p.contenido;
+            agregarLinea(`<span class="line-success">[ CARGADO ] #${id} — ${p.titulo}</span>`);
+            agregarLinea('');
+            agregarLinea(`<div class="prompt-output">${escaparHtml(p.contenido)}</div>`);
+            agregarLinea('');
+            agregarLinea('<span class="line-info">comandos:</span> <span class="cmd-hint">copiar</span> | <span class="cmd-hint">descargar</span>');
         }
 
-        function copyPrompt() {
+        function copiarPrompt() {
             if (!state.currentPrompt) {
-                appendLine('<span class="line-error">error: nothing to copy.</span>');
+                agregarLinea('<span class="line-error">error: nada que copiar.</span>');
                 return;
             }
             navigator.clipboard.writeText(state.currentPrompt);
-            appendLine('<span class="line-success">[ OK ] copied to clipboard.</span>');
+            agregarLinea('<span class="line-success">[ OK ] copiado al portapapeles ✓</span>');
         }
 
-        function downloadPrompt() {
+        function descargarPrompt() {
             if (!state.currentPrompt) {
-                appendLine('<span class="line-error">error: nothing to download.</span>');
+                agregarLinea('<span class="line-error">error: nada que descargar.</span>');
                 return;
             }
             const blob = new Blob([state.currentPrompt], {type:'text/plain'});
@@ -865,12 +1364,12 @@ MIT — Use it, break it, fix it, love it.
             a.download = `prompt_${Date.now()}.sh.txt`;
             a.click();
             URL.revokeObjectURL(url);
-            appendLine('<span class="line-success">[ OK ] downloaded.</span>');
+            agregarLinea('<span class="line-success">[ OK ] archivo descargado ✓</span>');
         }
 
-        function exportAll() {
+        function exportarTodo() {
             if (state.savedPrompts.length === 0) {
-                appendLine('<span class="line-error">error: nothing to export.</span>');
+                agregarLinea('<span class="line-error">error: nada que exportar.</span>');
                 return;
             }
             const data = JSON.stringify(state.savedPrompts, null, 2);
@@ -881,30 +1380,37 @@ MIT — Use it, break it, fix it, love it.
             a.download = `promptforge_backup_${Date.now()}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            appendLine(`<span class="line-success">[ OK ] exported ${state.savedPrompts.length} prompts.</span>`);
+            agregarLinea(`<span class="line-success">[ OK ] exportados ${state.savedPrompts.length} prompts ✓</span>`);
         }
 
         // =============================================
-        // UTILITIES
+        // UTILIDADES
         // =============================================
-        function appendLine(html, className = '') {
+        function agregarLinea(html, className = '') {
             const div = document.createElement('div');
             div.className = 'output-line ' + className;
             div.innerHTML = html;
             document.getElementById('outputArea').appendChild(div);
         }
 
-        function print(html) {
-            appendLine(html);
+        function imprimir(html) {
+            agregarLinea(html);
         }
 
-        function escapeHtml(text) {
+        function escaparHtml(texto) {
             const d = document.createElement('div');
-            d.textContent = text;
+            d.textContent = texto;
             return d.innerHTML;
         }
 
-        function scrollToBottom() {
+        function formatearRespuestaAI(texto) {
+            return escaparHtml(texto)
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--green-neon)">$1</strong>')
+                .replace(/`(.*?)`/g, '<code style="color:var(--cyan-green);background:rgba(0,255,200,0.1);padding:1px 5px;">$1</code>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function scrollAlFinal() {
             const el = document.getElementById('outputArea');
             requestAnimationFrame(() => {
                 el.scrollTop = el.scrollHeight;
