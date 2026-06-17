@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mr. Prompt | Terminal v2.0</title>
+    <title>Mr. Prompt | Terminal v3.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         /* ===== VARIABLES POR TEMA ===== */
@@ -23,7 +23,6 @@
             --scanline-opacity: 0.03;
         }
 
-        /* MODO DÍA */
         [data-theme="day"] {
             --bg-terminal: #f0f0f0;
             --bg-header: #ffffff;
@@ -40,7 +39,6 @@
             --scanline-opacity: 0;
         }
 
-        /* MODO AMOLED */
         [data-theme="amoled"] {
             --bg-terminal: #000000;
             --bg-header: #050505;
@@ -57,7 +55,6 @@
             --scanline-opacity: 0.02;
         }
 
-        /* MODO CYBER */
         [data-theme="cyber"] {
             --bg-terminal: #0a0010;
             --bg-header: #12001a;
@@ -80,11 +77,7 @@
         @keyframes blink-white { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes blink-cyber { 0%, 100% { opacity: 1; text-shadow: 0 0 10px #00ff88; } 50% { opacity: 0.7; text-shadow: 0 0 20px #00ff88; } }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Fira Code', 'JetBrains Mono', monospace;
@@ -95,26 +88,16 @@
             transition: all 0.3s ease;
         }
 
-        /* Scanlines effect */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, var(--scanline-opacity)) 2px,
-                rgba(0, 0, 0, var(--scanline-opacity)) 4px
-            );
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,var(--scanline-opacity)) 2px, rgba(0,0,0,var(--scanline-opacity)) 4px);
             pointer-events: none;
             z-index: 9999;
         }
 
-        /* ===== HEADER / BARRA SUPERIOR ===== */
         .terminal-header {
             background: var(--bg-header);
             border-bottom: 2px solid var(--border-color);
@@ -129,11 +112,7 @@
             z-index: 1000;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+        .header-left { display: flex; align-items: center; gap: 16px; }
 
         .terminal-title {
             font-size: 14px;
@@ -142,9 +121,7 @@
             text-shadow: var(--cyber-glow, none);
         }
 
-        .terminal-title span {
-            color: var(--text-info);
-        }
+        .terminal-title span { color: var(--text-info); }
 
         .clock-display {
             font-family: 'JetBrains Mono', monospace;
@@ -158,12 +135,7 @@
             text-shadow: var(--cyber-glow, none);
         }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
+        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 
         .control-group {
             display: flex;
@@ -175,12 +147,7 @@
             border-radius: 4px;
         }
 
-        .control-label {
-            font-size: 11px;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            margin-right: 4px;
-        }
+        .control-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-right: 4px; }
 
         .theme-btn, .engine-btn {
             background: transparent;
@@ -194,21 +161,9 @@
             border-radius: 3px;
         }
 
-        .theme-btn:hover, .engine-btn:hover {
-            color: var(--text-primary);
-            border-color: var(--border-color);
-        }
-
-        .theme-btn.active {
-            background: var(--text-primary);
-            color: var(--bg-terminal);
-            box-shadow: 0 0 10px var(--glow-color);
-        }
-
-        .engine-btn.active {
-            color: var(--text-info);
-            border-color: var(--text-info);
-        }
+        .theme-btn:hover, .engine-btn:hover { color: var(--text-primary); border-color: var(--border-color); }
+        .theme-btn.active { background: var(--text-primary); color: var(--bg-terminal); box-shadow: 0 0 10px var(--glow-color); }
+        .engine-btn.active { color: var(--text-info); border-color: var(--text-info); }
 
         .engine-dropdown {
             position: absolute;
@@ -223,9 +178,7 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.5);
         }
 
-        .engine-dropdown.show {
-            display: block;
-        }
+        .engine-dropdown.show { display: block; }
 
         .engine-option {
             padding: 10px 14px;
@@ -234,37 +187,14 @@
             transition: background 0.2s;
         }
 
-        .engine-option:hover {
-            background: var(--border-color);
-        }
+        .engine-option:hover { background: var(--border-color); }
+        .engine-option.selected { background: var(--text-primary); color: var(--bg-terminal); }
+        .engine-option-name { font-weight: 600; color: var(--text-info); }
+        .engine-option-desc { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
 
-        .engine-option.selected {
-            background: var(--text-primary);
-            color: var(--bg-terminal);
-        }
+        .engine-selector-wrapper { position: relative; }
 
-        .engine-option-name {
-            font-weight: 600;
-            color: var(--text-info);
-        }
-
-        .engine-option-desc {
-            font-size: 10px;
-            color: var(--text-dim);
-            margin-top: 2px;
-        }
-
-        .engine-selector-wrapper {
-            position: relative;
-        }
-
-        /* ===== TERMINAL PRINCIPAL ===== */
-        .terminal-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            min-height: calc(100vh - 60px);
-        }
+        .terminal-container { max-width: 1400px; margin: 0 auto; padding: 20px; min-height: calc(100vh - 60px); }
 
         .terminal-screen {
             background: var(--bg-terminal);
@@ -281,25 +211,11 @@
             line-height: 1.6;
         }
 
-        .terminal-output::-webkit-scrollbar {
-            width: 8px;
-        }
+        .terminal-output::-webkit-scrollbar { width: 8px; }
+        .terminal-output::-webkit-scrollbar-track { background: var(--bg-header); }
+        .terminal-output::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 4px; }
 
-        .terminal-output::-webkit-scrollbar-track {
-            background: var(--bg-header);
-        }
-
-        .terminal-output::-webkit-scrollbar-thumb {
-            background: var(--text-dim);
-            border-radius: 4px;
-        }
-
-        /* ===== ESTILOS DE TEXTO TERMINAL ===== */
-        .output-line {
-            margin-bottom: 4px;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
+        .output-line { margin-bottom: 4px; white-space: pre-wrap; word-break: break-word; }
 
         .text-green { color: var(--text-primary); }
         .text-cyan { color: var(--text-info); }
@@ -309,19 +225,7 @@
         .text-dim { color: var(--text-dim); }
         .text-bold { font-weight: 700; }
 
-        .ascii-art {
-            font-size: 11px;
-            line-height: 1.2;
-            color: var(--text-primary);
-            text-shadow: 0 0 5px var(--glow-color);
-        }
-
-        .box-border {
-            border: 1px solid var(--text-primary);
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-radius: 4px;
-        }
+        .ascii-art { font-size: 11px; line-height: 1.2; color: var(--text-primary); text-shadow: 0 0 5px var(--glow-color); }
 
         .menu-item {
             padding: 8px 0;
@@ -332,26 +236,11 @@
             gap: 12px;
         }
 
-        .menu-item:hover {
-            color: var(--text-warning);
-            padding-left: 10px;
-        }
+        .menu-item:hover { color: var(--text-warning); padding-left: 10px; }
+        .menu-number { color: var(--text-info); min-width: 25px; }
+        .menu-icon { min-width: 30px; }
+        .menu-desc { color: var(--text-dim); font-size: 12px; }
 
-        .menu-number {
-            color: var(--text-info);
-            min-width: 25px;
-        }
-
-        .menu-icon {
-            min-width: 30px;
-        }
-
-        .menu-desc {
-            color: var(--text-dim);
-            font-size: 12px;
-        }
-
-        /* ===== INPUT DE COMANDOS ===== */
         .input-area {
             border-top: 2px solid var(--border-color);
             padding: 15px 20px;
@@ -379,44 +268,24 @@
             caret-color: var(--text-primary);
         }
 
-        .command-input::placeholder {
-            color: var(--text-dim);
-        }
+        .command-input::placeholder { color: var(--text-dim); }
 
         .cursor {
             display: inline-block;
-            width: 8px;
-            height: 16px;
+            width: 8px; height: 16px;
             background: var(--text-primary);
             animation: var(--cursor-blink);
             vertical-align: middle;
             margin-left: 2px;
         }
 
-        /* ===== SECCIONES DE CONTENIDO ===== */
-        .section-content {
-            display: none;
-        }
+        .section-content { display: none; }
+        .section-content.active { display: block; }
 
-        .section-content.active {
-            display: block;
-        }
+        .term-form { margin: 15px 0; }
 
-        /* Formularios dentro del terminal */
-        .term-form {
-            margin: 15px 0;
-        }
-
-        .form-prompt {
-            color: var(--text-info);
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .form-prompt::before {
-            content: '> ';
-            color: var(--text-warning);
-        }
+        .form-prompt { color: var(--text-info); margin-bottom: 8px; display: block; }
+        .form-prompt::before { content: '> '; color: var(--text-warning); }
 
         .term-input, .term-textarea, .term-select {
             width: 100%;
@@ -436,10 +305,7 @@
             box-shadow: 0 0 10px var(--glow-color);
         }
 
-        .term-textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
+        .term-textarea { min-height: 120px; resize: vertical; }
 
         .term-btn {
             background: transparent;
@@ -463,17 +329,12 @@
             box-shadow: 0 0 15px var(--glow-color);
         }
 
-        .term-btn.primary {
-            border-color: var(--text-info);
-            color: var(--text-info);
-        }
+        .term-btn.primary { border-color: var(--text-info); color: var(--text-info); }
+        .term-btn.primary:hover { background: var(--text-info); color: var(--bg-terminal); }
 
-        .term-btn.primary:hover {
-            background: var(--text-info);
-            color: var(--bg-terminal);
-        }
+        .term-btn.download { border-color: var(--text-warning); color: var(--text-warning); }
+        .term-btn.download:hover { background: var(--text-warning); color: var(--bg-terminal); }
 
-        /* Resultado/output area */
         .result-box {
             background: var(--bg-header);
             border: 1px dashed var(--text-dim);
@@ -492,19 +353,9 @@
             color: var(--text-secondary);
         }
 
-        .copy-hint {
-            font-size: 10px;
-            color: var(--text-dim);
-            text-align: right;
-            margin-top: 8px;
-            cursor: pointer;
-        }
+        .copy-hint { font-size: 10px; color: var(--text-dim); text-align: right; margin-top: 8px; cursor: pointer; }
+        .copy-hint:hover { color: var(--text-info); }
 
-        .copy-hint:hover {
-            color: var(--text-info);
-        }
-
-        /* Status bar */
         .status-bar {
             display: flex;
             justify-content: space-between;
@@ -515,55 +366,180 @@
             color: var(--text-dim);
         }
 
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .status-item { display: flex; align-items: center; gap: 6px; }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background: var(--text-primary);
             border-radius: 50%;
             animation: pulse-dot 2s infinite;
         }
 
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* Config Panel Styles */
+        .config-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
         }
 
-        /* Responsive */
+        .config-card {
+            background: var(--bg-header);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .config-card:hover { border-color: var(--text-primary); box-shadow: 0 0 20px var(--glow-color); }
+
+        .config-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .config-card-icon { font-size: 24px; }
+
+        .config-card-title { font-weight: 700; font-size: 14px; color: var(--text-info); }
+
+        .config-card-version { font-size: 11px; color: var(--text-dim); }
+
+        .config-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: var(--bg-terminal);
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .status-indicator {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        .status-connected { background: var(--text-primary); box-shadow: 0 0 10px var(--text-primary); }
+        .status-disconnected { background: var(--text-error); }
+        .status-pending { background: var(--text-warning); }
+
+        .api-key-input-wrapper { position: relative; margin-bottom: 10px; }
+
+        .api-key-input {
+            width: 100%;
+            background: var(--bg-terminal);
+            border: 1px solid var(--text-dim);
+            color: var(--text-primary);
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            padding: 12px 40px 12px 12px;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .api-key-input:focus { border-color: var(--text-info); }
+
+        .toggle-visibility {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .toggle-visibility:hover { color: var(--text-primary); }
+
+        .config-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+
+        /* Chat Collaborative Styles */
+        .chat-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            height: 400px;
+            margin: 15px 0;
+        }
+
+        .chat-panel {
+            background: var(--bg-header);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-panel-header {
+            padding: 12px 15px;
+            background: var(--bg-terminal);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-panel-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+
+        .chat-message {
+            background: var(--bg-terminal);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--text-info);
+        }
+
+        .chat-message.user { border-left-color: var(--text-warning); }
+
+        .chat-loading {
+            display: flex;
+            gap: 4px;
+            padding: 10px;
+        }
+
+        .chat-loading span {
+            width: 8px; height: 8px;
+            background: var(--text-info);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .chat-loading span:nth-child(1) { animation-delay: -0.32s; }
+        .chat-loading span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
         @media (max-width: 768px) {
-            .terminal-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .header-left, .header-right {
-                justify-content: center;
-            }
-
-            .control-group {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .terminal-container {
-                padding: 10px;
-            }
-
-            .terminal-output {
-                padding: 15px;
-                font-size: 13px;
-            }
+            .terminal-header { flex-direction: column; align-items: stretch; }
+            .header-left, .header-right { justify-content: center; }
+            .control-group { flex-wrap: wrap; justify-content: center; }
+            .terminal-container { padding: 10px; }
+            .terminal-output { padding: 15px; font-size: 13px; }
+            .chat-container { grid-template-columns: 1fr; height: auto; }
+            .config-panel { grid-template-columns: 1fr; }
         }
 
-        /* Cyber mode extras */
-        [data-theme="cyber"] .terminal-header {
-            animation: cyber-glow-border 3s linear infinite;
-        }
+        [data-theme="cyber"] .terminal-header { animation: cyber-glow-border 3s linear infinite; }
 
         @keyframes cyber-glow-border {
             0%, 100% { border-bottom-color: #00ff88; box-shadow: 0 2px 20px rgba(0,255,136,0.3); }
@@ -571,44 +547,18 @@
             66% { border-bottom-color: #00ffff; box-shadow: 0 2px 20px rgba(0,255,255,0.3); }
         }
 
-        [data-theme="cyber"] .status-dot {
-            background: var(--text-primary);
-            box-shadow: 0 0 10px var(--text-primary);
-        }
-
-        /* Typing animation */
-        .typing-effect {
-            overflow: hidden;
-            border-right: 2px solid var(--text-primary);
-            white-space: nowrap;
-            animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-        }
+        [data-theme="cyber"] .status-dot { background: var(--text-primary); box-shadow: 0 0 10px var(--text-primary); }
     </style>
 </head>
 <body data-theme="amoled">
 
-    <!-- ===== HEADER CON HORA Y CONTROLES ===== -->
     <header class="terminal-header">
         <div class="header-left">
-            <div class="terminal-title">
-                🧠 <span>MR.PROMPT</span>_TERMINAL.exe v2.0
-            </div>
-            <div class="clock-display" id="clockDisplay">
-                00:00:00
-            </div>
+            <div class="terminal-title">🧠 <span>MR.PROMPT</span>_TERMINAL.exe v3.0</div>
+            <div class="clock-display" id="clockDisplay">00:00:00</div>
         </div>
 
         <div class="header-right">
-            <!-- Control de Tema -->
             <div class="control-group">
                 <span class="control-label">THEME:</span>
                 <button class="theme-btn" data-theme="day" onclick="setTheme('day')">☀ DAY</button>
@@ -616,19 +566,16 @@
                 <button class="theme-btn" data-theme="cyber" onclick="setTheme('cyber')">⚡ CYBER</button>
             </div>
 
-            <!-- Control de Motor IA -->
             <div class="control-group engine-selector-wrapper">
                 <span class="control-label">ENGINE:</span>
-                <button class="engine-btn active" id="currentEngineBtn" onclick="toggleEngineMenu()">
-                    ⚡ ARISTARCO 1.0 ▼
-                </button>
+                <button class="engine-btn active" id="currentEngineBtn" onclick="toggleEngineMenu()">⚡ ARISTARCO 1.0 ▼</button>
                 <div class="engine-dropdown" id="engineDropdown">
                     <div class="engine-option selected" data-engine="gemini" data-name="ARISTARCO" data-ver="1.0" onclick="selectEngine(this)">
                         <div class="engine-option-name">⚡ ARISTARCO 1.0</div>
                         <div class="engine-option-desc">Motor Gemini - Creatividad & Razonamiento</div>
                     </div>
-                    <div class="engine-option" data-engine="deepseek" data-name="GEMINIDES" data-ver="2.0" onclick="selectEngine(this)">
-                        <div class="engine-option-name">🔮 GEMINIDES 2.0</div>
+                    <div class="engine-option" data-engine="deepseek" data-name="FARADAY" data-ver="2.0" onclick="selectEngine(this)">
+                        <div class="engine-option-name">🔌 FARADAY 2.0</div>
                         <div class="engine-option-desc">Motor DeepSeek - Análisis Profundo & Lógica</div>
                     </div>
                 </div>
@@ -636,13 +583,10 @@
         </div>
     </header>
 
-    <!-- ===== TERMINAL PRINCIPAL ===== -->
     <main class="terminal-container">
         <div class="terminal-screen">
-            
-            <!-- Área de Output/Salida -->
             <div class="terminal-output" id="terminalOutput">
-                
+
                 <!-- MENÚ PRINCIPAL -->
                 <div class="section-content active" id="section-menu">
                     <div class="output-line text-green text-bold ascii-art">
@@ -698,7 +642,7 @@
                         <span class="menu-number text-cyan">[04]</span>
                         <span class="menu-icon">🔄</span>
                         <span class="text-green text-bold">CREADOR DE FLUJOGRAMAS</span>
-                        <span class="menu-desc">| Diagramación visual de procesos</span>
+                        <span class="menu-desc">| Diagramación visual de procesos en ASCII</span>
                     </div>
 
                     <div class="menu-item" onclick="navigateTo('analyzer')">
@@ -708,13 +652,27 @@
                         <span class="menu-desc">| Pre-análisis y optimización de ideas</span>
                     </div>
 
+                    <div class="menu-item" onclick="navigateTo('config')">
+                        <span class="menu-number text-yellow">[06]</span>
+                        <span class="menu-icon">⚙️</span>
+                        <span class="text-yellow text-bold">CONFIGURACIÓN</span>
+                        <span class="menu-desc">| API Keys y ajustes del sistema</span>
+                    </div>
+
+                    <div class="menu-item" onclick="navigateTo('chat')">
+                        <span class="menu-number text-purple">[07]</span>
+                        <span class="menu-icon">💬</span>
+                        <span class="text-purple text-bold">CHAT COLABORATIVO</span>
+                        <span class="menu-desc">| Dual-IA: Aristarco + Faraday trabajando juntos</span>
+                    </div>
+
                     <br>
                     <div class="output-line text-yellow text-bold">└────────────────────────────────────────────────────────┘</div>
 
                     <br><br>
                     <div class="output-line text-dim">
                         > Selecciona una opción escribiendo el número o haz clic<br>
-                        > Comandos disponibles: help, clear, back, exit, theme, engine<br>
+                        > Comandos: help, clear, back, config, chat<br>
                         > Escribe tu comando abajo...
                     </div>
                 </div>
@@ -722,8 +680,7 @@
                 <!-- SECCIÓN: INGENIERO DE PROMPTS -->
                 <div class="section-content" id="section-prompt">
                     <div class="output-line text-cyan text-bold">>>> MÓDULO: INGENIERO DE PROMPTS AVANZADO <<<</div>
-                    <div class="output-line text-dim">===============================================</div>
-                    <br>
+                    <div class="output-line text-dim">===============================================</div><br>
 
                     <div class="term-form">
                         <label class="form-prompt">OBJETIVO PRINCIPAL ¿Qué deseas lograr?</label>
@@ -748,7 +705,6 @@
                                 <option value="estratega">Consultor Estratégico</option>
                             </select>
                         </div>
-
                         <div class="term-form">
                             <label class="form-prompt">COMPLEJIDAD</label>
                             <select class="term-select" id="promptComplexity">
@@ -758,7 +714,6 @@
                                 <option value="experto">Experto - Máxima Optimización</option>
                             </select>
                         </div>
-
                         <div class="term-form">
                             <label class="form-prompt">FORMATO SALIDA</label>
                             <select class="term-select" id="promptOutput">
@@ -771,20 +726,20 @@
                     </div>
 
                     <button class="term-btn primary" onclick="generatePrompt()">⚡ GENERAR PROMPT</button>
+                    <button class="term-btn download" onclick="downloadAsTxt('prompt')">📥 DESCARGAR TXT</button>
                     <button class="term-btn" onclick="clearSection('prompt')">🗑 LIMPIAR</button>
                     <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
 
                     <div class="result-box" id="promptResultBox" style="display:none;">
                         <pre id="promptResult"></pre>
-                        <div class="copy-hint" onclick="copyResult('promptResult')">[ Click para copiar al portapapeles ]</div>
+                        <div class="copy-hint" onclick="copyResult('promptResult')">[ Click para copiar ]</div>
                     </div>
                 </div>
 
                 <!-- SECCIÓN: PLANIFICADOR -->
                 <div class="section-content" id="section-plan">
                     <div class="output-line text-cyan text-bold">>>> MÓDULO: PLANIFICADOR ESTRATÉGICO <<<</div>
-                    <div class="output-line text-dim">==============================================</div>
-                    <br>
+                    <div class="output-line text-dim">==============================================</div><br>
 
                     <div class="term-form">
                         <label class="form-prompt">PROYECTO U OBJETIVO A PLANIFICAR</label>
@@ -807,7 +762,6 @@
                                 <option value="personal">Desarrollo Personal</option>
                             </select>
                         </div>
-
                         <div class="term-form">
                             <label class="form-prompt">PLAZO</label>
                             <select class="term-select" id="planTimeline">
@@ -820,20 +774,20 @@
                     </div>
 
                     <button class="term-btn primary" onclick="generatePlan()">📊 GENERAR PLAN</button>
+                    <button class="term-btn download" onclick="downloadAsTxt('plan')">📥 DESCARGAR TXT</button>
                     <button class="term-btn" onclick="clearSection('plan')">🗑 LIMPIAR</button>
                     <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
 
                     <div class="result-box" id="planResultBox" style="display:none;">
                         <pre id="planResult"></pre>
-                        <div class="copy-hint" onclick="copyResult('planResult')">[ Click para copiar al portapapeles ]</div>
+                        <div class="copy-hint" onclick="copyResult('planResult')">[ Click para copiar ]</div>
                     </div>
                 </div>
 
                 <!-- SECCIÓN: ASCII ART -->
                 <div class="section-content" id="section-ascii">
                     <div class="output-line text-cyan text-bold">>>> MÓDULO: GENERADOR ASCII ART <<<</div>
-                    <div class="output-line text-dim">========================================</div>
-                    <br>
+                    <div class="output-line text-dim">========================================</div><br>
 
                     <div class="term-form">
                         <label class="form-prompt">¿QUÉ DESEAS CREAR?</label>
@@ -851,7 +805,6 @@
                                 <option value="objeto">Objeto/Máquina</option>
                             </select>
                         </div>
-
                         <div class="term-form">
                             <label class="form-prompt">COMPLEJIDAD</label>
                             <select class="term-select" id="asciiComplexity">
@@ -863,20 +816,20 @@
                     </div>
 
                     <button class="term-btn primary" onclick="generateASCII()">🎨 GENERAR ASCII</button>
+                    <button class="term-btn download" onclick="downloadAsTxt('ascii')">📥 DESCARGAR TXT</button>
                     <button class="term-btn" onclick="clearSection('ascii')">🗑 LIMPIAR</button>
                     <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
 
                     <div class="result-box" id="asciiResultBox" style="display:none;">
                         <pre class="ascii-art" id="asciiResult"></pre>
-                        <div class="copy-hint" onclick="copyResult('asciiResult')">[ Click para copiar al portapapeles ]</div>
+                        <div class="copy-hint" onclick="copyResult('asciiResult')">[ Click para copiar ]</div>
                     </div>
                 </div>
 
                 <!-- SECCIÓN: FLUJOGRAMAS -->
                 <div class="section-content" id="section-flowchart">
                     <div class="output-line text-cyan text-bold">>>> MÓDULO: CREADOR DE FLUJOGRAMAS <<<</div>
-                    <div class="output-line text-dim">===========================================</div>
-                    <br>
+                    <div class="output-line text-dim">===========================================</div><br>
 
                     <div class="term-form">
                         <label class="form-prompt">PROCESO O SISTEMA A DIAGRAMAR</label>
@@ -895,20 +848,20 @@
                     </div>
 
                     <button class="term-btn primary" onclick="generateFlowchart()">🔄 GENERAR FLUJOGRAMA</button>
+                    <button class="term-btn download" onclick="downloadAsTxt('flowchart')">📥 DESCARGAR TXT</button>
                     <button class="term-btn" onclick="clearSection('flowchart')">🗑 LIMPIAR</button>
                     <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
 
                     <div class="result-box" id="flowResultBox" style="display:none;">
                         <pre class="ascii-art" id="flowResult"></pre>
-                        <div class="copy-hint" onclick="copyResult('flowResult')">[ Click para copiar al portapapeles ]</div>
+                        <div class="copy-hint" onclick="copyResult('flowResult')">[ Click para copiar ]</div>
                     </div>
                 </div>
 
                 <!-- SECCIÓN: ANALIZADOR -->
                 <div class="section-content" id="section-analyzer">
                     <div class="output-line text-cyan text-bold">>>> MÓDULO: ANALIZADOR DE CONTEXTO <<<</div>
-                    <div class="output-line text-dim">==========================================</div>
-                    <br>
+                    <div class="output-line text-dim">==========================================</div><br>
 
                     <div class="term-form">
                         <label class="form-prompt">TU IDEA O CONCEPTO (sin procesar)</label>
@@ -916,242 +869,397 @@
                     </div>
 
                     <button class="term-btn primary" onclick="analyzeContext()">🔍 ANALIZAR Y OPTIMIZAR</button>
+                    <button class="term-btn download" onclick="downloadAsTxt('analyzer')">📥 DESCARGAR TXT</button>
                     <button class="term-btn" onclick="clearSection('analyzer')">🗑 LIMPIAR</button>
                     <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
 
                     <div class="result-box" id="analyzeResultBox" style="display:none;">
                         <pre id="analyzeResult"></pre>
-                        <div class="copy-hint" onclick="copyResult('analyzeResult')">[ Click para copiar al portapapeles ]</div>
+                        <div class="copy-hint" onclick="copyResult('analyzeResult')">[ Click para copiar ]</div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN: CONFIGURACIÓN -->
+                <div class="section-content" id="section-config">
+                    <div class="output-line text-yellow text-bold">>>> MÓDULO: CONFIGURACIÓN DEL SISTEMA <<<</div>
+                    <div class="output-line text-dim">==========================================</div><br>
+
+                    <div class="output-line text-dim" style="margin-bottom: 20px;">
+                        ℹ️ Las API Keys se almacenan SOLAMENTE en tu navegador (localStorage).<br>
+                        Nunca se envían a servidores externos ni se incluyen en el código.
+                    </div>
+
+                    <div class="config-panel">
+                        <!-- ARISTARCO 1.0 - Gemini -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <span class="config-card-icon">⚡</span>
+                                <div>
+                                    <div class="config-card-title">ARISTARCO 1.0</div>
+                                    <div class="config-card-version">Motor: Google Gemini API</div>
+                                </div>
+                            </div>
+
+                            <div class="config-status" id="geminiStatus">
+                                <span class="status-indicator status-disconnected" id="geminiIndicator"></span>
+                                <span id="geminiStatusText">No configurado</span>
+                            </div>
+
+                            <div class="api-key-input-wrapper">
+                                <input type="password" class="api-key-input" id="geminiApiKey" 
+                                       placeholder="Pega aquí tu API Key de Gemini...">
+                                <button class="toggle-visibility" onclick="toggleKeyVisibility('geminiApiKey', this)">👁</button>
+                            </div>
+
+                            <div class="config-buttons">
+                                <button class="term-btn primary" onclick="saveApiKey('gemini')">💾 GUARDAR KEY</button>
+                                <button class="term-btn" onclick="testApiConnection('gemini')">🔧 PROBAR CONEXIÓN</button>
+                                <button class="term-btn" onclick="deleteApiKey('gemini')" style="border-color: var(--text-error); color: var(--text-error);">🗑 ELIMINAR</button>
+                            </div>
+
+                            <div class="output-line text-dim" style="margin-top: 15px; font-size: 11px;">
+                                🔗 Obtener API Key: https://aistudio.google.com/apikey<br>
+                                💰 Plan gratuito disponible con límites generosos
+                            </div>
+                        </div>
+
+                        <!-- FARADAY 2.0 - DeepSeek -->
+                        <div class="config-card">
+                            <div class="config-card-header">
+                                <span class="config-card-icon">🔌</span>
+                                <div>
+                                    <div class="config-card-title">FARADAY 2.0</div>
+                                    <div class="config-card-version">Motor: DeepSeek API</div>
+                                </div>
+                            </div>
+
+                            <div class="config-status" id="deepseekStatus">
+                                <span class="status-indicator status-disconnected" id="deepseekIndicator"></span>
+                                <span id="deepseekStatusText">No configurado</span>
+                            </div>
+
+                            <div class="api-key-input-wrapper">
+                                <input type="password" class="api-key-input" id="deepseekApiKey" 
+                                       placeholder="Pega aquí tu API Key de DeepSeek...">
+                                <button class="toggle-visibility" onclick="toggleKeyVisibility('deepseekApiKey', this)">👁</button>
+                            </div>
+
+                            <div class="config-buttons">
+                                <button class="term-btn primary" onclick="saveApiKey('deepseek')">💾 GUARDAR KEY</button>
+                                <button class="term-btn" onclick="testApiConnection('deepseek')">🔧 PROBAR CONEXIÓN</button>
+                                <button class="term-btn" onclick="deleteApiKey('deepseek')" style="border-color: var(--text-error); color: var(--text-error);">🗑 ELIMINAR</button>
+                            </div>
+
+                            <div class="output-line text-dim" style="margin-top: 15px; font-size: 11px;">
+                                🔗 Obtener API Key: https://platform.deepseek.com/<br>
+                                💰 Créditos gratis al registrarse
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <button class="term-btn" onclick="clearAllConfig()" style="border-color: var(--text-error); color: var(--text-error);">🗑 RESTAURAR CONFIGURACIÓN POR DEFECTO</button>
+                    <button class="term-btn" onclick="navigateTo('menu')">← VOLVER AL MENÚ</button>
+                </div>
+
+                <!-- SECCIÓN: CHAT COLABORATIVO -->
+                <div class="section-content" id="section-chat">
+                    <div class="output-line text-purple text-bold">>>> MÓDULO: CHAT COLABORATIVO DUAL-IA <<<</div>
+                    <div class="output-line text-dim">===============================================</div><br>
+
+                    <div class="term-form">
+                        <label class="form-prompt">TU MENSAJE (ambas IAs recibirán esto)</label>
+                        <textarea class="term-textarea" id="chatMessage" placeholder="Escribe tu pregunta o solicitud..." style="min-height: 80px;"></textarea>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div class="term-form">
+                            <label class="form-prompt">MODO DE COLABORACIÓN</label>
+                            <select class="term-select" id="chatMode">
+                                <option value="parallel">🔄 PARALELO (Ambas responden a la vez)</option>
+                                <option value="chain">⚡ CADENA (Una mejora lo de la otra)</option>
+                                <option value="debate">💬 DEBATE (Discuten ante ti)</option>
+                                <option value="fusion">🤝 FUSIÓN (Respuesta combinada)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="term-btn primary" onclick="sendCollaborativeChat()">💬 ENVIAR A AMBAS IAS</button>
+                    <button class="term-btn" onclick="clearChat()">🗑 LIMPIAR CHAT</button>
+                    <button class="term-btn" onclick="navigateTo('menu')">← VOLVER</button>
+
+                    <div class="chat-container" id="chatContainer">
+                        <div class="chat-panel">
+                            <div class="chat-panel-header">
+                                <span>⚡</span> ARISTARCO 1.0 (Gemini)
+                            </div>
+                            <div class="chat-panel-messages" id="chatAristarco">
+                                <div class="output-line text-dim" style="font-size: 11px;">Esperando mensaje...</div>
+                            </div>
+                        </div>
+
+                        <div class="chat-panel">
+                            <div class="chat-panel-header">
+                                <span>🔌</span> FARADAY 2.0 (DeepSeek)
+                            </div>
+                            <div class="chat-panel-messages" id="chatFaraday">
+                                <div class="output-line text-dim" style="font-size: 11px;">Esperando mensaje...</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- INPUT DE COMANDOS -->
             <div class="input-area">
                 <span class="prompt-symbol">MR:PROMPT~$</span>
-                <input type="text" class="command-input" id="cmdInput" 
-                       placeholder="Escribe comando o selecciona opción..." 
-                       onkeypress="handleCommand(event)"
-                       autofocus>
+                <input type="text" class="command-input" id="cmdInput" placeholder="Escribe comando o selecciona opción..." onkeypress="handleCommand(event)" autofocus>
                 <span class="cursor"></span>
             </div>
 
-            <!-- STATUS BAR -->
             <div class="status-bar">
-                <div class="status-item">
-                    <span class="status-dot"></span>
-                    <span>SYSTEM: ONLINE</span>
-                </div>
-                <div class="status-item">
-                    <span>ENGINE: <span class="text-cyan" id="statusEngine">ARISTARCO 1.0</span></span>
-                </div>
-                <div class="status-item">
-                    <span>MODULE: <span class="text-yellow" id="statusModule">MENU</span></span>
-                </div>
-                <div class="status-item">
-                    <span>v2.0 | © MR.PROMPT</span>
-                </div>
+                <div class="status-item"><span class="status-dot"></span><span>SYSTEM: ONLINE</span></div>
+                <div class="status-item"><span>ENGINE: <span class="text-cyan" id="statusEngine">ARISTARCO 1.0</span></span></div>
+                <div class="status-item"><span>MODULE: <span class="text-yellow" id="statusModule">MENU</span></span></div>
+                <div class="status-item"><span>v3.0 | © MR.PROMPT</span></div>
             </div>
         </div>
     </main>
 
-    <!-- ===== JAVASCRIPT ===== -->
     <script>
         // ===== CONFIGURACIÓN GLOBAL =====
         let currentTheme = 'amoled';
         let currentEngine = { name: 'ARISTARCO', version: '1.0', type: 'gemini' };
         let currentModule = 'MENU';
 
-        // ===== RELOJ EN TIEMPO REAL =====
+        // ===== RELOJ =====
         function updateClock() {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const timeString = `${hours}:${minutes}:${seconds}`;
-            
-            document.getElementById('clockDisplay').textContent = timeString;
+            document.getElementById('clockDisplay').textContent = 
+                `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
         }
-        
         setInterval(updateClock, 1000);
         updateClock();
 
-        // ===== SISTEMA DE TEMAS =====
+        // ===== TEMAS =====
         function setTheme(theme) {
             currentTheme = theme;
             document.body.setAttribute('data-theme', theme);
-            
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.theme === theme);
-            });
-            
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.theme === theme));
             localStorage.setItem('mrprompt-theme', theme);
-            printSystemMessage(`[SYSTEM] Tema cambiado a: ${theme.toUpperCase()}`);
         }
 
-        // ===== SELECTOR DE MOTOR IA =====
-        function toggleEngineMenu() {
-            document.getElementById('engineDropdown').classList.toggle('show');
-        }
+        // ===== MOTOR IA =====
+        function toggleEngineMenu() { document.getElementById('engineDropdown').classList.toggle('show'); }
 
         function selectEngine(option) {
-            const name = option.dataset.name;
-            const ver = option.dataset.ver;
-            const type = option.dataset.engine;
-
+            const name = option.dataset.name, ver = option.dataset.ver, type = option.dataset.engine;
             currentEngine = { name, version: ver, type };
-            
-            document.getElementById('currentEngineBtn').textContent = 
-                `${type === 'gemini' ? '⚡' : '🔮'} ${name} ${ver} ▼`;
+            document.getElementById('currentEngineBtn').textContent = `${type==='gemini'?'⚡':'🔌'} ${name} ${ver} ▼`;
             document.getElementById('menuEngineDisplay').textContent = `${name} ${ver}`;
             document.getElementById('statusEngine').textContent = `${name} ${ver}`;
-
-            document.querySelectorAll('.engine-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
+            document.querySelectorAll('.engine-option').forEach(o => o.classList.remove('selected'));
             option.classList.add('selected');
-
             toggleEngineMenu();
             localStorage.setItem('mrprompt-engine', JSON.stringify(currentEngine));
-            
-            printSystemMessage(`[ENGINE] Motor activado: ${name} ${ver} (${type === 'gemini' ? 'Gemini' : 'DeepSeek'})`);
         }
 
-        // Cerrar dropdown al hacer clic fuera
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.engine-selector-wrapper')) {
-                document.getElementById('engineDropdown').classList.remove('show');
-            }
-        });
+        document.addEventListener('click', e => { if (!e.target.closest('.engine-selector-wrapper')) document.getElementById('engineDropdown').classList.remove('show'); });
 
-        // ===== NAVEGACIÓN ENTRE SECCIONES =====
+        // ===== NAVEGACIÓN =====
         function navigateTo(section) {
-            // Ocultar todas las secciones
-            document.querySelectorAll('.section-content').forEach(s => {
-                s.classList.remove('active');
-            });
-            
-            // Mostrar sección objetivo
-            const targetId = section === 'menu' ? 'section-menu' : `section-${section}`;
-            document.getElementById(targetId).classList.add('active');
-            
-            // Actualizar estado
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            document.getElementById(section === 'menu' ? 'section-menu' : `section-${section}`).classList.add('active');
             currentModule = section.toUpperCase();
             document.getElementById('statusModule').textContent = currentModule;
-            
-            // Scroll al inicio del output
             document.getElementById('terminalOutput').scrollTop = 0;
+            
+            if (section === 'config') updateConfigStatus();
         }
 
-        // ===== MANEJO DE COMANDOS DEL INPUT =====
-        function handleCommand(event) {
-            if (event.key === 'Enter') {
-                const input = event.target.value.trim().toLowerCase();
-                
-                if (input === '') return;
+        // ===== COMANDOS =====
+        function handleCommand(e) {
+            if (e.key !== 'Enter') return;
+            const input = e.target.value.trim().toLowerCase();
+            if (!input) return;
 
-                // Procesar comandos
-                switch(input) {
-                    case '1':
-                    case '01':
-                    case 'prompt':
-                        navigateTo('prompt');
-                        break;
-                    case '2':
-                    case '02':
-                    case 'plan':
-                        navigateTo('plan');
-                        break;
-                    case '3':
-                    case '03':
-                    case 'ascii':
-                        navigateTo('ascii');
-                        break;
-                    case '4':
-                    case '04':
-                    case 'flowchart':
-                    case 'flow':
-                        navigateTo('flowchart');
-                        break;
-                    case '5':
-                    case '05':
-                    case 'analyze':
-                    case 'analyzer':
-                        navigateTo('analyzer');
-                        break;
-                    case 'menu':
-                    case 'home':
-                    case 'back':
-                        navigateTo('menu');
-                        break;
-                    case 'help':
-                        showHelp();
-                        break;
-                    case 'clear':
-                    case 'cls':
-                        clearTerminal();
-                        break;
-                    case 'exit':
-                        printSystemMessage('[SYSTEM] ¡Gracias por usar Mr. Prompt! Hasta pronto.');
-                        break;
-                    default:
-                        if (input.startsWith('theme ')) {
-                            const theme = input.split(' ')[1];
-                            setTheme(theme);
-                        } else if (input.startsWith('engine ')) {
-                            const eng = input.split(' ')[1];
-                            if (eng === '1' || eng === 'aristarco' || eng === 'gemini') {
-                                selectEngine(document.querySelector('[data-engine="gemini"]'));
-                            } else if (eng === '2' || eng === 'geminides' || eng === 'deepseek') {
-                                selectEngine(document.querySelector('[data-engine="deepseek"]'));
-                            }
-                        } else {
-                            printError(`Comando no reconocido: "${event.target.value}". Escribe "help" para ayuda.`);
-                        }
-                }
-                
-                event.target.value = '';
+            switch(input) {
+                case '1': case '01': case 'prompt': navigateTo('prompt'); break;
+                case '2': case '02': case 'plan': navigateTo('plan'); break;
+                case '3': case '03': case 'ascii': navigateTo('ascii'); break;
+                case '4': case '04': case 'flowchart': case 'flow': navigateTo('flowchart'); break;
+                case '5': case '05': case 'analyze': case 'analyzer': navigateTo('analyzer'); break;
+                case '6': case '06': case 'config': case 'settings': navigateTo('config'); break;
+                case '7': case '07': case 'chat': navigateTo('chat'); break;
+                case 'menu': case 'home': case 'back': navigateTo('menu'); break;
+                case 'help': showHelp(); break;
+                case 'clear': case 'cls': navigateTo('menu'); break;
+                default:
+                    if (input.startsWith('theme ')) setTheme(input.split(' ')[1]);
+                    else if (input.startsWith('goto ') || /^[1-7]$/.test(input)) {
+                        const map = {'1':'prompt','2':'plan','3':'ascii','4':'flowchart','5':'analyzer','6':'config','7':'chat'};
+                        navigateTo(map[input.replace('goto ','')] || 'menu');
+                    } else alert(`[ERROR] Comando no reconocido: "${e.target.value}". Escribe "help".`);
             }
+            e.target.value = '';
         }
 
         function showHelp() {
             alert(`╔═══════════════════════════════════════╗
-║       MR.PROMPT - AYUDA DE COMANDOS      ║
+║       MR.PROMPT v3.0 - AYUDA        ║
 ╠═══════════════════════════════════════╣
-║  NAVEGACIÓN:                           ║
-║    1/prompt  → Ingeniero de Prompts    ║
-║    2/plan     → Planificador           ║
-║    3/ascii    → Generador ASCII        ║
-║    4/flow     → Flujogramas            ║
-║    5/analyze  → Analizador             ║
-║    menu/back  → Volver al menú         ║
+║  [01] prompt     Ingeniero Prompts   ║
+║  [02] plan       Planificador        ║
+║  [03] ascii      Generador ASCII     ║
+║  [04] flow       Flujogramas         ║
+║  [05] analyze    Analizador          ║
+║  [06] config     Configuración APIs  ║
+║  [07] chat       Chat Colaborativo   ║
 ║                                       ║
-║  SISTEMA:                              ║
-║    clear/cls  → Limpiar pantalla       ║
-║    help       → Esta ayuda             ║
-║    exit       → Salir                  ║
-║    theme X    → Cambiar tema           ║
-║    engine X   → Cambiar motor          ║
+║  clear/cls  Limpiar  help  Ayuda      ║
+║  theme X    Cambiar tema              ║
 ╚═══════════════════════════════════════╝`);
         }
 
-        function clearTerminal() {
-            // Podríamos limpiar el output, pero mejor recargar a menu
-            navigateTo('menu');
+        // ===== API KEYS MANAGEMENT =====
+        function saveApiKey(provider) {
+            const input = document.getElementById(`${provider}ApiKey`);
+            const key = input.value.trim();
+            
+            if (!key) { alert('[ERROR] Ingresa una API Key válida.'); return; }
+            
+            localStorage.setItem(`mrprompt_${provider}_key`, key);
+            alert(`✅ API Key de ${provider.toUpperCase()} guardada correctamente.`);
+            updateConfigStatus();
         }
 
-        // ===== FUNCIONES DE SALIDA EN TERMINAL =====
-        function printSystemMessage(msg) {
-            console.log(`%c${msg}`, 'color: #00ff00;');
+        function getApiKey(provider) {
+            return localStorage.getItem(`mrprompt_${provider}_key`) || '';
         }
 
-        function printError(msg) {
-            console.error(msg);
-            alert(`[ERROR] ${msg}`);
+        function deleteApiKey(provider) {
+            if (!confirm(`¿Eliminar API Key de ${provider.toUpperCase()}?`)) return;
+            localStorage.removeItem(`mrprompt_${provider}_key`);
+            document.getElementById(`${provider}ApiKey`).value = '';
+            updateConfigStatus();
+            alert(`🗑 API Key eliminada.`);
         }
 
-        // ===== GENERADOR DE PROMPTS =====
+        function toggleKeyVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+            btn.textContent = input.type === 'password' ? '👁' : '🙈';
+        }
+
+        function updateConfigStatus() {
+            const geminiKey = getApiKey('gemini');
+            const deepseekKey = getApiKey('deepseek');
+
+            // Gemini Status
+            const geminiInd = document.getElementById('geminiIndicator');
+            const geminiText = document.getElementById('geminiStatusText');
+            if (geminiKey) {
+                geminiInd.className = 'status-indicator status-connected';
+                geminiText.textContent = '✓ Configurada';
+                document.getElementById('geminiApiKey').value = geminiKey;
+            } else {
+                geminiInd.className = 'status-indicator status-disconnected';
+                geminiText.textContent = 'No configurado';
+            }
+
+            // DeepSeek Status
+            const dsInd = document.getElementById('deepseekIndicator');
+            const dsText = document.getElementById('deepseekStatusText');
+            if (deepseekKey) {
+                dsInd.className = 'status-indicator status-connected';
+                dsText.textContent = '✓ Configurada';
+                document.getElementById('deepseekApiKey').value = deepseekKey;
+            } else {
+                dsInd.className = 'status-indicator status-disconnected';
+                dsText.textContent = 'No configurado';
+            }
+        }
+
+        async function testApiConnection(provider) {
+            const key = getApiKey(provider);
+            if (!key) { alert('[ERROR] Primero guarda una API Key.'); return; }
+
+            const statusText = provider === 'gemini' ? 'geminiStatusText' : 'deepseekStatusText';
+            document.getElementById(statusText).textContent = 'Probando conexión...';
+
+            try {
+                if (provider === 'gemini') {
+                    const response = await fetch(
+                        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`,
+                        { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({contents:[{parts:[{text:"Hi"}]}]}) }
+                    );
+                    if (response.ok) alert('✅ Conexión con Aristarco 1.0 (Gemini) exitosa!');
+                    else throw new Error('Error en respuesta');
+                } else {
+                    const response = await fetch('https://api.deepseek.com/chat/completions', {
+                        method: 'POST',
+                        headers: {'Content-Type':'application/json','Authorization':`Bearer ${key}`},
+                        body: JSON.stringify({model:'deepseek-chat',messages:[{role:'user',content:'Hi'}],max_tokens:5})
+                    });
+                    if (response.ok) alert('✅ Conexión con Faraday 2.0 (DeepSeek) exitosa!');
+                    else throw new Error('Error en respuesta');
+                }
+                document.getElementById(statusText).textContent = '✓ Conexión OK';
+            } catch (err) {
+                alert(`❌ Error de conexión: ${err.message}`);
+                document.getElementById(statusText).textContent = '❌ Error';
+            }
+        }
+
+        function clearAllConfig() {
+            if (!confirm('¿Restaurar toda la configuración por defecto?')) return;
+            localStorage.clear();
+            location.reload();
+        }
+
+        // ===== LLAMADAS A LA API =====
+        async function callGemini(prompt) {
+            const key = getApiKey('gemini');
+            if (!key) throw new Error('API Key de Aristarco no configurada');
+
+            const response = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`,
+                {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify({
+                        contents:[{parts:[{text:prompt}]}],
+                        generationConfig:{temperature:0.7,maxOutputTokens:2048}
+                    })
+                }
+            );
+            
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sin respuesta';
+        }
+
+        async function callDeepSeek(prompt) {
+            const key = getApiKey('deepseek');
+            if (!key) throw new Error('API Key de Faraday no configurada');
+
+            const response = await fetch('https://api.deepseek.com/chat/completions', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json','Authorization':`Bearer ${key}`},
+                body: JSON.stringify({
+                    model:'deepseek-chat',
+                    messages:[{role:'user',content:prompt}],
+                    temperature:0.7,
+                    max_tokens:2048
+                })
+            });
+            
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message || data.error);
+            return data.choices?.[0]?.message?.content || 'Sin respuesta';
+        }
+
+        // ===== GENERADORES DE CONTENIDO =====
         function generatePrompt() {
             const objective = document.getElementById('promptObjective').value.trim();
             const context = document.getElementById('promptContext').value.trim();
@@ -1159,185 +1267,45 @@
             const complexity = document.getElementById('promptComplexity').value;
             const outputFormat = document.getElementById('promptOutput').value;
 
-            if (!objective) {
-                alert('[ERROR] Por favor, ingresa el objetivo principal.');
-                return;
-            }
+            if (!objective) { alert('[ERROR] Ingresa el objetivo.'); return; }
 
-            let prompt = '';
+            let p = `╔${'═'.repeat(58)}╗\n║     PROMPT OPTIMIZADO - MR.PROMPT ENGINEER v3.0      ║\n║     Motor: ${currentEngine.name.padEnd(10)} v${currentEngine.version.padEnd(37)}║\n╚${'═'.repeat(58)}╝\n\n`;
+            p += `[CONFIGURACIÓN DEL SISTEMA]\n${'─'.repeat(56)}\n`;
+            const roles = {'experto':'EXPERTO TÉCNICO ESPECIALIZADO','creativo':'DIRECTOR CREATIVO','analista':'ANALISTA DE DATOS SENIOR','profesor':'EDUCADOR/MENTOR EXPERTO','desarrollador':'INGENIERO DE SOFTWARE','estratega':'CONSULTOR ESTRATÉGICO'};
+            if (role && roles[role]) p += `│ ROL: ${roles[role]}\n`;
+            p += `│ COMPLEJIDAD: ${complexity.toUpperCase()} │ FORMATO: ${outputFormat.toUpperCase()}\n${'─'.repeat(56)}\n\n`;
 
-            prompt += `╔${'═'.repeat(58)}╗\n`;
-            prompt += `║     PROMPT OPTIMIZADO - MR.PROMPT ENGINEER v2.0      ║\n`;
-            prompt += `║     Motor: ${currentEngine.name.padEnd(10)} v${currentEngine.version.padEnd(37)}║\n`;
-            prompt += `╚${'═'.repeat(58)}╝\n\n`;
+            const inst = {'basico':['▸ Responde directo','▸ Enfócate en objetivo'],'intermedio':['▸ Chain-of-Thought','▸ Estructura lógica','▸ Incluye ejemplos'],'avanzado':['▸ Chain-of-Thought profundo','▸ Tree-of-Thought','▸ Meta-cognición','▸ Considera edge-cases'],'experto':['▸ MODO EXPERTO: Análisis multidimensional','▸ Desglose atómico','▸ Self-consistency múltiple']};
+            p += `[INSTRUCCIONES]\n`; inst[complexity].forEach(i => p+=`${i}\n`);
+            p += `\n[OBJETIVO]\n${'═'.repeat(56)}\n${objective}\n\n`;
+            if (context) p += `[CONTEXTO]\n${'─'.repeat(56)}\n${context}\n\n`;
+            p += `[EJECUCIÓN]\n${'═'.repeat(56)}\nGenera respuesta siguiendo instrucciones.\n\n${new Date().toLocaleString()} | Engine: ${currentEngine.name}`;
 
-            // Configuración del sistema
-            prompt += `[CONFIGURACIÓN DEL SISTEMA]\n`;
-            prompt += `${'─'.repeat(56)}\n`;
-            
-            const roles = {
-                'experto': 'EXPERTO TÉCNICO ESPECIALIZADO (20+ años experiencia)',
-                'creativo': 'DIRECTOR CREATIVO galardonado',
-                'analista': 'ANALISTA DE DATOS SENIOR',
-                'profesor': 'EDUCADOR/MENTOR EXPERTO',
-                'desarrollador': 'INGENIERO DE SOFTWARE',
-                'estratega': 'CONSULTOR ESTRATÉGICO'
-            };
-
-            if (role && roles[role]) {
-                prompt += `│ ROL ASIGNADO: ${roles[role]}\n`;
-            }
-            prompt += `│ COMPLEJIDAD: ${complexity.toUpperCase()}\n`;
-            prompt += `│ FORMATO: ${outputFormat.toUpperCase()}\n`;
-            prompt += `${'─'.repeat(56)}\n\n`;
-
-            // Instrucciones según complejidad
-            const instructions = {
-                'basico': [
-                    '▸ Responde de manera directa y concisa',
-                    '▸ Enfócate en el objetivo principal'
-                ],
-                'intermedio': [
-                    '▸ Aplica razonamiento paso a paso (Chain-of-Thought)',
-                    '▸ Estructura tu respuesta de forma lógica',
-                    '▸ Incluye ejemplos cuando sea relevante',
-                    '▸ Verifica coherencia antes de responder'
-                ],
-                'avanzado': [
-                    '▸ ACTIVA Chain-of-Thought profundo multi-nivel',
-                    '▸ Utiliza técnica Few-Shot si aplica al contexto',
-                    '▸ Considera múltiples perspectivas',
-                    '▸ Estructura con jerarquía clara',
-                    '▸ Incluye edge-cases y limitaciones',
-                    '▸ Proporciona alternativas cuando aplique'
-                ],
-                'experto': [
-                    '▸ MODO EXPERTO: Análisis multidimensional completo',
-                    '▸ Chain-of-Thought con desglose atómico',
-                    '▸ Meta-cognición: Evalúa tu propio razonamiento',
-                    '▸ Tree-of-Thought para explorar caminos',
-                    '▸ Self-consistency desde múltiples ángulos',
-                    '▸ Estructura: Contexto→Análisis→Solución→Validación',
-                    '▸ Considera: Ética, viabilidad, escalabilidad, riesgos'
-                ]
-            };
-
-            prompt += `[INSTRUCCIONES OPERATIVAS]\n`;
-            instructions[complexity].forEach(inst => {
-                prompt += `${inst}\n`;
-            });
-            prompt += `\n`;
-
-            // Objetivo
-            prompt += `[OBJETIVO PRINCIPAL]\n`;
-            prompt += `${'═'.repeat(56)}\n`;
-            prompt += `${objective}\n\n`;
-
-            // Contexto
-            if (context) {
-                prompt += `[CONTEXTO ADICIONAL]\n`;
-                prompt += `${'─'.repeat(56)}\n`;
-                prompt += `${context}\n\n`;
-            }
-
-            // Prompt final
-            prompt += `[PROMPT DE EJECUCIÓN]\n`;
-            prompt += `${'═'.repeat(56)}\n`;
-            prompt += `Genera la respuesta completa siguiendo estrictamente\n`;
-            prompt += `las instrucciones anteriores.\n\n`;
-            prompt += `Generado: ${new Date().toLocaleString()} | Engine: ${currentEngine.name} v${currentEngine.version}`;
-
-            document.getElementById('promptResult').textContent = prompt;
+            document.getElementById('promptResult').textContent = p;
             document.getElementById('promptResultBox').style.display = 'block';
         }
 
-        // ===== PLANIFICADOR =====
         function generatePlan() {
             const goal = document.getElementById('planGoal').value.trim();
             const resources = document.getElementById('planResources').value.trim();
-            const planType = document.getElementById('planType').value;
-            const timeline = document.getElementById('planTimeline').value;
 
-            if (!goal) {
-                alert('[ERROR] Por favor, describe el proyecto.');
-                return;
-            }
+            if (!goal) { alert('[ERROR] Describe el proyecto.'); return; }
 
-            let plan = '';
+            let p = `╔${'═'.repeat(58)}╗\n║       PLAN ESTRATÉGICO - MR.PROMPT PLANNER        ║\n╚${'═'.repeat(58)}╝\n\n`;
+            p += `[ANÁLISIS SMART]\n● ESPECÍFICO: ${goal.substring(0,45)}...\n● MEDIBLE: Definir KPIs\n● ALCANZABLE: Evaluar viabilidad\n● TEMPORAL: Plazo definido\n\n`;
+            p += `[FASES]\n┌─ FASE 1: INICIO ─┐\n☐ Definir alcance\n☐ Identificar stakeholders\n┌─ FASE 2: DISEÑO ─┐\n☐ Diseñar solución\n☐ Validar equipo\n┌─ FASE 3: EJECUCIÓN ─┐\n☐ Desarrollar\n☐ Control calidad\n┌─ FASE 4: CIERRE ─┐\n☐ Entrega final\n☐ Lecciones aprendidas\n\n`;
+            p += `[ACCIONES 48h]\n1. Kick-off meeting\n2. Documento requisitos\n3. Herramientas seguimiento\n\n${new Date().toLocaleString()}`;
 
-            plan += `╔${'═'.repeat(58)}╗\n`;
-            plan += `║       PLAN ESTRATÉGICO - MR.PROMPT PLANNER        ║\n`;
-            plan += `║       Motor: ${currentEngine.name.padEnd(10)} v${currentEngine.version.padEnd(37)}║\n`;
-            plan += `╚${'═'.repeat(58)}╝\n\n`;
-
-            // SMART Analysis
-            plan += `[ANÁLISIS SMART]\n`;
-            plan += `${'─'.repeat(56)}\n`;
-            plan += `● ESPECÍFICO: ${goal.substring(0, 50)}...\n`;
-            plan += `● MEDIBLE: Definir KPIs de éxito\n`;
-            plan += `● ALCANZABLE: Evaluar viabilidad\n`;
-            plan += `● RELEVANTE: Alinear con objetivos\n`;
-            plan += `● TEMPORAL: Plazo ${timeline.toUpperCase()}\n\n`;
-
-            // Fases
-            plan += `[FASES DEL PROYECTO]\n`;
-            plan += `${'═'.repeat(56)}\n\n`;
-            
-            const phases = [
-                { n: 'FASE 1', t: 'INICIO Y PLANIFICACIÓN', tasks: ['Definir alcance', 'Identificar stakeholders', 'Asignar recursos'] },
-                { n: 'FASE 2', t: 'DISEÑO Y ARQUITECTURA', tasks: ['Diseñar solución', 'Validar equipo', 'Documentar specs'] },
-                { n: 'FASE 3', t: 'EJECUCIÓN', tasks: ['Desarrollar/implementar', 'Revisiones periódicas', 'Control calidad'] },
-                { n: 'FASE 4', t: 'CIERRE Y EVALUACIÓN', tasks: ['Entrega final', 'Documentación', 'Lecciones aprendidas'] }
-            ];
-
-            phases.forEach(p => {
-                plan += `┌─ ${p.n}: ${p.t} ─┐\n`;
-                p.tasks.forEach(t => plan += `  ☐ ${t}\n`);
-                plan += `\n`;
-            });
-
-            // Riesgos
-            plan += `[MATRIZ DE RIESGOS]\n`;
-            plan += `${'─'.repeat(56)}\n`;
-            plan += `│ Riesgo          │ Prob │ Impacto │ Mitigación      │\n`;
-            plan += `│─────────────────┼──────┼─────────┼─────────────────│\n`;
-            plan += `│ Scope creep     │ Med  │ Alto    │ Change control  │\n`;
-            plan += `│ Recursos insuf  │ Baja │ Alto    │ Buffer 15%      │\n`;
-            plan += `│ Dependencias    │ Med  │ Medio   │ Plan B definido │\n\n`;
-
-            // Acciones inmediatas
-            plan += `[ACCIONES INMEDIATAS - Próximas 48h]\n`;
-            plan += `${'═'.repeat(56)}\n`;
-            plan += `1. Convocar kick-off meeting\n`;
-            plan += `2. Crear documento de requisitos\n`;
-            plan += `3. Configurar herramientas seguimiento\n`;
-            plan += `4. Confirmar disponibilidad recursos\n`;
-            plan += `5. Establecer primer milestone\n\n`;
-
-            plan += `Generado: ${new Date().toLocaleString()} | Engine: ${currentEngine.name}`;
-
-            document.getElementById('planResult').textContent = plan;
+            document.getElementById('planResult').textContent = p;
             document.getElementById('planResultBox').style.display = 'block';
         }
 
-        // ===== GENERADOR ASCII =====
         function generateASCII() {
             const subject = document.getElementById('asciiSubject').value.trim();
-            const style = document.getElementById('asciiStyle').value;
-            const complexity = document.getElementById('asciiComplexity').value;
+            if (!subject) { alert('[ERROR] Indica qué crear.'); return; }
 
-            if (!subject) {
-                alert('[ERROR] Por favor, indica qué deseas crear.');
-                return;
-            }
-
-            let ascii = '';
-
-            // Librería de arte ASCII
-            const artLibrary = {
-                robot: `
-    ┌────────────────────────────────────────┐
-    │                                        │
+            const arts = {
+                robot:`    ┌────────────────────────────────────────┐
     │     ╔═════════════════════════════╗     │
     │     ║  ┌─────────────────────┐   ║     │
     │     ║  │  ◯ ◯               │   ║     │
@@ -1345,363 +1313,196 @@
     │     ║  │  ╲___╱   [AI CORE]  │   ║     │
     │     ║  └─────────────────────┘   ║     │
     │     ╚═════════════════════════════╝     │
-    │              │    │                     │
-    │            ┌─┴────┴─┐                   │
-    │            │  ┌──┐  │  BODY             │
-    │            │  │░░│  │                   │
-    │            │  └──┘  │                   │
-    │            └───┬───┘                   │
-    │           ╱     ╲                      │
-    │          ╱       ╲  LEGS               │
-    │         ╱         ╲                    │
     └────────────────────────────────────────┘`,
-
-                rocket: `
-               ▲
-              ╱█╲
-             ╱███╲
-            ╱█████╲
-           ╱███████╲
-          ┌───────────┐
-          │ MR.PROMPT │
-          │  ENGINE   │
-          │ █████████ │
-          └─────┬─────┘
-            ═╧══
-             ││
-           ═╧╧═
-            ││
-           ─┴┴─
-          ╱    ╲
-         ╱ FIRE ╲
-        ╱   ══   ╲
-       ▼         ▼`,
-
-                brain: `
-        ╭──────────────────────────────╮
-        │       ╭────────────────╮     │
-        │      ╱    ╔═════════╗   ╲    │
-        │     │     ║ CREATIVE ║    │   │
-        │     │     ║  ENGINE  ║    │   │
-        │     │     ╚═════════╝    │   │
-        │     │╔═════════════════╗│   │
-        │     │║   ╔═════════╗   ║│   │
-        │     │║   ║ LOGIC   ║   ║│   │
-        │     │║   ║ PROCESS ║   ║│   │
-        │     │║   ╚═════════╝   ║│   │
-        │     │╠═════════════════╣│   │
-        │     │║   ╔═════════╗   ║│   │
-        │     │║   ║ PROMPT  ║   ║│   │
-        │     │║   ║ OPTIMIZE║   ║│   │
-        │     │║   ╚═════════╝   ║│   │
-        │     │╚═════════════════╝│   │
-        │      ╲                  ╱    │
-        │       ╰────────────────╯     │
-        ╰──────────────────────────────╯`,
-
-                computer: `
-    ╔══════════════════════════════════════╗
-    ║                                      ║
-    ║  ┌────────────────────────────────┐  ║
-    ║  │  ╔═══════════════════════════╗ │  ║
-    ║  │  ║  MR.PROMPT WORKSTATION   ║ │  ║
-    ║  │  ╚═══════════════════════════╝ │  ║
-    ║  │                                │  ║
-    ║  │  ┌──────────────────────────┐  │  ║
-    ║  │  │  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  │  │  ║
-    ║  │  │  █ PROMPT INPUT HERE  █  │  │  ║
-    ║  │  │  ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀  │  │  ║
-    ║  │  │  [■■■■■■■■■■■■■■■■■■]  │  │  ║
-    ║  │  │  Processing... 100% OK   │  │  ║
-    ║  │  └──────────────────────────┘  │  ║
-    ║  │                                │  ║
-    ║  │  ┌┐┌┐┌┐┌┐┌┐┌┐┌┐┌┐           │  ║
-    ║  │  └┘└┘└┘└┘└┘└┘└┘└┘           │  ║
-    ║  └────────────────────────────────┘  ║
-    ║                                      ║
-    ║  ╔═════════════════════════════════╗ ║
-    ║  ║ ⌨ KEYBOARD │ 🖱 MOUSE │ 💾 HDD ║ ║
-    ╚══════════════════════════════════════╝`
+                rocket:`           ▲
+          ╱█╲
+         ╱███╲
+        ╱█████╲
+       ┌───────────┐
+       │ MR.PROMPT │
+       └─────┬─────┘`,
+                brain:`        ╭──────────────────────────────╮
+       │       ╭────────────────╮     │
+       │      ╱    ╔═════════╗   ╲    │
+       │     │     ║ CREATIVE ║    │   │
+       │     │     ╚═════════╝    │   │
+       │     │╔═════════════════╗│   │
+       │     │║   ╔═════════╗   ║│   │
+       │     │║   ║ PROMPT  ║   ║│   │
+       │     │║   ╚═════════╝   ║│   │
+       │     │╚═════════════════╝│   │
+       │      ╲                  ╱    │
+       │       ╰────────────────╯     │
+       ╰──────────────────────────────╯`
             };
 
-            const lowerSubject = subject.toLowerCase();
+            const lower = subject.toLowerCase();
+            let art = arts.robot;
+            if (lower.includes('cohete')||lower.includes('rocket')) art = arts.rocket;
+            else if (lower.includes('cerebro')||lower.includes('brain')) art = arts.brain;
 
-            if (lowerSubject.includes('robot') || lowerSubject.includes('ia') || lowerSubject.includes('ai')) {
-                ascii = artLibrary.robot;
-            } else if (lowerSubject.includes('cohete') || lowerSubject.includes('rocket')) {
-                ascii = artLibrary.rocket;
-            } else if (lowerSubject.includes('cerebro') || lowerSubject.includes('brain')) {
-                ascii = artLibrary.brain;
-            } else if (lowerSubject.includes('pc') || lowerSubject.includes('computadora') || lowerSubject.includes('laptop')) {
-                ascii = artLibrary.computer;
-            } else {
-                // Generar dinámico
-                ascii = generateDynamicASCII(subject, style, complexity);
-            }
-
-            // Header
-            const header = `
-╔${'═'.repeat(56)}╗
-║${centerText(`★ ${subject.toUpperCase()} ★`, 56)}║
-║${centerText(`Estilo: ${style} | Complejidad: ${complexity}`, 56)}║
-║${centerText(`Engine: ${currentEngine.name} v${currentEngine.version}`, 56)}║
-╚${'═'.repeat(56)}╝
-`;
-            
-            document.getElementById('asciiResult').textContent = header + ascii;
+            const header = `╔${'═'.repeat(56)}╗\n║${centerText(`★ ${subject.toUpperCase()} ★`,56)}║\n║${centerText(`Engine: ${currentEngine.name} v${currentEngine.version}`,56)}║\n╚${'═'.repeat(56)}╝\n`;
+            document.getElementById('asciiResult').textContent = header + art;
             document.getElementById('asciiResultBox').style.display = 'block';
         }
 
-        function generateDynamicASCII(subject, style, complexity) {
-            const lines = [];
-            lines.push(`        ╭${'─'.repeat(subject.length + 8)}╮`);
-            lines.push(`        │  ${'█'.repeat(3)} ${subject.toUpperCase()} ${'█'.repeat(3)}  │`);
-            lines.push(`        ╰${'─'.repeat(subject.length + 8)}╯`);
-            lines.push('');
-            lines.push(`   ┌${'─'.repeat(40)}┐`);
-            lines.push(`   │                                  │`);
-            lines.push(`   │   ◈◈◈ ARTE ASCII GENERADO ◈◈◈   │`);
-            lines.push(`   │                                  │`);
-            lines.push(`   │   Representación conceptual de:  │`);
-            lines.push(`   │   "${subject}"                    │`);
-            lines.push(`   │                                  │`);
-            lines.push(`   │   Estilo: ${style.padEnd(23)}│`);
-            lines.push(`   │   Motor: ${currentEngine.name.padEnd(21)}│`);
-            lines.push(`   │                                  │`);
-            lines.push(`   └${'─'.repeat(40)}┘`);
-            return lines.join('\n');
-        }
-
-        function centerText(text, width) {
-            const pad = Math.floor((width - text.length) / 2);
-            return ' '.repeat(Math.max(0, pad)) + text;
-        }
-
-        // ===== FLUJOGRAMAS =====
         function generateFlowchart() {
             const process = document.getElementById('flowProcess').value.trim();
-            const flowType = document.getElementById('flowType').value;
+            if (!process) { alert('[ERROR] Describe el proceso.'); return; }
 
-            if (!process) {
-                alert('[ERROR] Por favor, describe el proceso.');
-                return;
-            }
-
-            const steps = extractSteps(process);
-            let flow = '';
-
-            flow += `╔${'═'.repeat(56)}╗\n`;
-            flow += `║      FLUJOGRAMA - REPRESENTACIÓN ASCII      ║\n`;
-            flow += `╚${'═'.repeat(56)}╝\n\n`;
-
-            flow += `        ┌─────────────┐\n`;
-            flow += `        │   ▶ INICIO   │\n`;
-            flow += `        └──────┬──────┘\n`;
-            flow += `               ↓\n`;
-
-            steps.forEach((step, i) => {
-                if (step.type === 'decision') {
-                    flow += `        ┌─────────────┐\n`;
-                    flow += `        │◇ ${padText(step.text, 11)}│\n`;
-                    flow += `        └──────┬──────┘\n`;
-                    flow += `      ┌────┴────┐\n`;
-                    flow += `   SÍ ↓        ↓ NO\n`;
-                    flow += `┌──────────┐ ┌──────────┐\n`;
-                    flow += `│${padText(step.yes || 'Continuar', 8)}│ │${padText(step.no || 'Alternativa', 8)}│\n`;
-                    flow += `└────┬─────┘ └────┬─────┘\n`;
-                    flow += `     └────┬────┘\n`;
-                    flow += `          ↓\n`;
-                } else {
-                    flow += `        ┌─────────────┐\n`;
-                    flow += `        │▢ ${padText(step.text, 11)}│\n`;
-                    flow += `        └──────┬──────┘\n`;
-                    flow += `               ↓\n`;
-                }
-            });
-
-            flow += `        ┌─────────────┐\n`;
-            flow += `        │    ■ FIN    │\n`;
-            flow += `        └─────────────┘\n\n`;
-            flow += `Leyenda: ▶■=Inicio/Fin ◇=Decisión ▢=Acción\n\n`;
-            flow += `Engine: ${currentEngine.name} v${currentEngine.version}`;
-
-            document.getElementById('flowResult').textContent = flow;
+            let f = `╔${'═'.repeat(56)}╗\n║      FLUJOGRAMA ASCII      ║\n╚${'═'.repeat(56)}╝\n\n`;
+            f += `        ┌─────────────┐\n        │   ▶ INICIO   │\n        └──────┬──────┘\n               ↓\n`;
+            f += `        ┌─────────────┐\n        │▢ ${padText(process.substring(0,15),11)}│\n        └──────┬──────┘\n               ↓\n        ┌─────────────┐\n        │    ■ FIN    │\n        └─────────────┘\n`;
+            document.getElementById('flowResult').textContent = f;
             document.getElementById('flowResultBox').style.display = 'block';
         }
 
-        function extractSteps(text) {
-            const steps = [];
-            const parts = text.split(/(?:→|->|,|;|\n)/).map(s => s.trim()).filter(s => s);
-
-            parts.slice(0, 5).forEach(part => {
-                const isDecision = /[?¿]|si|no|condicion/i.test(part);
-                steps.push({
-                    text: part.substring(0, 18),
-                    type: isDecision ? 'decision' : 'action',
-                    yes: isDecision ? 'Ejecutar' : null,
-                    no: isDecision ? 'Manejar error' : null
-                });
-            });
-
-            if (steps.length === 0) {
-                steps.push({ text: text.substring(0, 18), type: 'action' });
-            }
-
-            return steps;
-        }
-
-        function padText(text, len) {
-            return (text || '').toString().substring(0, len).padEnd(len);
-        }
-
-        // ===== ANALIZADOR DE CONTEXTO =====
         function analyzeContext() {
             const input = document.getElementById('analyzeInput').value.trim();
+            if (!input) { alert('[ERROR] Ingresa tu idea.'); return; }
 
-            if (!input) {
-                alert('[ERROR] Por favor, ingresa tu idea.');
-                return;
-            }
-
-            let analysis = '';
-
-            analysis += `╔${'═'.repeat(58)}╗\n`;
-            analysis += `║      ANÁLISIS DE CONTEXTO - MR.PROMPT        ║\n`;
-            analysis += `║      Engine: ${currentEngine.name.padEnd(10)} v${currentEngine.version.padEnd(35)}║\n`;
-            analysis += `╚${'═'.repeat(58)}╝\n\n`;
-
-            analysis += `[IDEA ORIGINAL]\n`;
-            analysis += `${'─'.repeat(56)}\n`;
-            analysis += `"${input}"\n\n`;
-
-            // Keywords
-            const keywords = extractKeywords(input);
-            analysis += `[PALABRAS CLAVE]\n`;
-            keywords.forEach(kw => analysis += `  • ${kw}\n`);
-            analysis += `\n`;
-
-            // Intención
-            const intention = classifyIntention(input);
-            analysis += `[INTENCIÓN DETECTADA]\n`;
-            analysis += `  Categoría: ${intention.category}\n`;
-            analysis += `  Subtipo: ${intention.subcategory}\n`;
-            analysis += `  Confianza: ${intention.confidence}%\n\n`;
-
-            // Sugerencias
-            analysis += `[SUGERENCIAS DE OPTIMIZACIÓN]\n`;
-            analysis += `${'─'.repeat(56)}\n\n`;
-            
-            const suggestions = [
-                { title: 'Especificar contexto de uso', impact: 5 },
-                { title: 'Definir formato de salida', impact: 4 },
-                { title: 'Agregar restricciones/límites', impact: 4 },
-                { title: 'Proporcionar ejemplos de referencia', impact: 5 },
-                { title: 'Establecer nivel de detalle', impact: 3 }
-            ];
-
-            suggestions.forEach((s, i) => {
-                analysis += `${i+1}. 💡 ${s.title}\n`;
-                analysis += `   Impacto: ${'★'.repeat(s.impact)}${'☆'.repeat(5-s.impact)}\n\n`;
-            });
-
-            // Prompt sugerido
-            analysis += `[PROMPT SUGERIDO]\n`;
-            analysis += `${'═'.repeat(56)}\n`;
-            analysis += `[ROL]: Experto en ${intention.category.toLowerCase()}\n\n`;
-            analysis += `[CONTEXTO]: ${input.substring(0, 150)}...\n\n`;
-            analysis += `[CLAVES]: ${keywords.slice(0, 5).join(', ')}\n\n`;
-            analysis += `[REQUISITOS]:\n`;
-            analysis += `- Respuesta estructurada y accionable\n`;
-            analysis += `- Ejemplos prácticos incluidos\n`;
-            analysis += `- Formato Markdown\n\n`;
-            analysis += `Generado: ${new Date().toLocaleString()}`;
-
-            document.getElementById('analyzeResult').textContent = analysis;
+            let a = `╔${'═'.repeat(58)}╗\n║      ANÁLISIS DE CONTEXTO      ║\n╚${'═'.repeat(58)}╝\n\n`;
+            a += `[IDEA ORIGINAL]\n"${input}"\n\n`;
+            a += `[PALABRAS CLAVE]\n${extractKeywords(input).map(k=>`• ${k}`).join('\n')}\n\n`;
+            a += `[INTENCIÓN]\nCategoría: ${classifyIntention(input).category}\n\n`;
+            a += `[SUGERENCIAS]\n1. Especificar contexto de uso ★★★★★\n2. Definir formato salida ★★★★☆\n3. Agregar restricciones ★★★★☆\n4. Proporcionar ejemplos ★★★★★\n\n${new Date().toLocaleString()}`;
+            document.getElementById('analyzeResult').textContent = a;
             document.getElementById('analyzeResultBox').style.display = 'block';
         }
 
-        function extractKeywords(text) {
-            const stopWords = ['que','de','la','en','un','una','con','para','por','del','los','las','es','son','como','mas','pero','tipo','yo','quiero','hacer'];
-            return [...new Set(
-                text.toLowerCase()
-                    .replace(/[^\w\s]/g,'')
-                    .split(/\s+/)
-                    .filter(w => w.length > 3 && !stopWords.includes(w))
-            )].slice(0, 8);
+        // ===== CHAT COLABORATIVO =====
+        async function sendCollaborativeChat() {
+            const message = document.getElementById('chatMessage').value.trim();
+            const mode = document.getElementById('chatMode').value;
+
+            if (!message) { alert('[ERROR] Escribe un mensaje.'); return; }
+
+            const aristarcoPanel = document.getElementById('chatAristarco');
+            const faradayPanel = document.getElementById('chatFaraday');
+
+            // Mostrar loading
+            aristarcoPanel.innerHTML = '<div class="chat-loading"><span></span><span></span><span></span></div>';
+            faradayPanel.innerHTML = '<div class="chat-loading"><span></span><span></span><span></span></div>';
+
+            const geminiKey = getApiKey('gemini');
+            const deepseekKey = getApiKey('deepseek');
+
+            try {
+                let aristoResponse = '', faraResponse = '';
+
+                if (mode === 'parallel') {
+                    [aristoResponse, faraResponse] = await Promise.allSettled([
+                        callGemini(message),
+                        callDeepSeek(message)
+                    ]);
+                    aristoResponse = aristoResponse.status === 'fulfilled' ? aristoResponse.value : `Error: ${aristoResponse.reason.message}`;
+                    faraResponse = faraResponse.status === 'fulfilled' ? faraResponse.value : `Error: ${faraResponse.reason.message}`;
+                } else if (mode === 'chain') {
+                    aristoResponse = await callGemini(message);
+                    faraResponse = await callDeepSeek(`Mejora/refina esta respuesta de otro experto:\n\n${aristoResponse}\n\nPregunta original: ${message}`);
+                } else if (mode === 'debate') {
+                    aristoResponse = await callGemini(`${message}\n\nResponde como experto. Sé conciso pero completo.`);
+                    faraResponse = await callDeepSeek(`${message}\n\nOtro experto dijo: "${aristoResponse.substring(0,200)}..."\n\nDa tu perspectiva diferente o crítica constructiva.`);
+                } else {
+                    aristoResponse = await callGemini(message);
+                    faraResponse = await callDeepSeek(message);
+                    const fusion = `🤝 FUSIÓN DE RESPUESTAS:\n\n⚡ ARISTARCO dice:\n${aristoResponse}\n\n🔌 FARADAY dice:\n${faraResponse}\n\n--- SÍNTESIS COMBINADA ---\nAmbos expertos coinciden en los puntos principales pero aportan perspectivas complementarias.`;
+                    aristoResponse = fusion;
+                    faraResponse = fusion;
+                }
+
+                aristarcoPanel.innerHTML = `<div class="chat-message user"><strong>Tú:</strong>${escapeHtml(message)}</div><div class="chat-message">${formatResponse(aristoResponse)}</div>`;
+                faradayPanel.innerHTML = `<div class="chat-message user"><strong>Tú:</strong>${escapeHtml(message)}</div><div class="chat-message">${formatResponse(faraResponse)}</div>`;
+            } catch (err) {
+                const errMsg = `<div class="chat-message" style="border-left-color:var(--text-error)">❌ Error: ${escapeHtml(err.message)}</div>`;
+                aristarcoPanel.innerHTML = errMsg;
+                faradayPanel.innerHTML = errMsg;
+            }
         }
 
-        function classifyIntention(text) {
-            const lower = text.toLowerCase();
-            const categories = [
-                { p: ['app','aplicacion','software','programa','desarrollar'], c: 'DESARROLLO SOFTWARE', s: 'Aplicación', conf: 90 },
-                { p: ['idea','crear','innovar','nuevo','producto'], c: 'INNOVACION', s: 'Producto', conf: 85 },
-                { p: ['organizar','plan','gestion','proyecto','tareas'], c: 'PLANIFICACION', s: 'Productividad', conf: 88 },
-                { p: ['aprender','enseñar','curso','educacion','tutorial'], c: 'EDUCACION', s: 'Aprendizaje', conf: 82 },
-                { p: ['negocio','empresa','vender','marketing','clientes'], c: 'NEGOCIOS', s: 'Comercial', conf: 87 }
-            ];
-            for (const cat of categories) {
-                if (cat.p.some(p => lower.includes(p))) return { category: cat.c, subcategory: cat.s, confidence: cat.conf };
-            }
-            return { category: 'GENERAL', subcategory: 'General', conf: 60 };
+        function formatResponse(text) {
+            return escapeHtml(text).replace(/\n/g, '<br>');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function clearChat() {
+            document.getElementById('chatAristarco').innerHTML = '<div class="output-line text-dim" style="font-size:11px">Esperando mensaje...</div>';
+            document.getElementById('chatFaraday').innerHTML = '<div class="output-line text-dim" style="font-size:11px">Esperando mensaje...</div>';
+            document.getElementById('chatMessage').value = '';
         }
 
         // ===== UTILIDADES =====
-        function copyResult(elementId) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const hint = event.target;
-                hint.textContent = '[ ✓ COPIADO AL PORTAPAPELES ]';
-                setTimeout(() => {
-                    hint.textContent = '[ Click para copiar al portapapeles ]';
-                }, 2000);
+        function copyResult(id) {
+            navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
+                event.target.textContent = '[ ✓ COPIADO ]';
+                setTimeout(() => event.target.textContent = '[ Click para copiar ]', 2000);
             });
         }
 
-        function clearSection(section) {
-            switch(section) {
-                case 'prompt':
-                    document.getElementById('promptObjective').value = '';
-                    document.getElementById('promptContext').value = '';
-                    document.getElementById('promptResultBox').style.display = 'none';
-                    break;
-                case 'plan':
-                    document.getElementById('planGoal').value = '';
-                    document.getElementById('planResources').value = '';
-                    document.getElementById('planResultBox').style.display = 'none';
-                    break;
-                case 'ascii':
-                    document.getElementById('asciiSubject').value = '';
-                    document.getElementById('asciiResultBox').style.display = 'none';
-                    break;
-                case 'flowchart':
-                    document.getElementById('flowProcess').value = '';
-                    document.getElementById('flowResultBox').style.display = 'none';
-                    break;
-                case 'analyzer':
-                    document.getElementById('analyzeInput').value = '';
-                    document.getElementById('analyzeResultBox').style.display = 'none';
-                    break;
+        function downloadAsTxt(section) {
+            const resultId = section + 'Result';
+            const content = document.getElementById(resultId)?.textContent;
+            if (!content) { alert('[ERROR] No hay contenido para descargar.'); return; }
+
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `MrPrompt_${section}_${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearSection(sec) {
+            switch(sec) {
+                case 'prompt': document.getElementById('promptObjective').value='';document.getElementById('promptContext').value='';document.getElementById('promptResultBox').style.display='none';break;
+                case 'plan': document.getElementById('planGoal').value='';document.getElementById('planResources').value='';document.getElementById('planResultBox').style.display='none';break;
+                case 'ascii': document.getElementById('asciiSubject').value='';document.getElementById('asciiResultBox').style.display='none';break;
+                case 'flowchart': document.getElementById('flowProcess').value='';document.getElementById('flowResultBox').style.display='none';break;
+                case 'analyzer': document.getElementById('analyzeInput').value='';document.getElementById('analyzeResultBox').style.display='none';break;
             }
         }
 
-        // ===== INICIALIZACIÓN =====
-        document.addEventListener('DOMContentLoaded', () => {
-            // Cargar preferencias guardadas
-            const savedTheme = localStorage.getItem('mrprompt-theme');
-            if (savedTheme) setTheme(savedTheme);
+        function extractKeywords(text) {
+            const stop=['que','de','la','en','un','una','con','para','por','del','los','las','es','son','como','mas','pero','tipo','yo','quiero','hacer'];
+            return [...new Set(text.toLowerCase().replace(/[^\w\s]/g,'').split(/\s+/).filter(w=>w.length>3&&!stop.includes(w)))].slice(0,8);
+        }
 
-            const savedEngine = localStorage.getItem('mrprompt-engine');
-            if (savedEngine) {
-                const engine = JSON.parse(savedEngine);
-                currentEngine = engine;
-                document.getElementById('currentEngineBtn').textContent = 
-                    `${engine.type === 'gemini' ? '⚡' : '🔮'} ${engine.name} ${engine.version} ▼`;
-                document.getElementById('menuEngineDisplay').textContent = `${engine.name} ${engine.version}`;
-                document.getElementById('statusEngine').textContent = `${engine.name} ${engine.version}`;
+        function classifyIntention(t) {
+            const lower=t.toLowerCase(), cats=[
+                {p:['app','aplicacion','software','programa'],c:'DESARROLLO SOFTWARE'},
+                {p:['idea','crear','innovar','producto'],c:'INNOVACION'},
+                {p:['organizar','plan','proyecto'],c:'PLANIFICACION'},
+                {p:['aprender','curso','educacion'],c:'EDUCACION'},
+                {p:['negocio','empresa','marketing'],c:'NEGOCIOS'}
+            ];
+            for(const cat of cats) if(cat.p.some(p=>lower.includes(p))) return {category:cat.c};
+            return {category:'GENERAL'};
+        }
+
+        function padText(t,len){return(t||'').toString().substring(0,len).padEnd(len);}
+        function centerText(t,w){return' '.repeat(Math.max(0,Math.floor((w-t.length)/2)))+t;}
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('mrprompt-theme');
+            if(savedTheme) setTheme(savedTheme);
+
+            const savedEng = localStorage.getItem('mrprompt-engine');
+            if(savedEng) {
+                const e=JSON.parse(savedEng);
+                currentEngine=e;
+                document.getElementById('currentEngineBtn').textContent=`${e.type==='gemini'?'⚡':'🔌'} ${e.name} ${e.version} ▼`;
+                document.getElementById('menuEngineDisplay').textContent=`${e.name} ${e.version}`;
+                document.getElementById('statusEngine').textContent=`${e.name} ${e.version}`;
             }
 
-            console.log('%c🧠 MR.PROMPT TERMINAL v2.0 INICIADO', 'color: #00ff00; font-size: 16px; font-weight: bold;');
-            console.log('%cSistema listo. Escribe "help" para comandos.', 'color: #00ffff;');
+            console.log('%c🧠 MR.PROMPT TERMINAL v3.0','color:#00ff00;font-size:16px;font-weight:bold;');
         });
     </script>
 </body>
