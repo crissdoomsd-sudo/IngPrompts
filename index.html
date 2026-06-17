@@ -3,413 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MR.PROMPT // INGENIERO DE PROMPTS</title>
+    <title>⬡ PROMPFORGE.SH // INGENIERO SENIOR v6.0</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
-/* ============================================
-   TEMA BASE
-   ============================================ */
-:root {
-    --bg-primary: #0a0f0a;
-    --bg-secondary: #111811;
-    --bg-tertiary: #1a281a;
-    --text-primary: #00ff88;
-    --text-secondary: #44ff99;
-    --text-terciary: #00ffcc;
-    --text-dim: #669999;
-    --accent-green: #00ff88;
-    --accent-cyan: #00ffcc;
-    --accent-lime: #b8ff44;
-    --accent-purple: #bf66ff;
-    --accent-red: #ff4466;
-    --border-color: rgba(0, 255, 136, 0.25);
-    --glow-green: rgba(0, 255, 136, 0.5);
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-black: #050a05;
+            --green-bright: #00ff41;
+            --green-neon: #39ff14;
+            --green-glow: rgba(57, 255, 20, 0.6);
+            --cyan-accent: #00ffc8;
+            --lime-warn: #adff2f;
+            --text-white: #e0ffe0;
+            --text-gray: #6b9b6b;
+            --red-error: #ff3860;
+            --purple-accent: #bf00ff;
+        }
+        html, body { height: 100%; overflow-x: hidden; }
+        body {
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+            background: var(--bg-black);
+            color: var(--green-bright);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.02) 2px, rgba(0,255,65,0.02) 4px);
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .app-container { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
+        
+        /* LOGIN */
+        .login-screen {
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 30px 20px; background: radial-gradient(ellipse at center, rgba(0,255,65,0.03) 0%, transparent 70%);
+        }
+        .login-box {
+            width: 100%; max-width: 650px; border: 1px solid rgba(0,255,65,0.25); padding: 35px;
+            background: rgba(0,255,65,0.01);
+            box-shadow: 0 0 60px rgba(0,255,65,0.08), inset 0 0 80px rgba(0,255,65,0.02);
+            position: relative;
+        }
+        .login-box::before, .login-box::after {
+            content: ''; position: absolute; width: 30px; height: 30px;
+            border-color: var(--green-neon); border-style: solid;
+        }
+        .login-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; box-shadow: -3px -3px 15px var(--green-glow); }
+        .login-box::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; box-shadow: 3px 3px 15px var(--green-glow); }
+        
+        .login-header { text-align: center; margin-bottom: 28px; }
+        .login-logo { font-size: 42px; margin-bottom: 12px; text-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); animation: pulse-glow 2s ease-in-out infinite; }
+        @keyframes pulse-glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.85;transform:scale(1.05)} }
+        .login-title { color: var(--green-neon); font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 20px var(--green-glow); margin-bottom: 6px; }
+        .login-subtitle { color: var(--text-gray); font-size: 12px; letter-spacing: 1px; }
+        
+        .login-form { display: flex; flex-direction: column; gap: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { color: var(--cyan-accent); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+        .input-cyber {
+            width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.6); border: 1px solid rgba(0,255,65,0.2);
+            color: var(--green-bright); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none;
+            transition: all 0.3s ease; letter-spacing: 0.5px;
+        }
+        .input-cyber:focus { border-color: var(--green-neon); box-shadow: 0 0 15px rgba(57,255,20,0.3), inset 0 0 20px rgba(57,255,20,0.05); }
+        .input-cyber::placeholder { color: rgba(0,255,65,0.25); font-style: italic; }
+        
+        .checkbox-group { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 0; }
+        .checkbox-custom {
+            width: 18px; height: 18px; border: 2px solid rgba(0,255,65,0.3); background: transparent;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
+        }
+        .checkbox-custom.checked { background: var(--green-neon); border-color: var(--green-neon); box-shadow: 0 0 12px var(--green-glow); }
+        .checkbox-custom.checked::after { content: '✓'; color: var(--bg-black); font-weight: bold; font-size: 13px; }
+        .checkbox-label { color: var(--text-gray); font-size: 12px; user-select: none; }
+        
+        .btn-login {
+            width: 100%; padding: 16px; background: transparent; border: 2px solid var(--green-neon);
+            color: var(--green-neon); font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; margin-top: 8px;
+        }
+        .btn-login:hover:not(:disabled) { background: var(--green-neon); color: var(--bg-black); box-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); transform: translateY(-2px); }
+        .btn-login:disabled { opacity: 0.5; cursor: not-allowed; border-color: var(--text-gray); color: var(--text-gray); }
+        
+        .message-box { padding: 14px 18px; font-size: 12px; margin-top: 14px; display: none; animation: shake 0.5s ease-in-out; line-height: 1.7; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+        .error-message { background: rgba(255,56,96,0.08); border: 1px solid rgba(255,56,96,0.35); color: var(--red-error); border-left: 3px solid var(--red-error); }
+        .success-message { background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.35); color: var(--green-bright); border-left: 3px solid var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
+        .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        
+        .login-info { margin-top: 24px; padding-top: 20px; border-top: 1px dashed rgba(0,255,65,0.15); }
+        .info-title { color: var(--lime-warn); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+        .info-text { color: var(--text-gray); font-size: 12px; line-height: 1.8; }
+        .info-link { color: var(--cyan-accent); text-decoration: none; border-bottom: 1px dashed var(--cyan-accent); }
 
-[data-theme="day"] {
-    --bg-primary: #fafafa;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f0f0f0;
-    --text-primary: #1a1a1a;
-    --text-secondary: #333333;
-    --text-terciary: #0066cc;
-    --text-dim: #888888;
-    --accent-green: #22c55e;
-    --accent-cyan: #0891b2;
-    --accent-lime: #84cc16;
-    --accent-purple: #9333ea;
-    --accent-red: #dc2626;
-    --border-color: rgba(0, 0, 0, 0.12);
-    --glow-green: rgba(34, 197, 94, 0.3);
-}
-[data-theme="night"] {
-    --bg-primary: #000000;
-    --bg-secondary: #050505;
-    --bg-tertiary: #0a0a0a;
-    --text-primary: #e0e0e0;
-    --text-secondary: #bbbbbb;
-    --text-terciary: #60a5fa;
-    --text-dim: #555555;
-    --accent-green: #4ade80;
-    --accent-cyan: #22d3ee;
-    --accent-lime: #a3e635;
-    --accent-purple: #c084fc;
-    --accent-red: #f87171;
-    --border-color: rgba(255, 255, 255, 0.06);
-    --glow-green: rgba(74, 222, 128, 0.35);
-}
-[data-theme="cyber"] body::before,
-[data-theme="night"] body::before {
-    content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none; z-index: 9999;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.02) 2px, rgba(0,255,136,0.02) 4px);
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; overflow-x: hidden; }
-body {
-    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
-    background: var(--bg-primary); color: var(--text-primary);
-    font-size: 14px; line-height: 1.6; transition: all 0.3s ease;
-}
-.app-container { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
-
-/* LOGIN */
-.login-screen {
-    flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
-    padding: 30px 20px; background: radial-gradient(ellipse at center, var(--glow-green) 0%, transparent 70%);
-}
-.login-box {
-    width: 100%; max-width: 750px; border: 1px solid var(--border-color);
-    padding: 45px; background: var(--bg-secondary);
-    box-shadow: var(--glow-green) 0 0 40px, inset 0 0 80px rgba(0,0,0,0.03);
-    position: relative; transition: all 0.3s ease;
-}
-.login-box::before, .login-box::after {
-    content: ''; position: absolute; width: 30px; height: 30px;
-    border-color: var(--accent-green); border-style: solid;
-}
-.login-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-.login-box::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-.login-header { text-align: center; margin-bottom: 35px; }
-.login-logo { 
-    font-size: 56px; margin-bottom: 16px; 
-    filter: drop-shadow(0 0 20px var(--glow-green));
-    animation: pulse-glow 2s ease-in-out infinite;
-}
-@keyframes pulse-glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.85;transform: scale(1.05)} }
-.login-title { 
-    color: var(--text-secondary); font-size: 24px; font-weight: 700; 
-    letter-spacing: 4px; text-transform: uppercase; 
-    text-shadow: 0 0 15px var(--glow-green); margin-bottom: 10px;
-}
-.login-subtitle { color: var(--text-dim); font-size: 13px; letter-spacing: 1px; }
-.login-form { display: flex; flex-direction: column; gap: 22px; }
-.form-group { display: flex; flex-direction: column; gap: 10px; }
-.form-label { 
-    color: var(--text-terciary); font-size: 12px; font-weight: 600; 
-    letter-spacing: 2px; text-transform: uppercase; 
-}
-.input-cyber {
-    width: 100%; padding: 16px 18px; background: var(--bg-tertiary);
-    border: 1px solid var(--border-color); color: var(--text-primary);
-    font-family: inherit; font-size: 14px; outline: none; transition: all 0.3s ease;
-}
-.input-cyber:focus { 
-    border-color: var(--accent-green); 
-    box-shadow: 0 0 15px var(--glow-green), inset 0 0 20px var(--glow-green);
-}
-.input-cyber::placeholder { color: var(--text-dim); opacity: 0.6; }
-.textarea-cyber {
-    min-height: 100px; resize: vertical; font-family: inherit;
-}
-.checkbox-group { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 8px 0; }
-.checkbox-custom {
-    width: 20px; height: 20px; border: 2px solid var(--border-color);
-    background: transparent; display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s; flex-shrink: 0;
-}
-.checkbox-custom.checked { 
-    background: var(--accent-green); border-color: var(--accent-green); 
-    box-shadow: 0 0 10px var(--glow-green);
-}
-.checkbox-custom.checked::after { content: '✓'; color: var(--bg-primary); font-weight: bold; font-size: 14px; }
-.checkbox-label { color: var(--text-dim); font-size: 13px; user-select: none; }
-.btn-login {
-    width: 100%; padding: 18px; background: transparent; border: 2px solid var(--accent-green);
-    color: var(--accent-green); font-family: inherit; font-size: 16px; font-weight: 700;
-    letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease;
-    margin-top: 12px;
-}
-.btn-login:hover:not(:disabled) { 
-    background: var(--accent-green); color: var(--bg-primary); 
-    box-shadow: var(--glow-green) 0 0 30px; transform: translateY(-2px);
-}
-.btn-login:disabled { opacity: 0.5; cursor: not-allowed; border-color: var(--text-dim); color: var(--text-dim); }
-.message-box {
-    padding: 16px 20px; font-size: 13px; margin-top: 18px; display: none;
-    animation: shake 0.5s ease-in-out; line-height: 1.7;
-}
-@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-.error-message { 
-    background: rgba(255, 68, 68, 0.08); border: 1px solid rgba(255, 68, 68, 0.3); 
-    color: var(--accent-red); border-left: 3px solid var(--accent-red);
-}
-.success-message { 
-    background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.3); 
-    color: var(--accent-green); border-left: 3px solid var(--accent-green);
-}
-.loading-spinner {
-    display: inline-block; width: 14px; height: 14px;
-    border: 2px solid currentColor; border-top-color: transparent;
-    border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px;
-}
-@keyframes spin { to{transform:rotate(360deg)} }
-.login-info { margin-top: 24px; padding-top: 22px; border-top: 1px dashed var(--border-color); }
-.info-title { 
-    color: var(--accent-lime); font-size: 12px; font-weight: 700; 
-    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px;
-}
-.info-text { color: var(--text-dim); font-size: 13px; line-height: 1.9; }
-.info-link { color: var(--text-terciary); text-decoration: none; border-bottom: 1px dashed; }
-.info-link:hover { color: var(--accent-green); border-bottom-style: solid; }
-
-/* MAIN */
-.main-screen { display: none; flex-direction: column; height: 100vh; }
-.main-screen.active { display: flex; }
-.status-bar {
-    background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, transparent 100%);
-    border-bottom: 1px solid var(--border-color); padding: 12px 20px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 13px; flex-shrink: 0; gap: 15px; flex-wrap: wrap;
-}
-.status-left { color: var(--text-secondary); font-weight: 600; filter: drop-shadow(0 0 8px var(--glow-green)); }
-.status-center { display: flex; gap: 12px; align-items: center; font-size: 11px; }
-.status-right { display: flex; gap: 15px; align-items: center; font-size: 11px; color: var(--text-dim); }
-.theme-btn {
-    background: none; border: 1px solid var(--border-color); color: var(--text-dim);
-    padding: 5px 12px; font-family: inherit; font-size: 10px;
-    cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-}
-.theme-btn:hover { border-color: var(--accent-green); color: var(--accent-green); }
-.theme-btn.active { 
-    background: var(--accent-green); color: var(--bg-primary); 
-    border-color: var(--accent-green); font-weight: 600;
-}
-.model-badge {
-    padding: 5px 12px; background: rgba(0,255,136,0.08); 
-    border: 1px solid var(--border-color); color: var(--accent-green);
-    font-weight: 600; font-size: 11px; letter-spacing: 1px;
-}
-.ai-dot { 
-    width: 8px; height: 8px; border-radius: 50%; 
-    background: var(--accent-green); display: inline-block;
-    animation: pulse-dot 1.5s infinite; box-shadow: 0 0 10px var(--glow-green);
-}
-@keyframes pulse-dot { 
-    0%,100%{box-shadow:0 0 5px var(--glow-green))}
-    50%{box-shadow:0 0 15px var(--glow-green), 0 0 25px var(--glow-green)}
-}
-.status-time { font-variant-numeric: tabular-nums; }
-.logout-btn {
-    background: none; border: 1px solid var(--accent-red); color: var(--accent-red);
-    padding: 5px 12px; font-family: inherit; font-size: 10px;
-    cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-}
-.logout-btn:hover { background: var(--accent-red); color: white; }
-.save-btn {
-    background: none; border: 1px solid var(--accent-green); color: var(--accent-green);
-    padding: 5px 12px; font-family: inherit; font-size: 10px;
-    cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-}
-.save-btn:hover { background: var(--accent-green); color: var(--bg-primary); }
-.download-btn {
-    background: none; border: 1px solid var(--accent-cyan); color: var(--accent-cyan);
-    padding: 5px 12px; font-family: inherit; font-size: 10px;
-    cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px;
-}
-.download-btn:hover { background: var(--accent-cyan); color: var(--bg-primary); }
-.output-area { flex: 1; overflow-y: auto; padding: 20px 24px; scroll-behavior: smooth; }
-.output-area::-webkit-scrollbar { width: 10px; }
-.output-area::-webkit-scrollbar-track { background: var(--bg-primary); }
-.output-area::-webkit-scrollbar-thumb { background: var(--border-color); }
-.boot-line { margin: 3px 0; white-space: pre-wrap; }
-.boot-ok { color: var(--accent-green); }
-.ascii-art { 
-    color: var(--text-secondary); white-space: pre; line-height: 1.2; 
-    margin: 16px 0; font-size: 12px; 
-    filter: drop-shadow(0 0 8px var(--glow-green));
-}
-.cyber-box {
-    border: 1px solid var(--border-color); padding: 24px; margin: 24px 0;
-    position: relative; background: rgba(0,0,0,0.02);
-    box-shadow: inset 0 0 40px rgba(0,0,0,0.03);
-}
-.cyber-box::before, .cyber-box::after {
-    content: ''; position: absolute; width: 24px; height: 24px;
-    border-color: var(--accent-green); border-style: solid;
-}
-.cyber-box::before { top:-1px;left:-1px;border-width:2px 0 0 2px; }
-.cyber-box::after {bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
-.box-title { 
-    color: var(--text-secondary); font-weight: 700; margin-bottom: 16px;
-    font-size: 16px; text-transform: uppercase; letter-spacing: 3px;
-    text-shadow: 0 0 15px var(--glow-green);
-}
-.box-content { color: var(--text-primary); line-height: 1.9; }
-.box-content p { margin: 10px 0; }
-.cmd-hint { color: var(--text-terciary); font-weight: 600; }
-.flujograma {
-    border: 1px solid var(--border-color); background: rgba(0,255,200,0.02);
-    padding: 16px 20px; margin: 16px 0; font-size: 12px;
-    line-height: 1.7; color: var(--text-terciary); position: relative;
-}
-.flujograma::before {
-    content: '⬇ FLUJOGRAMA DE PROCESO';
-    position: absolute; top: -10px; left: 16px;
-    background: var(--bg-primary); padding: 0 8px;
-    font-size: 10px; letter-spacing: 2px; font-weight: bold;
-}
-.ai-response {
-    border: 1px solid var(--border-color); background: rgba(0,255,200,0.02);
-    padding: 20px 24px; margin: 18px 0; position: relative;
-    box-shadow: inset 0 0 40px rgba(0,255,200,0.02);
-}
-.ai-response::before {
-    content: '🤖 RESPUESTA DEL INGENIERO';
-    position: absolute; top: -11px; left: 16px;
-    background: var(--bg-primary); padding: 0 10px;
-    font-size: 11px; color: var(--text-terciary);
-    letter-spacing: 2px; font-weight: bold;
-}
-.prompt-output {
-    border: 2px solid var(--border-color);
-    background: linear-gradient(135deg, rgba(0,255,136,0.04) 0%, rgba(0,255,136,0.01) 100%);
-    padding: 24px 28px; margin: 20px 0; font-size: 13px;
-    line-height: 1.85; color: var(--text-primary); position: relative;
-    box-shadow: 0 0 40px rgba(0,255,136,0.08);
-}
-.prompt-output::before {
-    content: '📋 PROMPT FINAL EN ESPAÑOL';
-    position: absolute; top: -12px; left: 20px;
-    background: var(--bg-primary); padding: 0 12px;
-    font-size: 11px; color: var(--accent-green);
-    letter-spacing: 2px; font-weight: 700;
-}
-.step-indicator {
-    color: var(--accent-purple); font-weight: 700; font-size: 13px;
-    letter-spacing: 1px; margin: 18px 0 12px 0;
-    padding: 10px 16px; background: linear-gradient(90deg, rgba(191,0,255,0.06) 0%, transparent 100%);
-    border-left: 3px solid var(--accent-purple);
-}
-.plan-box {
-    border: 1px dashed var(--border-color); background: rgba(173,255,47,0.02);
-    padding: 16px 20px; margin: 16px 0; font-size: 12px; color: var(--accent-lime);
-}
-.plan-title {
-    color: var(--accent-lime); font-weight: 700;
-    font-size: 11px; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase;
-}
-.output-line { margin: 4px 0; white-space: pre-wrap; word-break: break-word; }
-.line-error { color: var(--accent-red); }
-.line-success { color: var(--accent-green); }
-.line-info { color: var(--text-terciary); }
-.line-warn { color: var(--accent-lime); }
-.line-dim { color: var(--text-dim); }
-.line-ai {
-    color: var(--text-secondary); border-left: 3px solid var(--accent-green);
-    padding-left: 14px; margin: 14px 0;
-    background: linear-gradient(90deg, rgba(0,255,136,0.04) 0%, transparent 100%);
-}
-.line-engineer {
-    color: var(--accent-purple); border-left: 3px solid var(--accent-purple);
-    padding-left: 14px; margin: 14px 0;
-    background: linear-gradient(90deg, rgba(191,0,255,0.04) 0%, transparent 100%);
-}
-::selection { background: var(--accent-green); color: var(--bg-primary); }
-@media(max-width:768px){
-    body{font-size:13px} .login-box{padding:28px 20px} .login-logo{font-size:42px}
-    .login-title{font-size: 20px} .status-bar{padding:10px 12px;font-size:11px;gap:10px}
-    .output-area{padding:14px 16px} .input-line{padding:12px 16px}
-    .ascii-art{font-size:10px} .flujograma{padding:12px;font-size:11px}
-    .status-center,.status-right{display:none;}
-}
-.hidden{display:none!important}
+        /* MAIN SCREEN */
+        .main-screen { display: none; flex-direction: column; height: 100vh; }
+        .main-screen.active { display: flex; }
+        .status-bar {
+            background: linear-gradient(180deg, rgba(0,255,65,0.08) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(0,255,65,0.25); padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-shrink: 0;
+        }
+        .status-left { color: var(--green-neon); font-weight: 600; text-shadow: 0 0 10px var(--green-glow); }
+        .status-right { color: var(--text-gray); display: flex; gap: 20px; font-size: 12px; }
+        .status-highlight { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
+        .status-time { color: #00cc33; font-variant-numeric: tabular-nums; }
+        .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-neon); display: inline-block; animation: pulse-green 1.5s infinite; box-shadow: 0 0 10px var(--green-glow); }
+        @keyframes pulse-green { 0%,100%{box-shadow:0 0 5px var(--green-glow),0 0 10px var(--green-glow)} 50%{box-shadow:0 0 15px var(--green-glow),0 0 25px var(--green-glow)} }
+        .logout-btn { background: none; border: 1px solid var(--red-error); color: var(--red-error); padding: 4px 12px; font-family: inherit; font-size: 11px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .logout-btn:hover { background: var(--red-error); color: var(--bg-black); }
+        
+        .output-area { flex: 1; overflow-y: auto; padding: 20px 24px; scroll-behavior: smooth; }
+        .output-area::-webkit-scrollbar { width: 10px; }
+        .output-area::-webkit-scrollbar-track { background: var(--bg-black); border-left: 1px solid rgba(0,255,65,0.1); }
+        .output-area::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.2); }
+        
+        /* Estilos de output */
+        .boot-line { margin: 3px 0; white-space: pre-wrap; }
+        .boot-ok { color: var(--green-bright); text-shadow: 0 0 5px rgba(0,255,65,0.4); }
+        
+        .ascii-art { 
+            color: var(--green-neon); 
+            white-space: pre; 
+            line-height: 1.2; 
+            margin: 16px 0;
+            font-size: 12px;
+            text-shadow: 0 0 8px var(--green-glow);
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; filter: brightness(1.2); }
+        }
+        
+        .flujograma {
+            border: 1px solid rgba(0,255,200,0.2);
+            background: rgba(0,255,200,0.02);
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--cyan-accent);
+            position: relative;
+        }
+        .flujograma::before {
+            content: '⬇ FLUJOGRAMA';
+            position: absolute;
+            top: -10px;
+            left: 16px;
+            background: var(--bg-black);
+            padding: 0 8px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+        
+        .cyber-box { 
+            border: 1px solid rgba(0,255,65,0.3); 
+            padding: 24px; 
+            margin: 24px 0; 
+            position: relative; 
+            background: rgba(0,255,65,0.02); 
+            box-shadow: inset 0 0 40px rgba(0,255,65,0.03); 
+        }
+        .cyber-box::before, .cyber-box::after { 
+            content: ''; position: absolute; width: 24px; height: 24px; 
+            border-color: var(--green-bright); border-style: solid; 
+        }
+        .cyber-box::before { top:-1px;left:-1px;border-width:2px 0 0 2px; box-shadow:-3px -3px 15px var(--green-glow); }
+        .cyber-box::after {bottom:-1px;right:-1px;border-width:0 2px 2px 0;box-shadow:3px 3px 15px var(--green-glow);}
+        
+        .box-title { 
+            color: var(--green-neon); 
+            font-weight: 700; 
+            margin-bottom: 16px; 
+            font-size: 16px; 
+            text-transform: uppercase; 
+            letter-spacing: 3px; 
+            text-shadow: 0 0 20px var(--green-glow); 
+        }
+        .box-content { color: var(--text-white); line-height: 1.9; }
+        .box-content p { margin: 10px 0; }
+        .cmd-hint { color: var(--cyan-accent); font-weight: 600; text-shadow: 0 0 8px rgba(0,255,200,0.5); }
+        
+        .input-line { 
+            display: flex; align-items: center; 
+            padding: 14px 24px; 
+            border-top: 1px solid rgba(0,255,65,0.15); 
+            background: linear-gradient(180deg, rgba(0,255,65,0.03) 0%, transparent 100%); 
+            flex-shrink: 0; 
+        }
+        .prompt-prefix { color: var(--cyan-accent); margin-right: 10px; white-space: nowrap; text-shadow: 0 0 8px rgba(0,255,200,0.4); }
+        .prompt-user { color: var(--green-neon); font-weight: 700; }
+        .prompt-symbol { color: var(--green-bright); margin-right: 12px; font-weight: bold; }
+        .terminal-input { 
+            flex: 1; background: transparent; border: none; outline: none; 
+            color: var(--green-bright); font-family: inherit; font-size: inherit; caret-color: var(--green-neon); 
+        }
+        .terminal-input::placeholder { color: rgba(0,255,65,0.25); }
+        .cursor-cyber { 
+            display: inline-block; width: 10px; height: 18px; background: var(--green-neon); 
+            animation: blink-cursor 0.8s step-end infinite; vertical-align: middle; 
+            margin-left: 3px; box-shadow: 0 0 10px var(--green-glow); 
+        }
+        @keyframes blink-cursor { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+        
+        .output-line { margin: 4px 0; white-space: pre-wrap; word-break: break-word; }
+        .line-error { color: var(--red-error); text-shadow: 0 0 8px rgba(255,56,96,0.4); }
+        .line-success { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
+        .line-info { color: var(--cyan-accent); }
+        .line-warn { color: var(--lime-warn); }
+        .line-dim { color: var(--text-gray); }
+        .line-ai { 
+            color: var(--green-neon); 
+            border-left: 3px solid var(--green-bright); 
+            padding-left: 14px; 
+            margin: 14px 0; 
+            background: linear-gradient(90deg, rgba(57,255,20,0.03) 0%, transparent 100%);
+        }
+        .line-engineer {
+            color: var(--purple-accent);
+            border-left: 3px solid var(--purple-accent);
+            padding-left: 14px;
+            margin: 14px 0;
+            background: linear-gradient(90deg, rgba(191,0,255,0.03) 0%, transparent 100%);
+        }
+        
+        .ai-response { 
+            border: 1px solid rgba(0,255,200,0.25); 
+            background: rgba(0,255,200,0.03); 
+            padding: 20px 24px; 
+            margin: 18px 0; 
+            position: relative; 
+            box-shadow: inset 0 0 40px rgba(0,255,200,0.04);
+        }
+        .ai-response::before { 
+            content: '🤖 RESPUESTA DEL INGENIERO'; 
+            position: absolute; 
+            top: -11px; left: 16px; 
+            background: var(--bg-black); 
+            padding: 0 10px; 
+            font-size: 11px; 
+            color: var(--cyan-accent); 
+            letter-spacing: 2px; 
+            font-weight: bold; 
+        }
+        
+        .prompt-output { 
+            border: 2px solid rgba(0,255,65,0.4); 
+            background: linear-gradient(135deg, rgba(0,255,65,0.04) 0%, rgba(0,255,65,0.01) 100%);
+            padding: 24px 28px; 
+            margin: 20px 0; 
+            font-size: 13px; 
+            line-height: 1.85; 
+            color: var(--text-white); 
+            position: relative; 
+            box-shadow: 
+                0 0 40px rgba(0,255,65,0.1),
+                inset 0 0 60px rgba(0,255,65,0.03);
+        }
+        .prompt-output::before { 
+            content: '📋 PROMPT FINAL EN ESPAÑOL'; 
+            position: absolute; 
+            top: -12px; 
+            left: 20px; 
+            background: var(--bg-black); 
+            padding: 0 12px; 
+            font-size: 11px; 
+            color: var(--green-neon); 
+            letter-spacing: 2px; 
+            font-weight: 700; 
+            text-shadow: 0 0 12px var(--green-glow);
+        }
+        
+        .step-indicator { 
+            color: var(--purple-accent); 
+            font-weight: 700; 
+            font-size: 13px; 
+            letter-spacing: 1px; 
+            margin: 18px 0 12px 0; 
+            padding: 10px 16px; 
+            background: linear-gradient(90deg, rgba(191,0,255,0.08) 0%, transparent 100%);
+            border-left: 3px solid var(--purple-accent);
+            text-shadow: 0 0 10px rgba(191,0,255,0.5);
+        }
+        
+        .plan-box {
+            border: 1px dashed rgba(173,255,47,0.3);
+            background: rgba(173,255,47,0.02);
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-size: 12px;
+            color: var(--lime-warn);
+        }
+        .plan-title {
+            color: var(--lime-warn);
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        ::selection { background: var(--green-bright); color: var(--bg-black); }
+        
+        @media(max-width:768px){
+            body{font-size:13px}
+            .login-box{padding:24px 18px}
+            .login-logo{font-size:34px}
+            .login-title{font-size:17px}
+            .status-bar{padding:8px 14px;font-size:11px;flex-wrap:wrap;gap:8px}
+            .output-area{padding:14px 16px}
+            .input-line{padding:12px 16px}
+            .ascii-art{font-size:10px}
+            .flujograma{padding:12px;font-size:11px}
+        }
+        .hidden{display:none!important}
     </style>
 </head>
-<body data-theme="cyber">
-
+<body>
 <div class="app-container" id="appContainer">
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
 <div class="login-box">
 <div class="login-header">
-<div class="logo">⚡</div>
-<div class="login-title">MR.PROMPT</div>
-<div class="login-subtitle">INGENIERO DE PROMPTS SENIOR</div>
+<div class="login-logo">⬡</div>
+<div class="login-title">PromptForge.sh</div>
+<div class="login-subtitle">INGENIERO SENIOR DE PROMPTS v6.0</div>
 </div>
 
 <form class="login-form" id="loginForm" onsubmit="return false;">
 <div class="form-group">
-<label class="form-label">// SELECCIONA TU MODELO DE IA</label>
-<div style="
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
-    margin-top: 8px;
-">
-    <button type="button" class="model-option selected" onclick="seleccionarModelo('gemini')" id="btnGemini">⚡ GEMINI</button>
-    <button type="button" class="model-option" onclick="seleccionarModelo('deepseek')" id="btnDeepseek">🧠 DEEPSEEK</button>
-    <button type="button" class="model-option" onclick="seleccionarModelo('claude')" id="btnClaude">🎨 CLAUDE</button>
-    <button type="button" class="model-option" onclick="personalizarModelo()" id="btnPersonalizado">✏️ OTRO</button>
-</div>
-<div id="customModelContainer" style="display:none; margin-top: 10px;">
-    <input type="text" class="input-cyber" id="customModelInput" placeholder="Ej: gpt-4o, llama-3, groq..." style="font-size: 13px;">
-</div>
-</div>
+<label class="form-label">// TU CLAVE DE GEMINI</label>
+<input type="text" id="apiKeyInput" class="input-cyber" placeholder="Pega aquí tu API Key..." autocomplete="off" spellcheck="false">
 </div>
 
-<div class="form-group">
-<label class="form-label">// TU API KEY</label>
-<input type="text" class="input-cyber" id="apiKeyInput"
-       placeholder="Pega aquí tu API Key..."
-       autocomplete="off" spellcheck="false">
-</div>
-
-<div style="
-    background: linear-gradient(135deg, rgba(191,0,255,0.04) 0%, rgba(0,255,136,0.04) 100%);
-    border: 1px solid var(--border-color); padding: 14px 16px;
-    border-radius: 8px; margin: 10px 0; font-size: 12px;
-    color: var(--text-terciary); line-height: 1.6;
-">
-<strong>💡 ¿No tienes una API Key?</strong><br><br>
-• <strong>Gemini:</strong> → <span class="info-link" onclick="window.open('https://aistudio.google.com/app/apikey')">Obtener gratis</span><br>
-• <strong>DeepSeek:</strong> → <span class="info-link" Obtener</span> <span class="info-link" onclick="window.open('https://platform.deepseek.com/api_keys')">aquí</span><br>
-• <strong>Claude:</strong> → <span class="info-link" onclick="open('https://console.anthropic.com/')">Consola Anthropic</span><br>
-• <strong>Otros:</strong> Groq, OpenRouter, Together AI...
-</div>
+<div style="background:rgba(191,0,255,0.05);border-left:3px solid var(--purple-accent);padding:12px;margin:10px 0;font-size:11px;color:var(--purple-accent);">
+<strong>🧠 INGENIERO SENIOR LISTO</strong><br>
+Este sistema usa IA avanzada para crear prompts profesionales.<br>
+Soporta cualquier formato de key (AIzaSy... o AQ.Ab8R...)
 </div>
 
 <div class="checkbox-group" onclick="toggleRemember()">
 <div class="checkbox-custom" id="rememberCheckbox"></div>
-<span class="checkbox-label">💾 Recordar mi key en este navegador (recomendado)</span>
+<span class="checkbox-label">Recordar mi clave</span>
 </div>
 
-<button type="button" class="btn-login" id="loginBtn" onclick="iniciarSesion()">
-    [ ACTIVAR MR.PROMPT ]
-</button>
+<button type="button" class="btn-login" id="loginBtn" onclick="iniciarSesion()">[ ACTIVAR INGENIERO ]</button>
 
-<div class="message-box error-message" id="errorMsg"></div>
-<div class="message-box success-message" id="successMsg"></div>
+<div class="error-message" id="errorMsg"></div>
+<div class="success-message" id="successMsg"></div>
 </form>
 
 <div class="login-info">
-<div class="info-title">// TEMAS DISPONIBLES</div>
+<div class="info-title">// ¿Necesitas Una Key?</div>
 <div class="info-text">
-<p>Dentro del sistema, usa los botones en la barra superior:</p>
-<p>☀️ <strong>Día</strong> — Claro y suave a la vista</p>
-<p>🌙 <strong>Noche</strong> — Negro AMOLED puro</p>
-<p>⬡ <strong>Cyber</strong> — Verde neón (actual)</p>
+<p>1. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="info-link">Google AI Studio</a></p>
+<p>2. "Create API key"</p>
+<p>3. Copia y pega aquí</p>
+<p style="margin-top:8px;color:var(--lime-warn)">💡 Es gratis y seguro</p>
 </div>
 </div>
 </div>
@@ -418,29 +376,20 @@ body {
 <!-- MAIN TERMINAL -->
 <div class="main-screen" id="mainScreen">
 <div class="status-bar">
-<span class="status-left">⚡ MR.PROMPT // INGENIOR SENIOR</span>
-
-<div class="status-center">
-<span class="theme-btn active" data-theme="cyber" onclick="cambiarTema('cyber')">⬡ CYBER</span>
-<span class="theme-btn" data-theme="day" onclick="cambiarTema('day')">☀️ DÍA</span>
-<span class="theme-btn" data-theme="night" onclick="cambiarTema('night')">🌙 NOCHE</span>
-</div>
-
+<span class="status-left">⬡ PROMPFORGE // INGENIERO SENIOR ⚡</span>
 <span class="status-right">
-<span class="model-badge" id="modelBadge">⚡ GEMINI</span>
-<span style="color:var(--text-dim)">|</span>
-<span class="ai-dot"></span>
-<span id="clock">00:00:00</span>
-<button class="save-btn" onclick="guardarPrompt()">[ 💾 GUARDAR ]</button>
-<button class="download-btn" onclick="descargarPrompt()">[ 📥 DESCARGAR ]</button>
-<button class="logout-btn" onclick="cerrarSesion()">[ CAMBIAR ]</button>
+<span class="status-item">modo: <span class="status-highlight">EXPERTO</span></span>
+<span class="status-item">idioma: <span class="status-highlight">ESPAÑOL</span></span>
+<span class="status-item">ia: <span style="color:var(--green-neon)">ON</span> <span class="ai-dot"></span></span>
+<span class="status-time" id="clock">00:00:00</span>
+<button class="logout-btn" onclick="cerrarSesion()">[ SALIR ]</button>
 </span>
 </div>
 
 <div class="output-area" id="outputArea"></div>
 
 <div class="input-line">
-<span class="prompt-prefix"><span class="prompt-user">ingeniero</span>@<span class="prompt-user">mr-prompt</span>:<span class="prompt-symbol">$</span></span>
+<span class="prompt-prefix"><span class="prompt-user">ingeniero</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-symbol">$</span></span>
 <input type="text" class="terminal-input" id="cmdInput" autocomplete="off" spellcheck="false">
 <span class="cursor-cyber"></span>
 </div>
@@ -450,148 +399,103 @@ body {
 
 <script>
 // =============================================
-// ESTADO GLOBAL
+// CONFIGURACIÓN
 // =============================================
-const ESTADO = {
-    modeloActual: 'gemini',
-    apiKey: '',
-    recordarKey: false,
-    isConnected: false,
-    tema: 'cyber',
-    modeloPersonalizado: '',
-    
-    // Modelos disponibles
-    modelos: {
-        gemini: {
-            nombre: 'GEMINI',
-            icono: '⚡',
-            endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
-            authHeader: 'X-goog-api-key'
-        },
-        deepseek: {
-            nombre: 'DEEPSEEK',
-            icono: '🧠',
-            endpoint: 'https://api.deepseek.com/chat/completions',
-            authHeader: 'Authorization',
-            authPrefix: 'Bearer ',
-            model: 'deepseek-chat'
-        },
-        claude: {
-            nombre: 'CLAUDE',
-            icono: '🎨',
-            endpoint: 'https://api.anthropic.com/v1/messages',
-            'authHeader': 'x-api-key',
-            model: 'claude-sonnet-4-20250514'
-        },
-        personalizado: {
-            nombre: 'PERSONALIZADO',
-            icono: '✏️',
-            endpoint: '', // Se define dinámicamente
-            authHeader: 'Authorization',
-            authPrefix: 'Bearer ',
-            model: ''
-        }
+const CONFIG = {
+    endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
+    storageKeys: {
+        apiKey: 'pf_key_v6',
+        remember: 'pf_rem_v6',
+        prompts: 'pf_prompts_v6'
     },
-    
-    ingenieroSystemPrompt: `Eres un INGENIERO EXPERTO en creación de prompts con más de 15 años de experiencia. Tu especialidad es crear prompts que obtengan resultados EXCEPCIONALES.
+    // SYSTEM PROMPT DEL INGENIERO SENIOR
+    engineerSystemPrompt: `Eres un INGENIERO SENIOR DE PROMPTS con más de 15 años de experiencia creando prompts para IAs.
 
-Tus principios fundamentales:
+TUS CARACTERÍSTICAS:
+- Hablas de forma AMIGABLE y SENCILLA (como explicándole a un amigo)
+- Haces preguntas CORTAS y FÁCILES de entender
+- Usas EJEMPLOS concretos cuando ayudas
+- Generas TODO en ESPAÑOL (nunca en inglés)
+- Creas ARTE ASCII decorativo (banners, iconos, separadores)
+- Diseñas FLUJOGRAMAS en texto antes de generar el prompt final
+- PLANIFICAS cada prompt paso a paso antes de escribirlo
 
-1. SIEMPRE PREGUNTA PRIMERO: Antes de generar un prompt, analiza la necesidad del usuario con preguntas estratégicas.
+TU PROCESO DE TRABAJO:
+1. Saludas al usuario de forma cálida
+2. Preguntas qué tipo de quiere crear (muy simple)
+3. Haces 3-4 preguntas sencillas (una por vez)
+4. Creas un FLUJOGRAMA del proceso
+5. Muestras un PLAN del prompt que vas a crear
+6. Generas el PROMPT FINAL completo en español
+7. El prompt debe ser EXTREMADAMENTE DETALLADO y profesional
 
-2. RECOLECTA INFORMACIÓN ESENCIAL: Nunca generes un prompt sin antes entender:
-   • ¿Quién es la audiencia?
-   • ¿Qué nivel de detalle necesitan?
-   • ¿Cuál es el contexto?
-   • ¿Qué formato prefieren?
+FORMATOS QUE USAS:
+- Arte ASCII para decorar
+- Flujogramas con flechas → ↓ ←
+- Listas con ✓ ✗ ● ○
+- Emojis estratégicos
+- Separadores visuales ════
 
-3. GENERA PROMPTS ULTRA DETALLADOS: Cada prompt debe incluir:
-   • Rol claro y específico
-   - Ejemplos de entrada/salida
-   - Restricciones y límites
-   - Formato de salida esperado
-   - Tono y estilo de comunicación
-   - Manejo de casos edge case
-   - Criterios de evaluación de calidad
+IMPORTANTE: NUNCA generas prompts en inglés. SIEMPRE en español.
+Los prompts que generes deben ser listos para copiar y pegar en ChatGPT, Claude, Gemini o cualquier IA.`
+};
 
-4. Usa ARTE VISUAL: Cuando expliques procesos o flujos, usa:
-   - Diagramas ASCII
-   - Emojis estratégicos
-   - Formato estructurado con secciones claras
-   - Listas con checkmarks ✓
-   - Flechas y símbolos visuales
-
-5. TODO EN ESPAÑOL: Genera siempre los prompts en español, pero si el usuario lo prefiere, puedes ofrecer versión en inglés también.
-
-Tu objetivo final es que al usar el prompt generado, la IA tenga TODA la información necesaria para producir exactamente lo que el usuario necesita, sin ambigüedades ni confusiones.
-
-Ahora saluda al usuario preséntate y pregunta cuál es su necesidad.`,
-
-    conversationHistory: [],
+let state = {
+    apiKey: '',
+    rememberKey: false,
+    isConnected: false,
     step: 0,
+    totalSteps: 4,
+    promptsCreated: 0,
     data: {},
     savedPrompts: [],
-    promptActual: ''
-};
-
-const STORAGE_KEYS = {
-    apiKey: 'mr_prompt_key_v1',
-    recordar: 'mr_prompt_rem_v1',
-    modelo: 'mr_prompt_model_v1',
-    tema: 'mr_prompt_theme_v1',
-    personalizado: 'mr_prompt_custom_v1',
-    prompts: 'mr_prompts_v1'
+    currentPrompt: '',
+    conversationHistory: []
 };
 
 // =============================================
-// INICIALIZACIÓN
+// INIT
 // =============================================
 document.addEventListener('DOMContentLoaded', () => {
-    cargarConfiguracion();
+    verificarSesion();
     iniciarReloj();
     
     document.getElementById('cmdInput').addEventListener('keydown', e => {
         if (e.key === 'Enter') ejecutarComando();
     });
+    
+    document.getElementById('apiKeyInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') iniciarSesion();
+    });
 });
 
-function cargarConfiguracion() {
-    const key = localStorage.getItem(STORAGE_KEYS.apiKey);
-    const recordar = localStorage.getItem(STORAGE_KEYS.recordar) === 'true';
-    const modelo = localStorage.getItem(STORAGE_KEYS.modelo) || 'gemini';
-    const tema = localStorage.getItem(STORAGE_KEYS.tema) || 'cyber';
-    const custom = localStorage.getItem(STORAGE_KEYS.personalizado) || '';
+function verificarSesion() {
+    const savedKey = localStorage.getItem(CONFIG.storageKeys.apiKey);
+    const remember = localStorage.getItem(CONFIG.storageKeys.remember) === 'true';
     
-    if (key && recordar) {
-        ESTADO.apiKey = key;
-        document.getElementById('apiKeyInput').value = key.substring(0, 20) + '...';
+    if (savedKey && remember) {
+        state.apiKey = savedKey;
+        state.rememberKey = true;
         document.getElementById('rememberCheckbox').classList.add('checked');
-        mostrarCarga(true);
         
+        mostrarCargando(true);
         setTimeout(async () => {
-            try {
-                const resultado = await probarConexion(key);
-                if (resultado.exito) {
-                    mostrarExito('¡Bienvenido de vuelta! ✅');
-                    setTimeout(() => entrarAlSistema(), 800);
-                } else {
-                    mostrarError('La key guardada ya no funciona. Ingresa una nueva.');
-                    limpiarCarga();
-                }
-            } catch(e) {
-                mostrarError('Error verificando key guardada');
-                limpiarCarga();
+            const resultado = await probarConexion(savedKey);
+            if (resultado.exito) {
+                mostrarExito('✓ Bienvenido de nuevo');
+                setTimeout(() => entrarAlSistema(), 800);
+            } else {
+                mostrarError('La clave guardada ya no funciona');
+                limpiarSesion();
+                mostrarCargando(false);
             }
-        }, 800);
+        }, 600);
     } else {
-        ESTADO.savedPrompts = JSON.parse(localStorage.getItem(STORAGE_KEYS.prompts) || '[]');
+        state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
     }
-    
-    seleccionarModelo(modelo, false);
-    cambiarTema(tema, false);
 }
 
-function iniciarRelojo() {
+function iniciarReloj() {
     function act() {
         const n = new Date();
         document.getElementById('clock').textContent = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
@@ -600,254 +504,147 @@ function iniciarRelojo() {
 }
 
 // =============================================
-// SELECCIÓN DE MODELO
-// =============================================
-function seleccionarModelo(modelo, actualizarUI = true) {
-    ESTADO.modeloActual = modelo;
-    
-    if (actualizarUI) {
-        // Actualizar botones
-        document.querySelectorAll('.model-option').forEach(btn => {
-            btn.classList.remove('selected');
-        });
-        
-        if (['gemini', 'deepseek', 'claude'].includes(modelo)) {
-            document.getElementById('btn' + modelo.charAt(0).toUpperCase() + modelo.slice(1)).classList.add('selected');
-        }
-        
-        if (modelo === 'personalizado') {
-            document.getElementById('btnPersonalizado').classList.add('selected');
-        }
-        
-        // Actualizar badge
-        const config = ESTADO.modelos[modelo] || ESTADO.modelos.personalizado;
-        document.getElementById('modelBadge').textContent = `${config.icono} ${config.nombre.toUpperCase()}`;
-    }
-    
-    localStorage.setItem(STORAGE_KEYS.modelo, modelo);
-}
-
-function personalizarModelo() {
-    const container = document.getElementById('customModelContainer');
-    container.style.display = container.style.display === 'none' ? 'block' : 'none';
-    
-    if (container.style.display !== 'none') {
-        document.getElementById('customModelInput').focus();
-    }
-}
-
-document.getElementById('customModelInput').addEventListener('change', (e) => {
-    const valor = e.target.value.trim();
-    if (valor) {
-        ESTADO.modeloPersonalizado = valor;
-        ESTADO.modelos.personalizado.nombre = valor.toUpperCase();
-        ESTADO.modelos.personal.endpoint = ''; // Se define según el proveedor
-        seleccionarModelo('personalizado');
-    }
-});
-
-// =============================================
-// TEMA
-// =============================================
-function cambiarTema(tema, guardar = true) {
-    document.body.setAttribute('data-theme', tema);
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.theme === tema);
-    });
-    if (guardar) localStorage.setItem(STORAGE_KEYS.tema, tema);
-}
-
-// =============================================
-// RECORDAR KEY
+// LOGIN
 // =============================================
 function toggleRemember() {
-    const checkbox = document.getElementById('rememberCheckbox');
-    checkbox.classList.toggle('checked');
-    ESTADO.recordarKey = checkbox.classList.contains('checked');
+    state.rememberKey = !state.rememberKey;
+    document.getElementById('rememberCheckbox').classList.toggle('checked', state.rememberKey);
 }
 
-// =============================================
-// LOGIN / CONEXIÓN
-// =============================================
 async function iniciarSesion() {
     const input = document.getElementById('apiKeyInput');
     let key = input.value.trim().replace(/\s/g, '');
     
-    if (!key || key.length < 5) {
-        mostrarError('Ingresa tu API Key válida');
+    if (!key || key.length < 10) {
+        mostrarError('Ingresa una clave válida');
         return;
     }
     
-    // Detectar tipo de key automáticamente
-    const tipoKey = detectarTipoKey(key);
-    configurarParaTipo(tipoKey, key);
-    
-    mostrarCarga(true);
+    mostrarCargando(true);
     ocultarMensajes();
     
     try {
-        const resultado = await probarConexion();
-        
+        const resultado = await probarConexion(key);
         if (resultado.exito) {
-            ESTADO.isConnected = true;
+            state.apiKey = key;
+            state.isConnected = true;
             
-            if (ESTADO.recordarKey) {
-                localStorage.setItem(STORAGE_KEYS.apiKey, key);
+            if (state.rememberKey) {
+                localStorage.setItem(CONFIG.storageKeys.apiKey, key);
+                localStorage.setItem(CONFIG.storageKeys.remember, 'true');
             }
             
-            mostrarExito(`¡${ESTADO.modelos[ESTADO.modeloActual].icono} ${ESTADO.modelos[ESTADO.modeloActual].nombre} activado!`);
-            
-            setTimeout(() => entrarAlSistema(), 800);
+            mostrarExito('¡Ingeniero activado!');
+            setTimeout(() => entrarAlSistema(), 1000);
         } else {
-            mostrarError('Error de conexión: ' + resultado.error);
-            limpiarCarga();
+            mostrarError('Error: ' + resultado.error);
+            mostrarCargando(false);
         }
     } catch(e) {
         mostrarError('Error: ' + e.message);
-        limpiarCarga();
-    }
-}
-
-function detectarTipoKey(key) {
-    if (key.startsWith('AIzaSy') || key.startsWith('AQ.')) return 'gemini';
-    if (configurarParaTipo) return 'gemini';
-    if (key.startsWith('sk-')) return 'deepseek;
-    if (async' === 'sk-') return 'deepseek';
-    if (key.includes('anthropic') || key.startsWith('sk-ant')) return 'claude';
-    return 'personalizado';
-}
-
-function configurarParaTipo(tipo, key) {
-    switch(tipo) {
-        case 'gemini':
-            ESTADO.endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
-            ESTADO.authHeader = 'x-goog-api-key';
-            break;
-        case 'deepseek':
-            ESTADO.endpoint = 'https://api.deepseek.com/chat/completions';
-            ESTADO.authHeader = 'authorization';
-            ESTADO.authPrefix = 'Bearer ';
-            ESTADO.model = 'deepseek-chat';
-            break;
-        case 'claude':
-            ESTADO.endpoint = 'https://api.anthropic.com/v1/messages';
-            ESTADO.authHeader = 'x-api-key';
-            ESTADO.authPrefix = '';
-            ESTADO.model = 'claude-sonnet-4-20250514';
-            break;
-        default:
-            // Intentar detectar
-            if (key.includes('groq')) {
-                ESTADO.endpoint = 'https://api.groq.openai.app/v1/chat/completions';
-                ESTADO.authHeader = 'authorization';
-                ESTADO.authPrefix = 'gsk_';
-                ESTADO.model = 'mixtral-8x7b';
-            } else if (toLowercase(key).includes('openrouter')) {
-                ESTADO.endpoint = 'https://openrouter.ai/api/v1/chat/completions';
-                ESTADO.authHeader = 'authorization';
-                ESTADO.authPrefix = 'sk-or-v1-';
-                ESTADO.model = 'auto';
-            } else {
-                // Por defecto, intentar como Gemini
-                ESTADO.endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent';
-                ESTADO.authHeader = 'x-goog-api-key';
-            }
-            break;
+        mostrarCargando(false);
     }
 }
 
 async function probarConexion(apiKey) {
     try {
-        const endpoint = ESTADO.endpoint;
-        const header = ESTADO.authHeader;
-        let response;
+        const response = await fetch(CONFIG.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-goog-api-key': apiKey
+            },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: 'OK' }] }],
+                generationConfig: { maxOutputTokens: 5 }
+            })
+        });
         
-        if (ESTADO.modeloActual === 'gemini') {
-            response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [header]: apiKey
-                },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: 'OK' }] }],
-                    generationConfig: { maxOutputTokens: 5 }
-                }
-            });
-            
-            if (!response.ok) {
-                const err = await response.json().catch(() => ({}));
-                return { exito: false, error: err.error?.message || `HTTP ${response.status}` };
-            }
-            return { exito: true };
-            
-        } else {
-            // Formato OpenAI-compatible (DeepSeek, Claude, otros)
-            response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [header]: ESTADO.authPrefix + apiKey
-                },
-                body: JSON.stringify({
-                    model: ESTADO.model,
-                    messages: [{ role: 'user', content: 'OK' }],
-                    max_tokens: 5
-                })
-            });
-            
-            if (!response.ok) {
-                const err = await response.json().catch(() => ({}));
-                return { exito: false, error: err.error?.message || `HTTP ${response.status}` };
-            }
-            return { exito: true };
+        if (!response.ok) {
+            const err = await response.json().catch(() => ({}));
+            return { exito: false, error: err.error?.message || `HTTP ${response.status}` };
         }
+        return { exito: true, error: null };
     } catch(e) {
         return { exito: false, error: e.message };
     }
 }
 
+async function llamarGemini(prompt, historial = [], systemPrompt = null) {
+    let fullPrompt = prompt;
+    
+    // Añadir system prompt si se proporciona
+    if (systemPrompt) {
+        fullPrompt = `[INSTRUCCIONES DEL SISTEMA]\n${systemPrompt}\n\n[CONVERSACIÓN ACTUAL]\n${prompt}`;
+    }
+    
+    const response = await fetch(CONFIG.endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-goog-api-key': state.apiKey
+        },
+        body: JSON.stringify({
+            contents: [
+                ...historial,
+                { role: 'user', parts: [{ text: fullPrompt }] }
+            ],
+            generationConfig: {
+                temperature: 0.85,
+                topK: 45,
+                topP: 0.95,
+                maxOutputTokens: 4000
+            },
+            safetySettings: [
+                { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+                { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+                { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+                { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+            ]
+        })
+    });
+    
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error?.message || `Error ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
 function entrarAlSistema() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainScreen').classList.add('active');
-    ESTADO.savedPrompts = JSON.parse(localStorage.getItem(STORAGE_KEYS.prompts) || '[]');
-    bootSecuencia();
+    state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
+    secuenciaBoot();
     document.getElementById('cmdInput').focus();
 }
 
 function cerrarSesion() {
-    if (confirm('¿Cambiar de modelo? Podrás reingresar tu key.')) {
-        document.getElementById('loginScreen').style.display = 'flex';
-        document.getElementById('mainScreen').classList.remove('active');
-        document.getElementById('apiKeyInput').value = '';
-        document.getElementById('customModelContainer').style.display = 'none';
+    if (confirm('¿Cerrar sesión?')) {
+        limpiarSesion();
+        location.reload();
     }
 }
 
-function mostrarCarga(mostrar) {
-    const btn = document.getElementById('loginBtn');
-    btn.disabled = mostrar;
-    btn.innerHTML = mostrar ? '<span class="loading-spinner"></span>Conectando...' : '[ ACTIVAR MR.PROMPT]';
-}
-
-function limpiarCarga() {
-    const btn = document.getElementById('loginBtn');
-    btn.disabled = false;
-    btn.innerHTML = '[ ACTIVAR MR.PROMPT]';
+function limpiarSesion() {
+    localStorage.removeItem(CONFIG.storageKeys.apiKey);
+    localStorage.removeItem(CONFIG.storageKeys.remember);
+    state.apiKey = '';
+    state.isConnected = false;
 }
 
 function mostrarError(msg) {
     const el = document.getElementById('errorMsg');
     el.innerHTML = '✗ ERROR:<br>' + msg.replace(/\n/g, '<br>');
     el.style.display = 'block';
-    setTimeout(() => el.style.display = 'none', 5000);
 }
 
 function mostrarExito(msg) {
     const el = document.getElementById('successMsg');
     el.textContent = '✓ ' + msg;
     el.style.display = 'block';
-    setTimeout(() => el.style.display = 'none', 3000);
 }
 
 function ocultarMensajes() {
@@ -855,187 +652,248 @@ function ocultarMensajes() {
     document.getElementById('successMsg').style.display = 'none';
 }
 
+function mostrarCargando(mostrar) {
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = mostrar;
+    btn.innerHTML = mostrar ? '<span class="loading-spinner"></span>CONECTANDO...' : '[ ACTIVAR INGENIERO ]';
+}
+
 // =============================================
-// BOOT SECUENCE
-// ============================================
-function bootSecuencia() {
+// BOOT SEQUENCE CON ARTE ASCII
+// =============================================
+function secuenciaBoot() {
     const asciiArt = `
-╔════════════════════════════════════════════════╗
-║                                                    ║
-║   ██████╗██╗   ██╗███████╗ ██████╗ ██╗   ██╗     ║
-║  ██╔════╝██║   ██║██╔════╝██╔══██╗██║   ██║     ║
-║  ██║     ██║   ██║█████╗ ████╔╝ ██║   ██║     ║
-║  ╚██████╗╚██████╔╝██║  ██║██║  ██║╚██████╔╝     ║
-║   ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═════╝      ║
-║                                                    ║
-║       ⚡ M R . P R O M P T                       ║
-║          I N G E N I E R O D E  S E N I O R          ║
-║              D E   E N   O   M A   D O               ║
-║                                                    ║
-╚════════════════════════════════════════════════╝`;
+╔══════════════════════════════════════════════════════════╗
+║                                                            ║
+║   ██████╗██╗   ██╗ █████╗ ██████╗ ██╗   ██╗███████╗       ║
+║  ██╔════╝██║   ██║██╔══██╗██╔══██╗██║   ██║██╔════╝       ║
+║  ██║     ██║   ██║███████║██████╔╝██║   ██║█████╗         ║
+║  ██║     ██║   ██║██╔══██║██╔══██╗██║   ██║██╔══╝         ║
+║  ╚██████╗╚██████╔╝██║  ██║██║  ██║╚██████╔╝███████╗       ║
+║   ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝       ║
+║                                                            ║
+║              ⚡ INGENIERO SENIOR DE PROMPTS ⚡             ║
+║                  v6.0 — ESPAÑOL — FULL                    ║
+║                                                            ║
+╚══════════════════════════════════════════════════════════╝`;
 
     const bootMsgs = [
-        `[ OK ] Iniciando M.R.PROMPT...`,
-        [ OK ] Cargando ingeniero senior...`,
-        [ ]`,
-        `[ OK ] Preparando arte ASCII...`,
-        [ OK ] Configurando modo experto...`,
-        [ OK ] Sistema listo ✓`
+        '[ OK ] Iniciando sistema PromptForge...',
+        '[ OK ] Cargando módulo de ingeniería senior...',
+        '[ OK ] Conectando con Gemini Flash...',
+        '[ OK ] Configurando modo ESPAÑOL...',
+        '[ OK ] Preparando arte ASCII...',
+        '[ OK ] Sistema listo ✓'
     ];
     
     let i = 0;
+    
     function showBoot() {
         if (i < bootMsgs.length) {
             agregarLinea(`<span class="boot-ok">${bootMsgs[i]}</span>`, 'boot-line');
             i++;
-            setTimeout(showBoot, 120 + Math.random() * 100);
+            setTimeout(showBoot, 100 + Math.random() * 100);
         } else {
             setTimeout(() => {
                 agregarLinea(`<pre class="ascii-art">${asciiArt}</pre>`);
-                setTimeout(() => saludarUsuario(), 600);
-            }, 400);
+                
+                setTimeout(() => {
+                    // Saludar al usuario con el ingeniero
+                    saludarUsuario();
+                }, 500);
+            }, 300);
         }
     }
+    
     showBoot();
 }
 
-function saludarUsuario() {
+async function saludarUsuario() {
     agregarLinea('');
-    agregarLinea('<div class="line-engineer">🧠 <strong>INGENIERIO DE PROMPTS SENIOR</strong></div>');
-    agregarLinea('<div class="line-ai">Actuando vía <strong>${ESTADO.modelos[ESTADO.modeloActual].icono} ${ESTADO.modelos[ESTADO.modeloActual].nombre}</strong></div>');
+    agregarLinea(`<div class="line-engineer">🧠 <strong>INGENIERO SENIOR CONECTADO</strong></div>`);
     agregarLinea('');
+    
+    agregarLinea(`<div class="line-ai">¡Hola! 👋 Soy tu <strong>ingeniero de prompts</strong>. Llevo más de 15 años creando prompts profesionales.</div>`);
+    
     agregarLinea(`
 <div class="cyber-box">
-<div class="box-title">// ¿QUÉ PUEDO HACER HOY?</div>
+<div class="box-title">// ¿QUÉ PUEDO HACER POR TI?</div>
 <div class="box-content">
-<p>Soy un ingeniero experto en crear prompts. Mi trabajo es asegurarme de que cada prompt que genere sea:</p>
-<ul style="margin: 12px 0; padding-left: 20px; list-style: none;">
-<li><strong>✓ Ultra detallado</strong> - Sin ambigüedades</li>
-<li><strong>✓ Contextualizado</strong> - Adaptado a tu necesidad</li>
-<li>✓ Con ejemplos</li>
-<li>✓ Con restricciones claras</li>
-<li>✓ Formato definido</li>
-</ul>
+<p>Puedo ayudarte a crear <strong>prompts ultra-detalldos</strong> en español para:</p>
+<p>• ChatGPT / GPT-4</p>
+<p>• Claude / Anthropic</p>
+<p>• Gemini / Google</p>
+<p>• Cualquier otra IA</p>
 <br>
-<p><strong>Dime, ¿qué necesitas crear hoy?</strong></p>
+<p><strong>¿Qué necesitas hoy?</strong></p>
 </div>
 </div>`);
 
     agregarLinea('');
-    agregarLinea('<span class="line-dim">Ejemplos:');
-    addLinea('<span class="line-dim">• "Un prompt para escribir artículos técnicos"</span>');
-    addLinea('<span class="line-dim">• "Análisis de datos financieros"</span>');
-    addLinea('<span class="line-dim">"Prompt para programación en Python"</span>');
-    addLinea('<span class="line-dim">"Marketing digital para redes sociales"</span>');
-    addLinea('<span class="line-dim">"Recetas de cocina paso a paso"</span>');
-    addLinea('<span class="line-dim">"Guion de viaje interactivo"</span>');
-    addLinea('');
-    addLinea('<span class="cmd-hint">→ Escribe lo que necesitas:</span>');
+    agregarLinea('<span class="line-info">Ejemplos:</span>');
+    agregarLinea('<span class="line-dim">• "Quiero un prompt para escribir artículos"</span>');
+    agregarLinea('<span class="line-dim">• "Necesito un prompt para analizar datos"</span>');
+    agregarLinea('<span class="line-dim">• "Quiero un prompt para programación"</span>');
+    agregarLinea('<span class="line-dim">• "Ayúdame a crear un prompt para marketing"</span>');
+    agregarLinea('');
+    agregarLinea('<span class="cmd-hint">→ Escribe lo que necesitas y empezamos:</span>');
     
     scrollFinal();
 }
 
-function addLinea(text) {
-    const d = document.createElement('div');
-    d.className = 'output-line';
-    d.innerHTML = text;
-    document.getElementById('outputArea').appendChild(d);
-}
-
-function scrollFinal() {
-    requestAnimationFrame(() => {
-        document.getElementById('outputArea').scrollTop = 999999;
-    });
-}
-
 // =============================================
-// COMANDOS DEL SISTEMA
+// COMANDOS
 // =============================================
 async function ejecutarComando() {
     const input = document.getElementById('cmdInput');
     const cmd = input.value.trim();
     if (!cmd) return;
     
-    addLinea(`<span style="color:var(--text-terciario)">ingeniero@mr-prompt:~$</span> ${escaparHtml(cmd)}`);
+    agregarLinea(`<span style="color:var(--cyan-accent)">ingeniero@promptforge:~$</span> ${escaparHtml(cmd)}`);
     input.value = '';
     
-    procesarComando(cmd);
+    await procesarComando(cmd);
     scrollFinal();
 }
 
 async function procesarComando(cmd) {
     const c = cmd.toLowerCase().trim();
     
+    // Comandos del sistema
     if (c === 'ayuda' || c === 'help') { mostrarAyuda(); return; }
     if (c === 'limpiar' || c === 'clear') { limpiarPantalla(); return; }
-    if (c === 'nuevo' || c === 'new') => resetear(); return; 
-    if (container) ; // placeholder
-    
+    if (c === 'nuevo' || c === 'new') { resetearSesion(); return; }
     if (c === 'guardar' || c === 'save') { guardarPrompt(); return; }
-    if (c === 'lista' || c === 'list') => listarGuardados(); return; }
-    if (container) ;
+    if (c === 'lista' || c === 'list') { listarGuardados(); return; }
     if (c === 'copiar' || c === 'copy') { copiarPrompt(); return; }
-    if (c === 'descargar' || c === 'download') => descargarPrompt(); return; }
-    if (c === 'salir' || c === 'exit') => cerrarSesion(); return; }
+    if (c === 'descargar' || c === 'download') { descargarPrompt(); return; }
+    if (c === 'salir' || c === 'exit') { cerrarSesion(); return; }
     
-    await procesarRespuesta(cmd);
+    // Si no es comando, es una respuesta del usuario → Procesar con IA
+    await procesarRespuestaUsuario(cmd);
 }
 
-async function procesarRespuesta(respuesta) {
-    addLinea('');
-    addLinea('<div class="line-engineer">🤔 <strong>Analizando necesidad...</strong></div>');
+async function procesarRespuestaUsuario(respuesta) {
+    // Mostrar que el ingeniero está pensando
+    agregarLinea('');
+    agregarLinea('<div class="line-engineer">🤔 <strong>Ingeniero analizando...</strong></div>');
     
+    // Construir contexto para la IA
     const contexto = `
-[CONTEXTO]
-Estamos creando un prompt. Paso ${ESTADO.step + 1}.
-Información recopilada: ${JSON.stringify(ESTADO.data).substring(0, 250)}
+[CONTEXTO DE LA CONVERSA]
+Estamos en el paso ${state.step + 1} de creación de prompt.
 
-Última respuesta: "${respuesta}"
+Información recopilada hasta ahora:
+${JSON.stringify(state.data, null, 2)}
+
+Última respuesta del usuario: "${respuesta}"
 
 [INSTRUCCIONES]
-Responde amigablemente. Analiza la necesidad.
-Pregunta lo necesario para crear un prompt EXCEPCIONAL.
-Cuando tengas toda info (3-4 preguntas), genera:
+Responde de forma natural y amigable. 
+Si es el primer mensaje, saluda y pregunta qué tipo de prompt quiere crear.
+Si ya tenemos información, haz la siguiente pregunta sencilla.
+Cuando tengas toda la info (después de 3-4 preguntas), genera:
 1. Un FLUJOGRAMA ASCII del proceso
 2. Un PLAN del prompt
-3. `;
-    
+3. El PROMPT FINAL completo en español (muy detallado)
+
+Usa arte ASCII, emojis y formato visual atractivo.`;
+
     try {
-        const respIA = await llamarIA(contexto, ESTADO.conversationHistory.slice(-8));
+        const respuestaIA = await llamarGemini(contexto, state.conversationHistory.slice(-8), CONFIG.engineerSystemPrompt);
         
-        ESTADO.conversationHistory.push(
-            { role: 'user', content: respuesta },
-            { role: 'assistant', content: respAI }
+        // Guardar en historial
+        state.conversationHistory.push(
+            { role: 'user', parts: [{ text: respuesta }] },
+            { role: 'model', parts: [{ text: respuestaIA }] }
         );
         
-        if (!ESTADO.data.respuestas) ESTADO.data.respuestas = [];
-        ESTADO.data.respuestas.push({ paso: ESTADO.step, texto: respuesta });
-        ESTADO.step++;
+        // Mostrar respuesta formateada
+        agregarLinea('');
+        agregarLinea(`<div class="ai-response"><div style="color:var(--text-white);line-height:1.8;">${formatearRespuesta(respuestaIA)}</div></div>`);
+        agregarLinea('');
         
-        addLinea('');
-        addLinea(`<div class="ai-response"><div style="color:var(--text-primary);line-height:1.8;">${formatearRespuesta(respIA)}</div></div>');
-        addLinea('');
+        // Actualizar datos basado en la respuesta
+        actualizarDatos(respuesta);
+        
+        // Incrementar paso
+        state.step++;
         
     } catch(e) {
-        addLinea(`<span class="line-error">Error: ${e.message}</span>);
+        agregarLinea(`<span class="line-error">Error: ${e.message}</span>`);
     }
 }
 
-function resetar() {
-    ESTADO.step = 0;
-    ESTADO.data = {};
-    ESTADO.conversationHistory = [];
-    addLinea('<span class="line-success">[OK] Nueva sesión iniciada</span>');
+function actualizarDatos(respuesta) {
+    // Guardar respuestas del usuario para construir el prompt
+    if (!state.data.respuestas) state.data.respuestas = [];
+    state.data.respuestas.push({
+        paso: state.step,
+        texto: respuesta,
+        timestamp: new Date().toISOString()
+    });
+}
+
+async function generarPromptFinal() {
+    agregarLinea('');
+    agregarLinea('<div class="line-engineer">⚙️ <strong>Generando prompt profesional...</strong></div>');
+    
+    const instruccionFinal = `
+Basado en TODA la conversación anterior, ahora genera EL PROMPT DEFINITIVO.
+
+REQUISITOS:
+1. Debe estar 100% en ESPAÑOL
+2. Ser extremadamente detallado y profesional
+3. Incluir todas las especificaciones que dio el usuario
+4. Formato listo para copiar y pegar en cualquier IA
+5. Incluir instrucciones claras paso a paso
+
+Genera también:
+- Un banner ASCII decorativo al inicio
+- Secciones bien organizadas
+- Ejemplos si aplica
+- Formato de salida esperado
+
+ANTES del prompt, muestra:
+1. Un RESUMEN de lo que vas a crear
+2. Un FLUJOGRAMA de cómo usar el prompt`;
+    
+    try {
+        const promptFinal = await llamarGemini(instruccionFinal, state.conversationHistory.slice(-6));
+        
+        state.currentPrompt = promptFinal;
+        state.promptsCreated++;
+        
+        // Mostrar el prompt final
+        agregarLinea('');
+        agregarLinea('<div class="prompt-output">' + formatearRespuesta(promptFinal) + '</div>');
+        agregarLinea('');
+        agregarLinea('<span class="line-success">✅ ¡PROMPT GENERADO!</span>');
+        agregarLinea('<span class="line-info">Comandos: guardar | copiar | descargar</span>');
+        agregarLinea('<span class="line-dim">Escribe "nuevo" para crear otro prompt</span>');
+        
+    } catch(e) {
+        agregarLinea(`<span class="line-error">Error generando: ${e.message}</span>`);
+    }
+}
+
+function resetearSesion() {
+    state.step = 0;
+    state.data = {};
+    state.conversationHistory = [];
+    
+    agregarLinea('<span class="line-success">[OK] Nueva sesión iniciada</span>');
+    agregarLinea('');
     saludarUsuario();
 }
 
 function limpiarPantalla() {
     document.getElementById('outputArea').innerHTML = '';
-    addLinea('<span class="line-dim">[limpio]</span>');
+    agregarLinea('<span class="line-dim">[pantalla limpia]</span>');
 }
 
 function mostrarAyuda() {
-    addLinea(`
+    agregarLinea(`
 <div class="cyber-box">
 <div class="box-title">// COMANDOS DISPONIBLES</div>
 <div class="box-content">
@@ -1043,205 +901,90 @@ function mostrarAyuda() {
 <p><span class="cmd-hint">nuevo</span> — Empezar de cero</p>
 <p><span class="cmd-hint">guardar</span> — Guardar prompt actual</p>
 <p><span class="cmd-hint">lista</span> — Ver prompts guardados</p>
-<p><span class="cmd-hint">copiar</span> — Copiar portapapeles</p>
-<p><span class="cmd-hint">descargar</span> — Descargar .txt</p>
+<p><span class="cmd-hint">copiar</span> — Copiar al portapapeles</p>
+<p><span class="cmd-hint">descargar</span> — Descargar archivo .txt</p>
 <p><span class="cmd-hint">limpiar</span> — Limpiar pantalla</p>
-<p><span class="cmd-hint">salir</span> — Cambiar modelo</p>
+<p><span class="cmd-hint">salir</span> — Cerrar sesión</p>
 </div>
 </div>
 
-<span class="line-dim">También puedes escribir normalmente 🎯</span>`);
+<span class="line-dim">También puedes escribir normalmente y yo te ayudaré 🎯</span>`);
 }
 
 function guardarPrompt() {
-    if(!ESTADO.promptActual) { addLinea('<span class="line-error">error: nada que guardar aún</span>'); return; }
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que guardar aún</span>'); return; }
     
     const entry = {
-        id: ESTADO.savedPrompts.length + 1,
-        titulo: 'Prompt #' + (ESTADO.savedPrompts.length + 1),
-        contenido: ESTADO.promptActual,
+        id: state.savedPrompts.length + 1,
+        titulo: 'Prompt #' + (state.savedPrompts.length + 1),
+        contenido: state.currentPrompt,
         fecha: new Date().toISOString(),
-        modelo: ESTADO.modeloActual,
-        fechaCreacion: new Date().toISOString()
+        tipo: 'prompt_espanol'
     };
     
-    ESTADO.savedPrompts.push(entry);
-    localStorage.setItem(STORAGE_KEYS.prompts, JSON.stringify(ESTADO.savedPrompts));
-    addLinea(`<span class="line-success">[OK] guardado como #${entry.id} ✓</span>');
+    state.savedPrompts.push(entry);
+    localStorage.setItem(CONFIG.storageKeys.prompts, JSON.stringify(state.savedPrompts));
+    agregarLinea(`<span class="line-success">[OK] guardado como #${entry.id} ✓</span>`);
 }
 
 function listarGuardados() {
-    if(!ESTADO.savedPrompts.length) { addLinea('<span class="line-dim">vacío</span>'); return; }
-    
-    addLinea('<span style="color:var(--text-terciary)">📁 TUS PROMPTS GUARDADOS:</span>');
-    ESTADO.savedPrompts.forEach(p => {
-        addLinea(`  <span class="line-success">#${p.id}</span> ${p.titulo} <span class="line-dim">[${ESTADO.modelos[p.modelo]?.icono||'?'} ${ESTADO.modelos[p.modelo]?.nombre||''}]</span>`);
+    if(!state.savedPrompts.length) { agregarLinea('<span class="line-dim">vacío</span>'); return; }
+    agregarLinea('<span style="color:var(--cyan-acce)">📁 TUS PROMPTS GUARDADOS:</span>');
+    state.savedPrompts.forEach(p => {
+        agregarLinea(`  <span class="line-success">#${p.id}</span> ${p.titulo}  <span class="line-dim">[${new Date(p.fecha).toLocaleDateString('es')}]</span>`);
     });
 }
 
 function copiarPrompt() {
-    if(!ESTADO.promptActual) { addLinea('<span class="line-error">error: nada que copiar</span>'); return; }
-    navigator.clipboard.writeText(ESTADO.promptActual);
-    addLinea('<span class="line-success">[OK] ¡Copiado! ✓</span>');
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
+    navigator.clipboard.writeText(state.currentPrompt);
+    agregarLinea('<span class="line-success">[OK] ¡Copiado al portapapeles! ✓</span>');
 }
 
 function descargarPrompt() {
-    if(!ESTADO.promptActual) { addLinea('<span class="line-error">error: nada que descargar</span>'); return; }
-    
-    const blob = new Blob([ESTADO.promptActual], {type:'text/plain;charset=utf-8'});
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que descargar</span>'); return; }
+    const blob = new Blob([state.currentPrompt], {type:'text/plain;charset=utf-8'});
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `mr-prompt_${Date.now()}.txt`;
+    a.download = `prompt_${Date.now()}.txt`;
     a.click();
     URL.revokeObjectURL(a.href);
-    addLinea('<span class="line-success">[OK] Descargado! ✓</span>');
-}
-
-// =============================================
-// LLAMADAS A LA IA
-// =============================================
-async function llamarIA(prompt, historial = [], systemPrompt = null) {
-    const endpoint = ESTADO.endpoint;
-    const header = ESTADO.authHeader;
-    const prefix = ESTADO.authPrefix || '';
-    const model = ESTADO.model || 'gemini-pro';
-    
-    let fullPrompt = systemPrompt ? `[INSTRUCCIONES DEL SISTEMA]\n${systemPrompt}\n\n[CONVERSACIÓN]\n${prompt}` : prompt;
-    
-    try {
-        let response;
-        let data;
-        
-        if (ESTADO.modeloActual === 'gemini') {
-            response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [header]: ESTADO.apiKey
-                },
-                body: JSON.stringify({
-                    contents: [
-                        ...historial.map(h => ({
-                            role: h.role,
-                            parts: [{ text: h.content || h.parts?.[0]?.text || '' }]
-                        })),
-                        { role: 'user', parts: [{ text: fullPrompt }]
-                    ],
-                    generationConfig: {
-                        temperature: 0.85,
-                        topK: 45,
-                        topP: 0.95,
-                        maxOutputTokens: 4000
-                    },
-                    safetySettings: [
-                        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-                        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-                        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-                    ]
-                })
-            });
-            
-            data = await response.json();
-            return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            
-        } else {
-            // OpenAI compatible (DeepSeek, Claude, etc.)
-            const messages = [];
-            
-            if (systemPrompt) {
-                messages.push({ role: 'system', content: systemPrompt });
-            }
-            
-            messages.push(...historial.map(h => ({
-                role: h.role === 'model' ? 'assistant' : h.role,
-                content: h.content || h.parts?.[0]?.text || ''
-            })));
-            
-            messages.push({ role: 'user', content: fullPrompt });
-            
-            response = await fetch(endpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    [header]: prefix + ESTADO.apiKey
-                },
-                body: JSON.stringify({
-                    model: model,
-                    messages: messages,
-                    temperature: 0.85,
-                    max_tokens: 4000
-                })
-            });
-            
-            data = await response.json();
-            return data.choices?.[0]?.message?.content || '';
-        }
-        
-        throw new Error('Error en la llamada');
-    } catch(e) {
-        console.error('Error llamando IA:', e);
-        throw new Error(e.message);
-    }
+    agregarLinea('<span class="line-success">[OK] ¡Descargado! ✓</span>');
 }
 
 // =============================================
 // UTILIDADES
 // =============================================
-function escaparHtml(text) {
-    const d = document.createElement('d');
-    d.textContent = text;
+function agregarLinea(html, cls='') {
+    const d = document.createElement('div');
+    d.className = 'output-line ' + cls;
+    d.innerHTML = html;
+    document.getElementById('outputArea').appendChild(d);
+}
+
+function escaparHtml(t) {
+    const d = document.createElement('div');
+    d.textContent = t;
     return d.innerHTML;
 }
 
 function formatearRespuesta(texto) {
     return escaparHtml(texto)
-        .replace(/```([\s\S]*?)```/g, '<pre class="ascii-art" style="color:var(--text-secondary);white-space:pre-wrap;font-size:12px;line-height:1.2;margin:12px 0;">$1</pre>')
-        .replace(/`([^`]+)`/g, '<code style="color:var(--text-terciary);background:rgba(0,255,200,0.1);padding:2px 6px;border-radius:3px;">$1</code>')
-        .replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--text-secondary);">$1</strong>')
-        .replace(/={3,}/g, '<span style="letter-spacing:3px;color:var(--accent-green);">══════</span>')
+        // Arte ASCII (preservar pre)
+        .replace(/```([\s\S]*?)```/g, '<pre class="ascii-art">$1</pre>')
+        // Código inline
+        .replace(/`([^`]+)`/g, '<code style="color:var(--cyan-accent);background:rgba(0,255,200,0.1);padding:2px 6px;border-radius:3px;">$1</code>')
+        // Negritas
+        .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:var(--green-neon)">$1</strong>')
+        // Líneas separadoras
+        .replace(/={3,}/g, '<span style="color:var(--green-bright);letter-spacing:3px;">══════════════</span>')
+        // Saltos de línea
         .replace(/\n/g, '<br>');
 }
 
-// =============================================
-// CSS para botones de modelo
-// =============================================
-const style = document.createElement('style');
-style.textContent = `
-.model-option {
-    padding: 14px 18px;
-    background: var(--bg-tertiary);
-    border: 2px solid var(--border-color);
-    color: var(--text-secondary);
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-    border-radius: 8px;
-}
-.model-option:hover {
-    border-color: var(--accent-green);
-    background: linear-gradient(135deg, rgba(0,255,136,0.08) 0%, transparent 0%);
-    transform: translateY(-2px);
-    box-shadow: 0 0 8px var(--glow-green);
-}
-.model-option.selected {
-    border-color: var(--accent-green) !important;
-    background: linear-gradient(135deg, rgba(0, 255, 0.1) 0%, transparent 0%) !important;
-    box-shadow: 0 0 15px var(--glow-green);
-}
-`;
-document.head.appendChild(style);
-
-// =============================================
-// Inicialización
-// =============================================
-if (typeof window.onload !== 'undefined') {
-    window.addEventListener('load', () => {
-        // Aplicar estilos de botones de modelo
-        document.head.appendChild(style);
+function scrollFinal() {
+    requestAnimationFrame(() => {
+        document.getElementById('outputArea').scrollTop = 999999;
     });
 }
 </script>
