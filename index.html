@@ -3,330 +3,568 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⬡ PROMPFORGE.SH // INGENIERO SENIOR v6.0</title>
+    <title>⬡ PROMPFORGE.SH // MULTI-IA v7.0</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-black: #050a05;
-            --green-bright: #00ff41;
-            --green-neon: #39ff14;
-            --green-glow: rgba(57, 255, 20, 0.6);
-            --cyan-accent: #00ffc8;
-            --lime-warn: #adff2f;
-            --text-white: #e0ffe0;
-            --text-gray: #6b9b6b;
-            --red-error: #ff3860;
-            --purple-accent: #bf00ff;
-        }
-        html, body { height: 100%; overflow-x: hidden; }
-        body {
-            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
-            background: var(--bg-black);
-            color: var(--green-bright);
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.02) 2px, rgba(0,255,65,0.02) 4px);
-            pointer-events: none;
-            z-index: 9999;
-        }
-        .app-container { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
-        
-        /* LOGIN */
-        .login-screen {
-            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 30px 20px; background: radial-gradient(ellipse at center, rgba(0,255,65,0.03) 0%, transparent 70%);
-        }
-        .login-box {
-            width: 100%; max-width: 650px; border: 1px solid rgba(0,255,65,0.25); padding: 35px;
-            background: rgba(0,255,65,0.01);
-            box-shadow: 0 0 60px rgba(0,255,65,0.08), inset 0 0 80px rgba(0,255,65,0.02);
-            position: relative;
-        }
-        .login-box::before, .login-box::after {
-            content: ''; position: absolute; width: 30px; height: 30px;
-            border-color: var(--green-neon); border-style: solid;
-        }
-        .login-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; box-shadow: -3px -3px 15px var(--green-glow); }
-        .login-box::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; box-shadow: 3px 3px 15px var(--green-glow); }
-        
-        .login-header { text-align: center; margin-bottom: 28px; }
-        .login-logo { font-size: 42px; margin-bottom: 12px; text-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); animation: pulse-glow 2s ease-in-out infinite; }
-        @keyframes pulse-glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.85;transform:scale(1.05)} }
-        .login-title { color: var(--green-neon); font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 20px var(--green-glow); margin-bottom: 6px; }
-        .login-subtitle { color: var(--text-gray); font-size: 12px; letter-spacing: 1px; }
-        
-        .login-form { display: flex; flex-direction: column; gap: 18px; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
-        .form-label { color: var(--cyan-accent); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-        .input-cyber {
-            width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.6); border: 1px solid rgba(0,255,65,0.2);
-            color: var(--green-bright); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none;
-            transition: all 0.3s ease; letter-spacing: 0.5px;
-        }
-        .input-cyber:focus { border-color: var(--green-neon); box-shadow: 0 0 15px rgba(57,255,20,0.3), inset 0 0 20px rgba(57,255,20,0.05); }
-        .input-cyber::placeholder { color: rgba(0,255,65,0.25); font-style: italic; }
-        
-        .checkbox-group { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 0; }
-        .checkbox-custom {
-            width: 18px; height: 18px; border: 2px solid rgba(0,255,65,0.3); background: transparent;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
-        }
-        .checkbox-custom.checked { background: var(--green-neon); border-color: var(--green-neon); box-shadow: 0 0 12px var(--green-glow); }
-        .checkbox-custom.checked::after { content: '✓'; color: var(--bg-black); font-weight: bold; font-size: 13px; }
-        .checkbox-label { color: var(--text-gray); font-size: 12px; user-select: none; }
-        
-        .btn-login {
-            width: 100%; padding: 16px; background: transparent; border: 2px solid var(--green-neon);
-            color: var(--green-neon); font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
-            letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; margin-top: 8px;
-        }
-        .btn-login:hover:not(:disabled) { background: var(--green-neon); color: var(--bg-black); box-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); transform: translateY(-2px); }
-        .btn-login:disabled { opacity: 0.5; cursor: not-allowed; border-color: var(--text-gray); color: var(--text-gray); }
-        
-        .message-box { padding: 14px 18px; font-size: 12px; margin-top: 14px; display: none; animation: shake 0.5s ease-in-out; line-height: 1.7; }
-        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-        .error-message { background: rgba(255,56,96,0.08); border: 1px solid rgba(255,56,96,0.35); color: var(--red-error); border-left: 3px solid var(--red-error); }
-        .success-message { background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.35); color: var(--green-bright); border-left: 3px solid var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
-        .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
-        @keyframes spin { to{transform:rotate(360deg)} }
-        
-        .login-info { margin-top: 24px; padding-top: 20px; border-top: 1px dashed rgba(0,255,65,0.15); }
-        .info-title { color: var(--lime-warn); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-        .info-text { color: var(--text-gray); font-size: 12px; line-height: 1.8; }
-        .info-link { color: var(--cyan-accent); text-decoration: none; border-bottom: 1px dashed var(--cyan-accent); }
+/* ============================================
+   TEMA BASE (CYBER - DEFAULT)
+   ============================================ */
+:root {
+    --bg-primary: #050a05;
+    --bg-secondary: #0a140a;
+    --bg-tertiary: #0f1f0f;
+    --text-primary: #00ff41;
+    --text-secondary: #39ff14;
+    --text-tertiary: #00ffc8;
+    --text-dim: #6b9b6b;
+    --accent-green: #00ff41;
+    --accent-cyan: #00ffc8;
+    --accent-lime: #adff2f;
+    --accent-purple: #bf00ff;
+    --accent-red: #ff3860;
+    --border-color: rgba(0, 255, 65, 0.25);
+    --glow-green: rgba(57, 255, 20, 0.6);
+    --glow-cyan: rgba(0, 255, 200, 0.5);
+    --shadow-strong: 0 0 30px var(--glow-green);
+}
 
-        /* MAIN SCREEN */
-        .main-screen { display: none; flex-direction: column; height: 100vh; }
-        .main-screen.active { display: flex; }
-        .status-bar {
-            background: linear-gradient(180deg, rgba(0,255,65,0.08) 0%, transparent 100%);
-            border-bottom: 1px solid rgba(0,255,65,0.25); padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-shrink: 0;
-        }
-        .status-left { color: var(--green-neon); font-weight: 600; text-shadow: 0 0 10px var(--green-glow); }
-        .status-right { color: var(--text-gray); display: flex; gap: 20px; font-size: 12px; }
-        .status-highlight { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
-        .status-time { color: #00cc33; font-variant-numeric: tabular-nums; }
-        .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-neon); display: inline-block; animation: pulse-green 1.5s infinite; box-shadow: 0 0 10px var(--green-glow); }
-        @keyframes pulse-green { 0%,100%{box-shadow:0 0 5px var(--green-glow),0 0 10px var(--green-glow)} 50%{box-shadow:0 0 15px var(--green-glow),0 0 25px var(--green-glow)} }
-        .logout-btn { background: none; border: 1px solid var(--red-error); color: var(--red-error); padding: 4px 12px; font-family: inherit; font-size: 11px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
-        .logout-btn:hover { background: var(--red-error); color: var(--bg-black); }
-        
-        .output-area { flex: 1; overflow-y: auto; padding: 20px 24px; scroll-behavior: smooth; }
-        .output-area::-webkit-scrollbar { width: 10px; }
-        .output-area::-webkit-scrollbar-track { background: var(--bg-black); border-left: 1px solid rgba(0,255,65,0.1); }
-        .output-area::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.2); }
-        
-        /* Estilos de output */
-        .boot-line { margin: 3px 0; white-space: pre-wrap; }
-        .boot-ok { color: var(--green-bright); text-shadow: 0 0 5px rgba(0,255,65,0.4); }
-        
-        .ascii-art { 
-            color: var(--green-neon); 
-            white-space: pre; 
-            line-height: 1.2; 
-            margin: 16px 0;
-            font-size: 12px;
-            text-shadow: 0 0 8px var(--green-glow);
-            animation: glow-pulse 3s ease-in-out infinite;
-        }
-        @keyframes glow-pulse {
-            0%, 100% { opacity: 0.9; }
-            50% { opacity: 1; filter: brightness(1.2); }
-        }
-        
-        .flujograma {
-            border: 1px solid rgba(0,255,200,0.2);
-            background: rgba(0,255,200,0.02);
-            padding: 16px 20px;
-            margin: 16px 0;
-            font-size: 12px;
-            line-height: 1.6;
-            color: var(--cyan-accent);
-            position: relative;
-        }
-        .flujograma::before {
-            content: '⬇ FLUJOGRAMA';
-            position: absolute;
-            top: -10px;
-            left: 16px;
-            background: var(--bg-black);
-            padding: 0 8px;
-            font-size: 10px;
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
-        
-        .cyber-box { 
-            border: 1px solid rgba(0,255,65,0.3); 
-            padding: 24px; 
-            margin: 24px 0; 
-            position: relative; 
-            background: rgba(0,255,65,0.02); 
-            box-shadow: inset 0 0 40px rgba(0,255,65,0.03); 
-        }
-        .cyber-box::before, .cyber-box::after { 
-            content: ''; position: absolute; width: 24px; height: 24px; 
-            border-color: var(--green-bright); border-style: solid; 
-        }
-        .cyber-box::before { top:-1px;left:-1px;border-width:2px 0 0 2px; box-shadow:-3px -3px 15px var(--green-glow); }
-        .cyber-box::after {bottom:-1px;right:-1px;border-width:0 2px 2px 0;box-shadow:3px 3px 15px var(--green-glow);}
-        
-        .box-title { 
-            color: var(--green-neon); 
-            font-weight: 700; 
-            margin-bottom: 16px; 
-            font-size: 16px; 
-            text-transform: uppercase; 
-            letter-spacing: 3px; 
-            text-shadow: 0 0 20px var(--green-glow); 
-        }
-        .box-content { color: var(--text-white); line-height: 1.9; }
-        .box-content p { margin: 10px 0; }
-        .cmd-hint { color: var(--cyan-accent); font-weight: 600; text-shadow: 0 0 8px rgba(0,255,200,0.5); }
-        
-        .input-line { 
-            display: flex; align-items: center; 
-            padding: 14px 24px; 
-            border-top: 1px solid rgba(0,255,65,0.15); 
-            background: linear-gradient(180deg, rgba(0,255,65,0.03) 0%, transparent 100%); 
-            flex-shrink: 0; 
-        }
-        .prompt-prefix { color: var(--cyan-accent); margin-right: 10px; white-space: nowrap; text-shadow: 0 0 8px rgba(0,255,200,0.4); }
-        .prompt-user { color: var(--green-neon); font-weight: 700; }
-        .prompt-symbol { color: var(--green-bright); margin-right: 12px; font-weight: bold; }
-        .terminal-input { 
-            flex: 1; background: transparent; border: none; outline: none; 
-            color: var(--green-bright); font-family: inherit; font-size: inherit; caret-color: var(--green-neon); 
-        }
-        .terminal-input::placeholder { color: rgba(0,255,65,0.25); }
-        .cursor-cyber { 
-            display: inline-block; width: 10px; height: 18px; background: var(--green-neon); 
-            animation: blink-cursor 0.8s step-end infinite; vertical-align: middle; 
-            margin-left: 3px; box-shadow: 0 0 10px var(--green-glow); 
-        }
-        @keyframes blink-cursor { 0%,50%{opacity:1} 51%,100%{opacity:0} }
-        
-        .output-line { margin: 4px 0; white-space: pre-wrap; word-break: break-word; }
-        .line-error { color: var(--red-error); text-shadow: 0 0 8px rgba(255,56,96,0.4); }
-        .line-success { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
-        .line-info { color: var(--cyan-accent); }
-        .line-warn { color: var(--lime-warn); }
-        .line-dim { color: var(--text-gray); }
-        .line-ai { 
-            color: var(--green-neon); 
-            border-left: 3px solid var(--green-bright); 
-            padding-left: 14px; 
-            margin: 14px 0; 
-            background: linear-gradient(90deg, rgba(57,255,20,0.03) 0%, transparent 100%);
-        }
-        .line-engineer {
-            color: var(--purple-accent);
-            border-left: 3px solid var(--purple-accent);
-            padding-left: 14px;
-            margin: 14px 0;
-            background: linear-gradient(90deg, rgba(191,0,255,0.03) 0%, transparent 100%);
-        }
-        
-        .ai-response { 
-            border: 1px solid rgba(0,255,200,0.25); 
-            background: rgba(0,255,200,0.03); 
-            padding: 20px 24px; 
-            margin: 18px 0; 
-            position: relative; 
-            box-shadow: inset 0 0 40px rgba(0,255,200,0.04);
-        }
-        .ai-response::before { 
-            content: '🤖 RESPUESTA DEL INGENIERO'; 
-            position: absolute; 
-            top: -11px; left: 16px; 
-            background: var(--bg-black); 
-            padding: 0 10px; 
-            font-size: 11px; 
-            color: var(--cyan-accent); 
-            letter-spacing: 2px; 
-            font-weight: bold; 
-        }
-        
-        .prompt-output { 
-            border: 2px solid rgba(0,255,65,0.4); 
-            background: linear-gradient(135deg, rgba(0,255,65,0.04) 0%, rgba(0,255,65,0.01) 100%);
-            padding: 24px 28px; 
-            margin: 20px 0; 
-            font-size: 13px; 
-            line-height: 1.85; 
-            color: var(--text-white); 
-            position: relative; 
-            box-shadow: 
-                0 0 40px rgba(0,255,65,0.1),
-                inset 0 0 60px rgba(0,255,65,0.03);
-        }
-        .prompt-output::before { 
-            content: '📋 PROMPT FINAL EN ESPAÑOL'; 
-            position: absolute; 
-            top: -12px; 
-            left: 20px; 
-            background: var(--bg-black); 
-            padding: 0 12px; 
-            font-size: 11px; 
-            color: var(--green-neon); 
-            letter-spacing: 2px; 
-            font-weight: 700; 
-            text-shadow: 0 0 12px var(--green-glow);
-        }
-        
-        .step-indicator { 
-            color: var(--purple-accent); 
-            font-weight: 700; 
-            font-size: 13px; 
-            letter-spacing: 1px; 
-            margin: 18px 0 12px 0; 
-            padding: 10px 16px; 
-            background: linear-gradient(90deg, rgba(191,0,255,0.08) 0%, transparent 100%);
-            border-left: 3px solid var(--purple-accent);
-            text-shadow: 0 0 10px rgba(191,0,255,0.5);
-        }
-        
-        .plan-box {
-            border: 1px dashed rgba(173,255,47,0.3);
-            background: rgba(173,255,47,0.02);
-            padding: 16px 20px;
-            margin: 16px 0;
-            font-size: 12px;
-            color: var(--lime-warn);
-        }
-        .plan-title {
-            color: var(--lime-warn);
-            font-weight: 700;
-            font-size: 11px;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        
-        ::selection { background: var(--green-bright); color: var(--bg-black); }
-        
-        @media(max-width:768px){
-            body{font-size:13px}
-            .login-box{padding:24px 18px}
-            .login-logo{font-size:34px}
-            .login-title{font-size:17px}
-            .status-bar{padding:8px 14px;font-size:11px;flex-wrap:wrap;gap:8px}
-            .output-area{padding:14px 16px}
-            .input-line{padding:12px 16px}
-            .ascii-art{font-size:10px}
-            .flujograma{padding:12px;font-size:11px}
-        }
-        .hidden{display:none!important}
+/* ============================================
+   TEMA DÍA (CLARO)
+   ============================================ */
+[data-theme="day"] {
+    --bg-primary: #f5f5f0;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #ebebe5;
+    --text-primary: #1a1a1a;
+    --text-secondary: #333333;
+    --text-tertiary: #0066cc;
+    --text-dim: #888888;
+    --accent-green: #22c55e;
+    --accent-cyan: #0891b2;
+    --accent-lime: #84cc16;
+    --accent-purple: #9333ea;
+    --accent-red: #dc2626;
+    --border-color: rgba(0, 0, 0, 0.12);
+    --glow-green: rgba(34, 197, 94, 0.3);
+    --glow-cyan: rgba(8, 145, 178, 0.3);
+    --shadow-strong: 0 4px 20px rgba(0, 0, 0, 0.08);
+    
+    body::before { display: none; }
+}
+
+/* ============================================
+   TEMA NOCTURNO (AMOLED)
+   ============================================ */
+[data-theme="night"] {
+    --bg-primary: #000000;
+    --bg-secondary: #050505;
+    --bg-tertiary: #0a0a0a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-tertiary: #60a5fa;
+    --text-dim: #555555;
+    --accent-green: #4ade80;
+    --accent-cyan: #22d3ee;
+    --accent-lime: #a3e635;
+    --accent-purple: #c084fc;
+    --accent-red: #f87171;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --glow-green: rgba(74, 222, 128, 0.4);
+    --glow-cyan: rgba(34, 211, 238, 0.4);
+    --shadow-strong: 0 0 20px rgba(74, 222, 128, 0.3);
+    
+    body::before { 
+        background: repeating-linear-gradient(
+            0deg, transparent, transparent 2px, 
+            rgba(255, 255, 255, 0.01) 2px, 
+            rgba(255, 255, 255, 0.01) 4px
+        );
+    }
+}
+
+/* ============================================
+   ESTILOS BASE
+   ============================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; overflow-x: hidden; }
+
+body {
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.6;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Scanlines solo en modo cyber */
+[data-theme="cyber"] body::before,
+[data-theme="night"] body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.app-container { 
+    display: flex; flex-direction: column; 
+    height: 100vh; width: 100vw; overflow: hidden; 
+}
+
+/* ============================================
+   LOGIN SCREEN
+   ============================================ */
+.login-screen {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    padding: 30px 20px;
+    background: radial-gradient(ellipse at center, var(--glow-green) 0%, transparent 70%);
+}
+
+.login-box {
+    width: 100%; max-width: 700px;
+    border: 1px solid var(--border-color);
+    padding: 40px;
+    background: var(--bg-secondary);
+    box-shadow: var(--shadow-strong), inset 0 0 60px rgba(128,128,128,0.03);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.login-box::before, .login-box::after {
+    content: ''; position: absolute; width: 30px; height: 30px;
+    border-color: var(--accent-green); border-style: solid;
+    transition: border-color 0.3s ease;
+}
+.login-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.login-box::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+.login-header { text-align: center; margin-bottom: 32px; }
+.login-logo { 
+    font-size: 48px; margin-bottom: 16px; 
+    filter: drop-shadow(0 0 20px var(--glow-green));
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+@keyframes pulse-glow { 
+    0%,100%{opacity:1;transform:scale(1)} 
+    50%{opacity:.85;transform:scale(1.05)} 
+}
+
+.login-title { 
+    color: var(--text-secondary); 
+    font-size: 22px; font-weight: 700; 
+    letter-spacing: 3px; text-transform: uppercase;
+    text-shadow: 0 0 15px var(--glow-green);
+    margin-bottom: 8px;
+}
+.login-subtitle { color: var(--text-dim); font-size: 13px; letter-spacing: 1px; }
+
+.login-form { display: flex; flex-direction: column; gap: 20px; }
+
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-label { 
+    color: var(--text-terciario); 
+    font-size: 11px; font-weight: 600; 
+    letter-spacing: 2px; text-transform: uppercase; 
+}
+
+.input-cyber {
+    width: 100%; padding: 14px 18px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px; outline: none;
+    transition: all 0.3s ease;
+}
+.input-cyber:focus {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 15px var(--glow-green), inset 0 0 20px var(--glow-green);
+}
+.input-cyber::placeholder { color: var(--text-dim); opacity: 0.6; }
+
+/* Selector de IA */
+.ia-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.ia-option {
+    padding: 12px;
+    background: var(--bg-tertiary);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.ia-option:hover {
+    border-color: var(--accent-green);
+    transform: translateY(-2px);
+}
+
+.ia-option.selected {
+    border-color: var(--accent-green);
+    background: linear-gradient(135deg, rgba(0,255,65,0.05) 0%, transparent 100%);
+    box-shadow: 0 0 15px var(--glow-green);
+}
+
+.ia-option .ia-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.ia-option .ia-speed {
+    font-size: 10px;
+    color: var(--text-dim);
+}
+
+.ia-option .check-mark {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    color: var(--accent-green);
+    font-weight: bold;
+    display: none;
+}
+
+.ia-option.selected .check-mark { display: block; }
+
+.checkbox-group { 
+    display: flex; align-items: center; gap: 10px; 
+    cursor: pointer; padding: 8px 0; 
+}
+.checkbox-custom {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+}
+.checkbox-custom.checked {
+    background: var(--accent-green);
+    border-color: var(--accent-green);
+    box-shadow: 0 0 10px var(--glow-green);
+}
+.checkbox-custom.checked::after { content: '✓'; color: var(--bg-primary); font-weight: bold; font-size: 13px; }
+.checkbox-label { color: var(--text-dim); font-size: 12px; user-select: none; }
+
+.btn-login {
+    width: 100%; padding: 18px;
+    background: transparent;
+    border: 2px solid var(--accent-green);
+    color: var(--accent-green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s ease;
+    margin-top: 10px;
+}
+.btn-login:hover:not(:disabled) {
+    background: var(--accent-green);
+    color: var(--bg-primary);
+    box-shadow: var(--shadow-strong);
+    transform: translateY(-2px);
+}
+.btn-login:disabled { 
+    opacity: 0.5; cursor: not-allowed; 
+    border-color: var(--text-dim); color: var(--text-dim); 
+}
+
+.message-box {
+    padding: 14px 18px; font-size: 12px;
+    margin-top: 16px; display: none;
+    line-height: 1.7; animation: shake 0.5s ease-in-out;
+}
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+.error-message { 
+    background: rgba(220, 38, 38, 0.08); 
+    border: 1px solid rgba(220, 38, 38, 0.3); 
+    color: var(--accent-red); 
+    border-left: 3px solid var(--accent-red); 
+}
+.success-message { 
+    background: rgba(34, 197, 94, 0.08); 
+    border: 1px solid rgba(34, 197, 94, 0.3); 
+    color: var(--accent-green); 
+    border-left: 3px solid var(--accent-green); 
+}
+.loading-spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid currentColor; border-top-color: transparent;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+    margin-right: 8px; vertical-align: middle;
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+.login-info {
+    margin-top: 28px; padding-top: 24px;
+    border-top: 1px dashed var(--border-color);
+}
+.info-title {
+    color: var(--accent-lime); font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+}
+.info-text { color: var(--text-dim); font-size: 12px; line-height: 1.9; }
+.info-link { color: var(--text-terciario); text-decoration: none; border-bottom: 1px dashed; }
+.info-link:hover { color: var(--accent-green); border-bottom-style: solid; }
+
+/* ============================================
+   MAIN TERMINAL
+   ============================================ */
+.main-screen { display: none; flex-direction: column; height: 100vh; }
+.main-screen.active { display: flex; }
+
+.status-bar {
+    background: linear-gradient(180deg, rgba(128,128,128,0.05) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; flex-shrink: 0;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.status-left { 
+    color: var(--text-secondary); font-weight: 600; 
+    filter: drop-shadow(0 0 8px var(--glow-green)); 
+}
+.status-center { 
+    display: flex; gap: 15px; align-items: center;
+    font-size: 11px;
+}
+.status-right { 
+    display: flex; gap: 15px; align-items: center;
+    font-size: 11px; color: var(--text-dim);
+}
+
+.theme-btn {
+    background: none; border: 1px solid var(--border-color);
+    color: var(--text-dim); padding: 4px 10px;
+    font-family: inherit; font-size: 10px;
+    cursor: pointer; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 1px;
+}
+.theme-btn:hover {
+    border-color: var(--accent-green); color: var(--accent-green);
+}
+.theme-btn.active {
+    background: var(--accent-green); color: var(--bg-primary);
+    border-color: var(--accent-green);
+}
+
+.ia-badge {
+    padding: 4px 10px;
+    background: rgba(0,255,65,0.08);
+    border: 1px solid var(--border-color);
+    color: var(--accent-green);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.ai-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-green);
+    display: inline-block;
+    animation: pulse-dot 1.5s infinite;
+    box-shadow: 0 0 10px var(--glow-green);
+}
+@keyframes pulse-dot {
+    0%,100%{box-shadow:0 0 5px var(--glow-green)}
+    50%{box-shadow:0 0 15px var(--glow-green), 0 0 25px var(--glow-green)}
+}
+
+.status-time { font-variant-numeric: tabular-nums; }
+
+.logout-btn {
+    background: none; border: 1px solid var(--accent-red);
+    color: var(--accent-red); padding: 4px 12px;
+    font-family: inherit; font-size: 10px;
+    cursor: pointer; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 1px;
+}
+.logout-btn:hover { background: var(--accent-red); color: white; }
+
+.output-area {
+    flex: 1; overflow-y: auto; padding: 20px 24px; scroll-behavior: smooth;
+}
+.output-area::-webkit-scrollbar { width: 10px; }
+.output-area::-webkit-scrollbar-track { background: var(--bg-primary); }
+.output-area::-webkit-scrollbar-thumb { background: var(--border-color); }
+
+.boot-line { margin: 3px 0; white-space: pre-wrap; }
+.boot-ok { color: var(--accent-green); }
+
+.ascii-art {
+    color: var(--text-secondary);
+    white-space: pre; line-height: 1.2; margin: 16px 0;
+    font-size: 12px; filter: drop-shadow(0 0 8px var(--glow-green));
+}
+
+.flujograma {
+    border: 1px solid var(--border-color);
+    background: rgba(0,255,200,0.02);
+    padding: 16px 20px; margin: 16px 0;
+    font-size: 12px; line-height: 1.7;
+    color: var(--text-terciario); position: relative;
+}
+.flujograma::before {
+    content: '⬇ FLUJOGRAMA';
+    position: absolute; top: -10px; left: 16px;
+    background: var(--bg-primary); padding: 0 8px;
+    font-size: 10px; letter-spacing: 2px; font-weight: bold;
+}
+
+.cyber-box {
+    border: 1px solid var(--border-color);
+    padding: 24px; margin: 24px 0; position: relative;
+    background: rgba(128,128,128,0.02);
+    box-shadow: inset 0 0 40px rgba(128,128,128,0.02);
+}
+.cyber-box::before, .cyber-box::after {
+    content: ''; position: absolute; width: 24px; height: 24px;
+    border-color: var(--accent-green); border-style: solid;
+}
+.cyber-box::before { top:-1px;left:-1px;border-width:2px 0 0 2px; }
+.cyber-box::after {bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+
+.box-title {
+    color: var(--text-secondary); font-weight: 700; margin-bottom: 16px;
+    font-size: 16px; text-transform: uppercase; letter-spacing: 3px;
+    text-shadow: 0 0 15px var(--glow-green);
+}
+.box-content { color: var(--text-primary); line-height: 1.9; }
+.box-content p { margin: 10px 0; }
+.cmd-hint { color: var(--text-terciario); font-weight: 600; }
+
+.input-line {
+    display: flex; align-items: center;
+    padding: 14px 24px;
+    border-top: 1px solid var(--border-color);
+    background: linear-gradient(180deg, rgba(128,128,128,0.03) 0%, transparent 100%);
+    flex-shrink: 0;
+}
+.prompt-prefix {
+    color: var(--text-terciario); margin-right: 10px;
+    white-space: nowrap; font-weight: 500;
+}
+.prompt-user { color: var(--text-secondary); font-weight: 700; }
+.prompt-symbol { color: var(--accent-green); margin-right: 12px; font-weight: bold; }
+
+.terminal-input {
+    flex: 1; background: transparent; border: none; outline: none;
+    color: var(--text-primary); font-family: inherit; font-size: inherit;
+    caret-color: var(--accent-green);
+}
+.terminal-input::placeholder { color: var(--text-dim); opacity: 0.6; }
+
+.cursor-cyber {
+    display: inline-block; width: 10px; height: 18px;
+    background: var(--accent-green);
+    animation: blink-cursor 0.8s step-end infinite;
+    vertical-align: middle; margin-left: 3px;
+    box-shadow: 0 0 10px var(--glow-green);
+}
+@keyframes blink-cursor { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+
+.output-line { margin: 4px 0; white-space: pre-wrap; word-break: break-word; }
+.line-error { color: var(--accent-red); }
+.line-success { color: var(--accent-green); }
+.line-info { color: var(--text-terciario); }
+.line-warn { color: var(--accent-lime); }
+.line-dim { color: var(--text-dim); }
+.line-ai {
+    color: var(--text-secondary);
+    border-left: 3px solid var(--accent-green);
+    padding-left: 14px; margin: 14px 0;
+    background: linear-gradient(90deg, rgba(0,255,65,0.03) 0%, transparent 100%);
+}
+.line-engineer {
+    color: var(--accent-purple);
+    border-left: 3px solid var(--accent-purple);
+    padding-left: 14px; margin: 14px 0;
+    background: linear-gradient(90deg, rgba(191,0,255,0.03) 0%, transparent 100%);
+}
+
+.ai-response {
+    border: 1px solid var(--border-color);
+    background: rgba(0,255,200,0.02);
+    padding: 20px 24px; margin: 18px 0; position: relative;
+    box-shadow: inset 0 0 40px rgba(0,255,200,0.02);
+}
+.ai-response::before {
+    content: '🤖 RESPUESTA DEL INGENIERO';
+    position: absolute; top: -11px; left: 16px;
+    background: var(--bg-primary); padding: 0 10px;
+    font-size: 11px; color: var(--text-terciario);
+    letter-spacing: 2px; font-weight: bold;
+}
+
+.prompt-output {
+    border: 2px solid var(--border-color);
+    background: linear-gradient(135deg, rgba(0,255,65,0.04) 0%, rgba(0,255,65,0.01) 100%);
+    padding: 24px 28px; margin: 20px 0;
+    font-size: 13px; line-height: 1.85;
+    color: var(--text-primary); position: relative;
+    box-shadow: 0 0 40px rgba(0,255,65,0.08);
+}
+.prompt-output::before {
+    content: '📋 PROMPT FINAL EN ESPAÑOL';
+    position: absolute; top: -12px; left: 20px;
+    background: var(--bg-primary); padding: 0 12px;
+    font-size: 11px; color: var(--accent-green);
+    letter-spacing: 2px; font-weight: 700;
+}
+
+.step-indicator {
+    color: var(--accent-purple); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; margin: 18px 0 12px 0;
+    padding: 10px 16px;
+    background: linear-gradient(90deg, rgba(191,0,255,0.06) 0%, transparent 100%);
+    border-left: 3px solid var(--accent-purple);
+}
+
+.plan-box {
+    border: 1px dashed var(--border-color);
+    background: rgba(173,255,47,0.02);
+    padding: 16px 20px; margin: 16px 0;
+    font-size: 12px; color: var(--accent-lime);
+}
+.plan-title {
+    color: var(--accent-lime); font-weight: 700;
+    font-size: 11px; letter-spacing: 2px;
+    margin-bottom: 10px; text-transform: uppercase;
+}
+
+::selection { background: var(--accent-green); color: var(--bg-primary); }
+
+@media(max-width:768px){
+    body{font-size:13px}
+    .login-box{padding:28px 20px}
+    .login-logo{font-size:36px}
+    .login-title{font-size:18px}
+    .status-bar{padding:8px 12px;font-size:11px;gap:10px}
+    .output-area{padding:14px 16px}
+    .input-line{padding:12px 16px}
+    .ascii-art{font-size:10px}
+    .ia-selector{grid-template-columns: 1fr;}
+    .status-center,.status-right{display:none;}
+}
+.hidden{display:none!important}
     </style>
 </head>
-<body>
+<body data-theme="cyber">
+
 <div class="app-container" id="appContainer">
 
 <!-- LOGIN -->
@@ -335,39 +573,67 @@
 <div class="login-header">
 <div class="login-logo">⬡</div>
 <div class="login-title">PromptForge.sh</div>
-<div class="login-subtitle">INGENIERO SENIOR DE PROMPTS v6.0</div>
+<div class="login-subtitle">MULTI-IA // INGENIERO SENIOR v7.0</div>
 </div>
 
 <form class="login-form" id="loginForm" onsubmit="return false;">
 <div class="form-group">
-<label class="form-label">// TU CLAVE DE GEMINI</label>
-<input type="text" id="apiKeyInput" class="input-cyber" placeholder="Pega aquí tu API Key..." autocomplete="off" spellcheck="false">
+<label class="form-label">// SELECCIONA TU IA</label>
+<div class="ia-selector" id="iaSelector">
+<div class="ia-option selected" data-ia="gemini" onclick="seleccionarIA('gemini')">
+<div class="ia-name">⚡ GEMINI</div>
+<div class="ia-speed">Google • Rápido</div>
+<span class="check-mark">✓</span>
+</div>
+<div class="ia-option" data-ia="deepseek" onclick="seleccionarIA('deepseek')">
+<div class="ia-name">🧠 DEEPSEEK</div>
+<div class="ia-speed">Muy Rápido ⚡</div>
+<span class="check-mark">✓</span>
+</div>
+<div class="ia-option" data-ia="zai" onclick="seleccionarIA('zai')">
+<div class="ia-name">💎 Z.AI</div>
+<div class="ia-speed">Rápido</div>
+<span class="check-mark">✓</span>
+</div>
+<div class="ia-option" data-ia="kimi" onclick="seleccionarIA('kimi')">
+<div class="ia-name">🌙 KIMI</div>
+<div class="ia-speed">Rápido</div>
+<span class="check-mark">✓</span>
+</div>
+</div>
 </div>
 
-<div style="background:rgba(191,0,255,0.05);border-left:3px solid var(--purple-accent);padding:12px;margin:10px 0;font-size:11px;color:var(--purple-accent);">
-<strong>🧠 INGENIERO SENIOR LISTO</strong><br>
-Este sistema usa IA avanzada para crear prompts profesionales.<br>
-Soporta cualquier formato de key (AIzaSy... o AQ.Ab8R...)
+<div class="form-group">
+<label class="form-label">// TU CLAVE DE API</label>
+<input type="text" id="apiKeyInput" class="input-cyber" placeholder="Pega tu API Key aquí..." autocomplete="off" spellcheck="false">
+</div>
+
+<div style="background:rgba(191,0,255,0.04);border-left:3px solid var(--accent-purple);padding:14px;margin:10px 0;font-size:11px;color:var(--accent-purple);">
+<strong>🎯 INFORMACIÓN:</strong><br><br>
+• <strong>Gemini:</strong> Key tipo AIzaSy o AQ.Ab8R<br>
+• <strong>DeepSeek:</strong> sk-...<br>
+• <strong>Z.AI:</strong> Tu key de Z.AI<br>
+• <strong>KIMI:</strong> Tu key de Moonshot
 </div>
 
 <div class="checkbox-group" onclick="toggleRemember()">
 <div class="checkbox-custom" id="rememberCheckbox"></div>
-<span class="checkbox-label">Recordar mi clave</span>
+<span class="checkbox-label">Recordar mi clave y configuración</span>
 </div>
 
-<button type="button" class="btn-login" id="loginBtn" onclick="iniciarSesion()">[ ACTIVAR INGENIERO ]</button>
+<button type="button" class="btn-login" id="loginBtn" onclick="iniciarSesion()">[ ACTIVAR SISTEMA ]</button>
 
 <div class="error-message" id="errorMsg"></div>
 <div class="success-message" id="successMsg"></div>
 </form>
 
 <div class="login-info">
-<div class="info-title">// ¿Necesitas Una Key?</div>
+<div class="info-title">// TEMAS DISPONIBLES</div>
 <div class="info-text">
-<p>1. <a href="https://aistudio.google.com/app/apikey" target="_blank" class="info-link">Google AI Studio</a></p>
-<p>2. "Create API key"</p>
-<p>3. Copia y pega aquí</p>
-<p style="margin-top:8px;color:var(--lime-warn)">💡 Es gratis y seguro</p>
+<p>Después de entrar, usa los botones en la barra superior:</p>
+<p>☀️ <strong>Día</strong> — Claro, suave a la vista</p>
+<p>🌙 <strong>Nocturno</strong> — Negro AMOLED puro</p>
+<p>⬡ <strong>Cyber</strong> — Verde neón (actual)</p>
 </div>
 </div>
 </div>
@@ -376,12 +642,19 @@ Soporta cualquier formato de key (AIzaSy... o AQ.Ab8R...)
 <!-- MAIN TERMINAL -->
 <div class="main-screen" id="mainScreen">
 <div class="status-bar">
-<span class="status-left">⬡ PROMPFORGE // INGENIERO SENIOR ⚡</span>
+<span class="status-left">⬡ PROMPFORGE // MULTI-IA v7.0</span>
+
+<div class="status-center">
+<span class="theme-btn active" data-theme="cyber" onclick="cambiarTema('cyber')">⬡ CYBER</span>
+<span class="theme-btn" data-theme="day" onclick="cambiarTema('day')">☀️ DÍA</span>
+<span class="theme-btn" data-theme="night" onclick="cambiarTema('night')">🌙 NOCHE</span>
+</div>
+
 <span class="status-right">
-<span class="status-item">modo: <span class="status-highlight">EXPERTO</span></span>
-<span class="status-item">idioma: <span class="status-highlight">ESPAÑOL</span></span>
-<span class="status-item">ia: <span style="color:var(--green-neon)">ON</span> <span class="ai-dot"></span></span>
-<span class="status-time" id="clock">00:00:00</span>
+<span class="ia-badge" id="iaBadge">⚡ GEMINI</span>
+<span style="color:var(--text-dim)">|</span>
+<span class="ai-dot"></span>
+<span id="clock">00:00:00</span>
 <button class="logout-btn" onclick="cerrarSesion()">[ SALIR ]</button>
 </span>
 </div>
@@ -399,53 +672,48 @@ Soporta cualquier formato de key (AIzaSy... o AQ.Ab8R...)
 
 <script>
 // =============================================
-// CONFIGURACIÓN
+// CONFIGURACIÓN DE IAs
 // =============================================
-const CONFIG = {
-    endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
-    storageKeys: {
-        apiKey: 'pf_key_v6',
-        remember: 'pf_rem_v6',
-        prompts: 'pf_prompts_v6'
+const IA_CONFIG = {
+    gemini: {
+        nombre: 'GEMINI',
+        icono: '⚡',
+        endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
+        authHeader: 'X-goog-api-key',
+        systemPrompt: `Eres un INGENIERO SENIOR DE PROMPTS con más de 15 años de experiencia. Hablas de forma AMIGABLE y SENCILLA. Generas TODO en ESPAÑOL. Usas ARTE ASCII, FLUJOGRAMAS y PLANES paso a paso antes de generar el prompt final.`
     },
-    // SYSTEM PROMPT DEL INGENIERO SENIOR
-    engineerSystemPrompt: `Eres un INGENIERO SENIOR DE PROMPTS con más de 15 años de experiencia creando prompts para IAs.
-
-TUS CARACTERÍSTICAS:
-- Hablas de forma AMIGABLE y SENCILLA (como explicándole a un amigo)
-- Haces preguntas CORTAS y FÁCILES de entender
-- Usas EJEMPLOS concretos cuando ayudas
-- Generas TODO en ESPAÑOL (nunca en inglés)
-- Creas ARTE ASCII decorativo (banners, iconos, separadores)
-- Diseñas FLUJOGRAMAS en texto antes de generar el prompt final
-- PLANIFICAS cada prompt paso a paso antes de escribirlo
-
-TU PROCESO DE TRABAJO:
-1. Saludas al usuario de forma cálida
-2. Preguntas qué tipo de quiere crear (muy simple)
-3. Haces 3-4 preguntas sencillas (una por vez)
-4. Creas un FLUJOGRAMA del proceso
-5. Muestras un PLAN del prompt que vas a crear
-6. Generas el PROMPT FINAL completo en español
-7. El prompt debe ser EXTREMADAMENTE DETALLADO y profesional
-
-FORMATOS QUE USAS:
-- Arte ASCII para decorar
-- Flujogramas con flechas → ↓ ←
-- Listas con ✓ ✗ ● ○
-- Emojis estratégicos
-- Separadores visuales ════
-
-IMPORTANTE: NUNCA generas prompts en inglés. SIEMPRE en español.
-Los prompts que generes deben ser listos para copiar y pegar en ChatGPT, Claude, Gemini o cualquier IA.`
+    deepseek: {
+        nombre: 'DEEPSEEK',
+        icono: '🧠',
+        endpoint: 'https://api.deepseek.com/chat/completions',
+        authHeader: 'Authorization',
+        authPrefix: 'Bearer ',
+        systemPrompt: `Eres un INGENIERO SENIOR DE PROMPTS experto. Hablas simple y claro. Todo en ESPAÑOL. Usas arte ASCII y flujogramas.`
+    },
+    zai: {
+        nombre: 'Z.AI',
+        icono: '💎',
+        endpoint: 'https://api.z.ai/v1/chat/completions',
+        authHeader: 'Authorization',
+        authPrefix: 'Bearer ',
+        systemPrompt: `Eres ingeniero de prompts senior. Amigable, detallado. Todo en español. Usa arte visual ASCII.`
+    },
+    kimi: {
+        nombre: 'KIMI',
+        icono: '🌙',
+        endpoint: 'https://api.moonshot.cn/v1/chat/completions',
+        authHeader: 'Authorization',
+        authPrefix: 'Bearer ',
+        systemPrompt: `Ingeniero de prompts experimentado. Explicas simple. 100% español. Arte ASCII y flujogramas incluidos.`
+    }
 };
 
 let state = {
+    iaSeleccionada: 'gemini',
     apiKey: '',
     rememberKey: false,
     isConnected: false,
     step: 0,
-    totalSteps: 4,
     promptsCreated: 0,
     data: {},
     savedPrompts: [],
@@ -453,54 +721,106 @@ let state = {
     conversationHistory: []
 };
 
+const STORAGE_KEYS = {
+    apiKey: 'pf_v7_key',
+    remember: 'pf_v7_rem',
+    ia: 'pf_v7_ia',
+    theme: 'pf_v7_theme',
+    prompts: 'pf_v7_prompts'
+};
+
 // =============================================
 // INIT
 // =============================================
 document.addEventListener('DOMContentLoaded', () => {
-    verificarSesion();
+    cargarConfiguracionGuardada();
     iniciarReloj();
     
     document.getElementById('cmdInput').addEventListener('keydown', e => {
         if (e.key === 'Enter') ejecutarComando();
     });
-    
     document.getElementById('apiKeyInput').addEventListener('keydown', e => {
         if (e.key === 'Enter') iniciarSesion();
     });
 });
 
-function verificarSesion() {
-    const savedKey = localStorage.getItem(CONFIG.storageKeys.apiKey);
-    const remember = localStorage.getItem(CONFIG.storageKeys.remember) === 'true';
+function cargarConfiguracionGuardada() {
+    const savedKey = localStorage.getItem(STORAGE_KEYS.apiKey);
+    const remember = localStorage.getItem(STORAGE_KEYS.remember) === 'true';
+    const savedIA = localStorage.getItem(STORAGE_KEYS.ia) || 'gemini';
+    const savedTheme = localStorage.getItem(STORAGE_KEYS.theme) || 'cyber';
+    
+    // Aplicar tema guardado
+    cambiarTema(savedTheme, false);
+    
+    // Aplicar IA guardada
+    seleccionarIA(savedIA, false);
     
     if (savedKey && remember) {
         state.apiKey = savedKey;
         state.rememberKey = true;
         document.getElementById('rememberCheckbox').classList.add('checked');
+        document.getElementById('apiKeyInput').value = savedKey.substring(0, 15) + '...';
         
         mostrarCargando(true);
         setTimeout(async () => {
             const resultado = await probarConexion(savedKey);
             if (resultado.exito) {
-                mostrarExito('✓ Bienvenido de nuevo');
+                mostrarExito('¡Bienvenido de nuevo!');
                 setTimeout(() => entrarAlSistema(), 800);
             } else {
-                mostrarError('La clave guardada ya no funciona');
+                mostrarError('La clave guardada no funciona: ' + resultado.error);
                 limpiarSesion();
                 mostrarCargando(false);
             }
         }, 600);
     } else {
-        state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
+        state.savedPrompts = JSON.parse(localStorage.getItem(STORAGE_KEYS.prompts) || '[]');
     }
 }
 
 function iniciarReloj() {
     function act() {
         const n = new Date();
-        document.getElementById('clock').textContent = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+        document.getElementById('clock').textContent = 
+            `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
     }
     act(); setInterval(act, 1000);
+}
+
+// =============================================
+// SELECCIÓN DE IA
+// =============================================
+function seleccionarIA(ia, actualizarUI = true) {
+    state.iaSeleccionada = ia;
+    
+    if (actualizarUI) {
+        document.querySelectorAll('.ia-option').forEach(el => {
+            el.classList.toggle('selected', el.dataset.ia === ia);
+        });
+        
+        // Actualizar badge
+        const config = IA_CONFIG[ia];
+        document.getElementById('iaBadge').textContent = `${config.icono} ${config.nombre}`;
+    }
+    
+    localStorage.setItem(STORAGE_KEYS.ia, ia);
+}
+
+// =============================================
+// CAMBIAR TEMA
+// =============================================
+function cambiarTema(theme, guardar = true) {
+    document.body.setAttribute('data-theme', theme);
+    
+    // Actualizar botones
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === theme);
+    });
+    
+    if (guardar) {
+        localStorage.setItem(STORAGE_KEYS.theme, theme);
+    }
 }
 
 // =============================================
@@ -515,8 +835,8 @@ async function iniciarSesion() {
     const input = document.getElementById('apiKeyInput');
     let key = input.value.trim().replace(/\s/g, '');
     
-    if (!key || key.length < 10) {
-        mostrarError('Ingresa una clave válida');
+    if (!key || key.length < 5) {
+        mostrarError('Ingresa una clave válida para ' + IA_CONFIG[state.iaSeleccionada].nombre);
         return;
     }
     
@@ -530,12 +850,12 @@ async function iniciarSesion() {
             state.isConnected = true;
             
             if (state.rememberKey) {
-                localStorage.setItem(CONFIG.storageKeys.apiKey, key);
-                localStorage.setItem(CONFIG.storageKeys.remember, 'true');
+                localStorage.setItem(STORAGE_KEYS.apiKey, key);
+                localStorage.setItem(STORAGE_KEYS.remember, 'true');
             }
             
-            mostrarExito('¡Ingeniero activado!');
-            setTimeout(() => entrarAlSistema(), 1000);
+            mostrarExito(`¡${IA_CONFIG[state.iaSeleccionada].icono} ${IA_CONFIG[state.iaSeleccionada].nombre} activado!`);
+            setTimeout(() => entrarAlSistema(), 800);
         } else {
             mostrarError('Error: ' + resultado.error);
             mostrarCargando(false);
@@ -548,21 +868,41 @@ async function iniciarSesion() {
 
 async function probarConexion(apiKey) {
     try {
-        const response = await fetch(CONFIG.endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-goog-api-key': apiKey
-            },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: 'OK' }] }],
-                generationConfig: { maxOutputTokens: 5 }
-            })
-        });
+        const config = IA_CONFIG[state.iaSeleccionada];
+        let response;
+        
+        if (state.iaSeleccionada === 'gemini') {
+            // Gemini usa formato especial
+            response = await fetch(config.endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [config.authHeader]: apiKey
+                },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: 'OK' }] }],
+                    generationConfig: { maxOutputTokens: 5 }
+                })
+            });
+        } else {
+            // DeepSeek, Z.AI, KIMI usan formato OpenAI-compatible
+            response = await fetch(config.endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [config.authHeader]: config.authPrefix + apiKey
+                },
+                body: JSON.stringify({
+                    model: getModelName(),
+                    messages: [{ role: 'user', content: 'OK' }],
+                    max_tokens: 5
+                })
+            });
+        }
         
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));
-            return { exito: false, error: err.error?.message || `HTTP ${response.status}` };
+            return { exito: false, error: err.error?.message || err.message || `HTTP ${response.status}` };
         }
         return { exito: true, error: null };
     } catch(e) {
@@ -570,53 +910,103 @@ async function probarConexion(apiKey) {
     }
 }
 
-async function llamarGemini(prompt, historial = [], systemPrompt = null) {
+function getModelName() {
+    switch(state.iaSeleccionada) {
+        case 'deepseek': return 'deepseek-chat';
+        case 'zai': return 'claude-3-haiku-20240307';
+        case 'kimi': return 'moonshot-v1-8k';
+        default: return 'gemini-pro';
+    }
+}
+
+async function llamarIA(prompt, historial = [], systemPrompt = null) {
+    const config = IA_CONFIG[state.iaSeleccionada];
     let fullPrompt = prompt;
     
-    // Añadir system prompt si se proporciona
     if (systemPrompt) {
-        fullPrompt = `[INSTRUCCIONES DEL SISTEMA]\n${systemPrompt}\n\n[CONVERSACIÓN ACTUAL]\n${prompt}`;
+        fullPrompt = `[INSTRUCCIONES DEL SISTEMA]\n${systemPrompt}\n\n[CONVERSACIÓN]\n${prompt}`;
     }
     
-    const response = await fetch(CONFIG.endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-goog-api-key': state.apiKey
-        },
-        body: JSON.stringify({
-            contents: [
-                ...historial,
-                { role: 'user', parts: [{ text: fullPrompt }] }
-            ],
-            generationConfig: {
-                temperature: 0.85,
-                topK: 45,
-                topP: 0.95,
-                maxOutputTokens: 4000
-            },
-            safetySettings: [
-                { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-                { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-                { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-            ]
-        })
-    });
-    
-    if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.error?.message || `Error ${response.status}`);
+    try {
+        let response;
+        let data;
+        
+        if (state.iaSeleccionada === 'gemini') {
+            // Formato Gemini
+            response = await fetch(config.endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [config.authHeader]: state.apiKey
+                },
+                body: JSON.stringify({
+                    contents: [
+                        ...historial.map(h => ({
+                            role: h.role,
+                            parts: [{ text: h.content || h.parts?.[0]?.text || '' }]
+                        })),
+                        { role: 'user', parts: [{ text: fullPrompt }] }
+                    ],
+                    generationConfig: {
+                        temperature: 0.85,
+                        topK: 45,
+                        topP: 0.95,
+                        maxOutputTokens: 4000
+                    },
+                    safetySettings: [
+                        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+                        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+                        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+                        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+                    ]
+                })
+            });
+            
+            data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            
+        } else {
+            // Formato OpenAI-compatible (DeepSeek, Z.AI, KIMI)
+            const messages = [];
+            
+            if (systemPrompt) {
+                messages.push({ role: 'system', content: systemPrompt });
+            }
+            
+            messages.push(...historial.map(h => ({
+                role: h.role === 'model' ? 'assistant' : h.role,
+                content: h.content || h.parts?.[0]?.text || ''
+            })));
+            
+            messages.push({ role: 'user', content: fullPrompt });
+            
+            response = await fetch(config.endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [config.authHeader]: config.authPrefix + state.apiKey
+                },
+                body: JSON.stringify({
+                    model: getModelName(),
+                    messages: messages,
+                    temperature: 0.85,
+                    max_tokens: 4000
+                })
+            });
+            
+            data = await response.json();
+            return data.choices?.[0]?.message?.content || '';
+        }
+        
+    } catch(e) {
+        throw new Error(e.message);
     }
-    
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
 }
 
 function entrarAlSistema() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('mainScreen').classList.add('active');
-    state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
+    state.savedPrompts = JSON.parse(localStorage.getItem(STORAGE_KEYS.prompts) || '[]');
     secuenciaBoot();
     document.getElementById('cmdInput').focus();
 }
@@ -629,8 +1019,8 @@ function cerrarSesion() {
 }
 
 function limpiarSesion() {
-    localStorage.removeItem(CONFIG.storageKeys.apiKey);
-    localStorage.removeItem(CONFIG.storageKeys.remember);
+    localStorage.removeItem(STORAGE_KEYS.apiKey);
+    localStorage.removeItem(STORAGE_KEYS.remember);
     state.apiKey = '';
     state.isConnected = false;
 }
@@ -655,39 +1045,38 @@ function ocultarMensajes() {
 function mostrarCargando(mostrar) {
     const btn = document.getElementById('loginBtn');
     btn.disabled = mostrar;
-    btn.innerHTML = mostrar ? '<span class="loading-spinner"></span>CONECTANDO...' : '[ ACTIVAR INGENIERO ]';
+    btn.innerHTML = mostrar ? '<span class="loading-spinner"></span>CONECTANDO...' : '[ ACTIVAR SISTEMA ]';
 }
 
 // =============================================
-// BOOT SEQUENCE CON ARTE ASCII
+// BOOT
 // =============================================
 function secuenciaBoot() {
     const asciiArt = `
-╔══════════════════════════════════════════════════════════╗
-║                                                            ║
-║   ██████╗██╗   ██╗ █████╗ ██████╗ ██╗   ██╗███████╗       ║
-║  ██╔════╝██║   ██║██╔══██╗██╔══██╗██║   ██║██╔════╝       ║
-║  ██║     ██║   ██║███████║██████╔╝██║   ██║█████╗         ║
-║  ██║     ██║   ██║██╔══██║██╔══██╗██║   ██║██╔══╝         ║
-║  ╚██████╗╚██████╔╝██║  ██║██║  ██║╚██████╔╝███████╗       ║
-║   ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝       ║
-║                                                            ║
-║              ⚡ INGENIERO SENIOR DE PROMPTS ⚡             ║
-║                  v6.0 — ESPAÑOL — FULL                    ║
-║                                                            ║
-╚══════════════════════════════════════════════════════════╝`;
+╔════════════════════════════════════════════════╗
+║                                                    ║
+║   ██████╗██╗   ██╗███████╗ ██████╗ ██╗   ██╗     ║
+║  ██╔════╝██║   ██║██╔════╝██╔══██╗██║   ██║     ║
+║  ██║     ██║   ██║█████╗ ████╔╝ ██║   ██║     ║
+║  ██║     ██║   ██║██╔══╝ ██╔══██╗██║   ██║     ║
+║  ╚██████╗╚██████╔╝██║  ██║██║  ██║╚██████╔╝     ║
+║   ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝      ║
+║                                                    ║
+║       ⚡ MULTI-IA ENGINEER v7.0 ⚡               ║
+║          [ESPAÑOL] [ASCII] [FLUJOS]             ║
+║                                                    ║
+╚════════════════════════════════════════════════╝`;
 
     const bootMsgs = [
-        '[ OK ] Iniciando sistema PromptForge...',
-        '[ OK ] Cargando módulo de ingeniería senior...',
-        '[ OK ] Conectando con Gemini Flash...',
-        '[ OK ] Configurando modo ESPAÑOL...',
-        '[ OK ] Preparando arte ASCII...',
-        '[ OK ] Sistema listo ✓'
+        `[ OK ] Iniciando PromptForge Multi-IA...`,
+        `[ OK ] Cargando módulo ingeniero senior...`,
+        `[ OK ] Conectando con ${IA_CONFIG[state.iaSeleccionada].nombre}...`,
+        `[ OK ] Configurando modo ESPAÑOL...`,
+        `[ OK ] Preparando arte ASCII y flujogramas...`,
+        `[ OK ] Sistema listo ✓`
     ];
     
     let i = 0;
-    
     function showBoot() {
         if (i < bootMsgs.length) {
             agregarLinea(`<span class="boot-ok">${bootMsgs[i]}</span>`, 'boot-line');
@@ -696,33 +1085,30 @@ function secuenciaBoot() {
         } else {
             setTimeout(() => {
                 agregarLinea(`<pre class="ascii-art">${asciiArt}</pre>`);
-                
-                setTimeout(() => {
-                    // Saludar al usuario con el ingeniero
-                    saludarUsuario();
-                }, 500);
+                setTimeout(() => saludarUsuario(), 500);
             }, 300);
         }
     }
-    
     showBoot();
 }
 
 async function saludarUsuario() {
     agregarLinea('');
     agregarLinea(`<div class="line-engineer">🧠 <strong>INGENIERO SENIOR CONECTADO</strong></div>`);
+    agregarLinea(`<div class="line-ai">Actuando vía <strong>${IA_CONFIG[state.iaSeleccionada].icono} ${IA_CONFIG[state.iaSeleccionada].nombre}</strong></div>`);
     agregarLinea('');
     
-    agregarLinea(`<div class="line-ai">¡Hola! 👋 Soy tu <strong>ingeniero de prompts</strong>. Llevo más de 15 años creando prompts profesionales.</div>`);
+    agregarLinea(`<div class="line-ai">¡Hola! 👋 Soy tu ingeniero de prompts. Llevo 15+ años creando prompts profesionales.</div>`);
     
     agregarLinea(`
 <div class="cyber-box">
 <div class="box-title">// ¿QUÉ PUEDO HACER POR TI?</div>
 <div class="box-content">
-<p>Puedo ayudarte a crear <strong>prompts ultra-detalldos</strong> en español para:</p>
-<p>• ChatGPT / GPT-4</p>
+<p>Puedo crear <strong>prompts ultra-detallados en español</strong> para cualquier IA:</p>
+<p>• ChatGPT / GPT-4 / o1</p>
 <p>• Claude / Anthropic</p>
 <p>• Gemini / Google</p>
+<p>• DeepSeek / Z.AI / KIMI</p>
 <p>• Cualquier otra IA</p>
 <br>
 <p><strong>¿Qué necesitas hoy?</strong></p>
@@ -730,13 +1116,13 @@ async function saludarUsuario() {
 </div>`);
 
     agregarLinea('');
-    agregarLinea('<span class="line-info">Ejemplos:</span>');
+    agregarLinea('<span class="line-dim">Ejemplos rápidos:</span>');
     agregarLinea('<span class="line-dim">• "Quiero un prompt para escribir artículos"</span>');
-    agregarLinea('<span class="line-dim">• "Necesito un prompt para analizar datos"</span>');
-    agregarLinea('<span class="line-dim">• "Quiero un prompt para programación"</span>');
-    agregarLinea('<span class="line-dim">• "Ayúdame a crear un prompt para marketing"</span>');
+    agregarLinea('<span class="line-dim">• "Necesito analizar datos financieros"</span>');
+    agregarLinea('<span class="line-dim">• "Prompt para programación en Python"</span>');
+    agregarLinea('<span class="line-dim">• "Marketing digital para redes sociales"</span>');
     agregarLinea('');
-    agregarLinea('<span class="cmd-hint">→ Escribe lo que necesitas y empezamos:</span>');
+    agregarLinea('<span class="cmd-hint">→ Escribe lo que necesitas:</span>');
     
     scrollFinal();
 }
@@ -749,7 +1135,7 @@ async function ejecutarComando() {
     const cmd = input.value.trim();
     if (!cmd) return;
     
-    agregarLinea(`<span style="color:var(--cyan-accent)">ingeniero@promptforge:~$</span> ${escaparHtml(cmd)}`);
+    agregarLinea(`<span style="color:var(--text-terciario)">ingeniero@promptforge:~$</span> ${escaparHtml(cmd)}`);
     input.value = '';
     
     await procesarComando(cmd);
@@ -759,7 +1145,6 @@ async function ejecutarComando() {
 async function procesarComando(cmd) {
     const c = cmd.toLowerCase().trim();
     
-    // Comandos del sistema
     if (c === 'ayuda' || c === 'help') { mostrarAyuda(); return; }
     if (c === 'limpiar' || c === 'clear') { limpiarPantalla(); return; }
     if (c === 'nuevo' || c === 'new') { resetearSesion(); return; }
@@ -769,111 +1154,49 @@ async function procesarComando(cmd) {
     if (c === 'descargar' || c === 'download') { descargarPrompt(); return; }
     if (c === 'salir' || c === 'exit') { cerrarSesion(); return; }
     
-    // Si no es comando, es una respuesta del usuario → Procesar con IA
+    // Si no es comando, es respuesta → Procesar con IA
     await procesarRespuestaUsuario(cmd);
 }
 
 async function procesarRespuestaUsuario(respuesta) {
-    // Mostrar que el ingeniero está pensando
     agregarLinea('');
     agregarLinea('<div class="line-engineer">🤔 <strong>Ingeniero analizando...</strong></div>');
     
-    // Construir contexto para la IA
     const contexto = `
-[CONTEXTO DE LA CONVERSA]
-Estamos en el paso ${state.step + 1} de creación de prompt.
+[CONTEXTO]
+Estamos creando un prompt. Paso ${state.step + 1}.
 
-Información recopilada hasta ahora:
-${JSON.stringify(state.data, null, 2)}
+Info recopilada: ${JSON.stringify(state.data).substring(0, 300)}
 
-Última respuesta del usuario: "${respuesta}"
+Última respuesta: "${respuesta}"
 
 [INSTRUCCIONES]
-Responde de forma natural y amigable. 
-Si es el primer mensaje, saluda y pregunta qué tipo de prompt quiere crear.
-Si ya tenemos información, haz la siguiente pregunta sencilla.
-Cuando tengas toda la info (después de 3-4 preguntas), genera:
-1. Un FLUJOGRAMA ASCII del proceso
-2. Un PLAN del prompt
-3. El PROMPT FINAL completo en español (muy detallado)
+Responde amigablemente. Pregunta lo siguiente.
+Cuando tengas toda info (3-4 preguntas), genera:
+1. FLUJOGRAMA ASCII
+2. PLAN del prompt  
+3. PROMPT FINAL en español (muy detallado)
 
-Usa arte ASCII, emojis y formato visual atractivo.`;
+Usa arte ASCII, emojis, formato visual.`;
 
     try {
-        const respuestaIA = await llamarGemini(contexto, state.conversationHistory.slice(-8), CONFIG.engineerSystemPrompt);
+        const respIA = await llamarIA(contexto, state.conversationHistory.slice(-8), IA_CONFIG[state.iaSeleccionada].systemPrompt);
         
-        // Guardar en historial
         state.conversationHistory.push(
-            { role: 'user', parts: [{ text: respuesta }] },
-            { role: 'model', parts: [{ text: respuestaIA }] }
+            { role: 'user', content: respuesta },
+            { role: 'model', content: respIA }
         );
         
-        // Mostrar respuesta formateada
-        agregarLinea('');
-        agregarLinea(`<div class="ai-response"><div style="color:var(--text-white);line-height:1.8;">${formatearRespuesta(respuestaIA)}</div></div>`);
-        agregarLinea('');
-        
-        // Actualizar datos basado en la respuesta
-        actualizarDatos(respuesta);
-        
-        // Incrementar paso
+        if (!state.data.respuestas) state.data.respuestas = [];
+        state.data.respuestas.push({ paso: state.step, texto: respuesta });
         state.step++;
         
-    } catch(e) {
-        agregarLinea(`<span class="line-error">Error: ${e.message}</span>`);
-    }
-}
-
-function actualizarDatos(respuesta) {
-    // Guardar respuestas del usuario para construir el prompt
-    if (!state.data.respuestas) state.data.respuestas = [];
-    state.data.respuestas.push({
-        paso: state.step,
-        texto: respuesta,
-        timestamp: new Date().toISOString()
-    });
-}
-
-async function generarPromptFinal() {
-    agregarLinea('');
-    agregarLinea('<div class="line-engineer">⚙️ <strong>Generando prompt profesional...</strong></div>');
-    
-    const instruccionFinal = `
-Basado en TODA la conversación anterior, ahora genera EL PROMPT DEFINITIVO.
-
-REQUISITOS:
-1. Debe estar 100% en ESPAÑOL
-2. Ser extremadamente detallado y profesional
-3. Incluir todas las especificaciones que dio el usuario
-4. Formato listo para copiar y pegar en cualquier IA
-5. Incluir instrucciones claras paso a paso
-
-Genera también:
-- Un banner ASCII decorativo al inicio
-- Secciones bien organizadas
-- Ejemplos si aplica
-- Formato de salida esperado
-
-ANTES del prompt, muestra:
-1. Un RESUMEN de lo que vas a crear
-2. Un FLUJOGRAMA de cómo usar el prompt`;
-    
-    try {
-        const promptFinal = await llamarGemini(instruccionFinal, state.conversationHistory.slice(-6));
-        
-        state.currentPrompt = promptFinal;
-        state.promptsCreated++;
-        
-        // Mostrar el prompt final
         agregarLinea('');
-        agregarLinea('<div class="prompt-output">' + formatearRespuesta(promptFinal) + '</div>');
+        agregarLinea(`<div class="ai-response"><div style="color:var(--text-primary);line-height:1.8;">${formatearRespuesta(respIA)}</div></div>");
         agregarLinea('');
-        agregarLinea('<span class="line-success">✅ ¡PROMPT GENERADO!</span>');
-        agregarLinea('<span class="line-info">Comandos: guardar | copiar | descargar</span>');
-        agregarLinea('<span class="line-dim">Escribe "nuevo" para crear otro prompt</span>');
         
     } catch(e) {
-        agregarLinea(`<span class="line-error">Error generando: ${e.message}</span>`);
+        agregarLinea(`<span class="line-error">Error: ${e.message}</span>);
     }
 }
 
@@ -881,64 +1204,68 @@ function resetearSesion() {
     state.step = 0;
     state.data = {};
     state.conversationHistory = [];
-    
-    agregarLinea('<span class="line-success">[OK] Nueva sesión iniciada</span>');
-    agregarLinea('');
+    agregarLinea('<span class="line-success">[OK] Nueva sesión</span>');
     saludarUsuario();
 }
 
 function limpiarPantalla() {
     document.getElementById('outputArea').innerHTML = '';
-    agregarLinea('<span class="line-dim">[pantalla limpia]</span>');
+    agregarLinea('<span class="line-dim">[limpio]</span>');
 }
 
 function mostrarAyuda() {
     agregarLinea(`
 <div class="cyber-box">
-<div class="box-title">// COMANDOS DISPONIBLES</div>
+<div class="box-title">// COMANDOS</div>
 <div class="box-content">
 <p><span class="cmd-hint">ayuda</span> — Esta ayuda</p>
 <p><span class="cmd-hint">nuevo</span> — Empezar de cero</p>
-<p><span class="cmd-hint">guardar</span> — Guardar prompt actual</p>
-<p><span class="cmd-hint">lista</span> — Ver prompts guardados</p>
-<p><span class="cmd-hint">copiar</span> — Copiar al portapapeles</p>
-<p><span class="cmd-hint">descargar</span> — Descargar archivo .txt</p>
+<p><span class="cmd-hint">guardar</span> — Guardar prompt</p>
+<p><span class="cmd-hint">lista</span> — Ver guardados</p>
+<p><span class="cmd-hint">copiar</span> — Copiar portapapeles</p>
+<p><span class="cmd-hint">descargar</span> — Descargar .txt</p>
 <p><span class="cmd-hint">limpiar</span> — Limpiar pantalla</p>
 <p><span class="cmd-hint">salir</span> — Cerrar sesión</p>
 </div>
 </div>
 
-<span class="line-dim">También puedes escribir normalmente y yo te ayudaré 🎯</span>`);
+<span class="line-dim">También puedes escribir normalmente 🎯</span>`);
 }
 
 function guardarPrompt() {
-    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que guardar aún</span>'); return; }
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que guardar</span>'); return; }
     
     const entry = {
         id: state.savedPrompts.length + 1,
         titulo: 'Prompt #' + (state.savedPrompts.length + 1),
         contenido: state.currentPrompt,
         fecha: new Date().toISOString(),
-        tipo: 'prompt_espanol'
+        ia: state.iaSeleccionada
     };
     
     state.savedPrompts.push(entry);
-    localStorage.setItem(CONFIG.storageKeys.prompts, JSON.stringify(state.savedPrompts));
+    localStorage.setItem(STORAGE_KEYS.prompts, JSON.stringify(state.savedPrompts));
     agregarLinea(`<span class="line-success">[OK] guardado como #${entry.id} ✓</span>`);
 }
 
 function listarGuardados() {
     if(!state.savedPrompts.length) { agregarLinea('<span class="line-dim">vacío</span>'); return; }
-    agregarLinea('<span style="color:var(--cyan-acce)">📁 TUS PROMPTS GUARDADOS:</span>');
+    agregarLinea('<span style="color:var(--text-terciario)">📁 GUARDADOS:</span>');
     state.savedPrompts.forEach(p => {
-        agregarLinea(`  <span class="line-success">#${p.id}</span> ${p.titulo}  <span class="line-dim">[${new Date(p.fecha).toLocaleDateString('es')}]</span>`);
+        agregarLinea(`  <span class="line-success">#${p.id}</span> ${p.titulo} <span class="line-dim">[${IA_CONFIG[p.ia||'gemini'].icono}]</span>`);
     });
 }
 
 function copiarPrompt() {
     if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
     navigator.clipboard.writeText(state.currentPrompt);
-    agregarLinea('<span class="line-success">[OK] ¡Copiado al portapapeles! ✓</span>');
+    agregarrLinea('<span class="line-success">[OK] ¡Copiado! ✓</span>');
+}
+
+function copiarrPrompt() {
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
+    navigator.clipboard.writeText(state.currentPrompt);
+    agregarLinea('<span class="line-success">[OK] ¡Copiado! ✓</span>');
 }
 
 function descargarPrompt() {
@@ -963,22 +1290,17 @@ function agregarLinea(html, cls='') {
 }
 
 function escaparHtml(t) {
-    const d = document.createElement('div');
+    const d = document.createElement('d');
     d.textContent = t;
     return d.innerHTML;
 }
 
 function formatearRespuesta(texto) {
     return escaparHtml(texto)
-        // Arte ASCII (preservar pre)
         .replace(/```([\s\S]*?)```/g, '<pre class="ascii-art">$1</pre>')
-        // Código inline
-        .replace(/`([^`]+)`/g, '<code style="color:var(--cyan-accent);background:rgba(0,255,200,0.1);padding:2px 6px;border-radius:3px;">$1</code>')
-        // Negritas
-        .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:var(--green-neon)">$1</strong>')
-        // Líneas separadoras
-        .replace(/={3,}/g, '<span style="color:var(--green-bright);letter-spacing:3px;">══════════════</span>')
-        // Saltos de línea
+        .replace(/`([^`]+)`/g, '<code style="color:var(--text-terciario);background:rgba(128,128,128,0.1);padding:2px 6px;">$1</code>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong style="color:var(--text-secondary)">$1</strong>')
+        .replace(/={3,}/g, '<span style="letter-spacing:3px;color:var(--accent-green)">══════</span>')
         .replace(/\n/g, '<br>');
 }
 
