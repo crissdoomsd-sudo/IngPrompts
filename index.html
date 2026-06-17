@@ -3,717 +3,2102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⬡ PROMPFORGE.SH // FIXED v5.0</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <title>Mr. Prompt | Ingeniero de Prompts & Planificador</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Fira+Code:wght@300;400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ===== VARIABLES CSS POR TEMA ===== */
         :root {
-            --bg-black: #050a05;
-            --green-bright: #00ff41;
-            --green-neon: #39ff14;
-            --green-glow: rgba(57, 255, 20, 0.6);
-            --cyan-accent: #00ffc8;
-            --lime-warn: #adff2f;
-            --text-white: #e0ffe0;
-            --text-gray: #6b9b6b;
-            --red-error: #ff3860;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --border-color: #e2e8f0;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --card-bg: #ffffff;
+            --input-bg: #ffffff;
+            --code-bg: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --glow-effect: none;
+            --cyber-glow: none;
         }
-        html, body { height: 100%; overflow-x: hidden; }
+
+        /* MODO AMOLED */
+        [data-theme="amoled"] {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-tertiary: #111111;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+            --border-color: #27272a;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --card-bg: #0a0a0a;
+            --input-bg: #111111;
+            --code-bg: #18181b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --glow-effect: none;
+            --cyber-glow: none;
+        }
+
+        /* MODO CYBERPUNK */
+        [data-theme="cyber"] {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --text-primary: #00ff88;
+            --text-secondary: #00cc6a;
+            --text-muted: #00994d;
+            --accent-primary: #ff00ff;
+            --accent-secondary: #00ffff;
+            --accent-gradient: linear-gradient(135deg, #ff00ff 0%, #00ffff 100%);
+            --border-color: #00ff8833;
+            --shadow-color: rgba(0, 255, 136, 0.15);
+            --card-bg: #12121a;
+            --input-bg: #1a1a25;
+            --code-bg: #0f0f18;
+            --success: #00ff88;
+            --warning: #ffff00;
+            --error: #ff0055;
+            --glow-effect: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(255, 0, 255, 0.2);
+            --cyber-glow: 0 0 10px currentColor, 0 0 20px currentColor;
+        }
+
+        /* ===== ESTILOS BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
-            background: var(--bg-black);
-            color: var(--green-bright);
-            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             line-height: 1.6;
         }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.02) 2px, rgba(0,255,65,0.02) 4px);
-            pointer-events: none;
-            z-index: 9999;
+
+        /* ===== HEADER / HERO SECTION ===== */
+        .hero-section {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
         }
-        .app-container { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
-        
-        /* LOGIN */
-        .login-screen {
-            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 30px 20px; background: radial-gradient(ellipse at center, rgba(0,255,65,0.03) 0%, transparent 70%);
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
         }
-        .login-box {
-            width: 100%; max-width: 650px; border: 1px solid rgba(0,255,65,0.25); padding: 35px;
-            background: rgba(0,255,65,0.01);
-            box-shadow: 0 0 60px rgba(0,255,65,0.08), inset 0 0 80px rgba(0,255,65,0.02);
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: var(--glow-effect);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .logo-text h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 900;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: var(--cyber-glow);
+        }
+
+        .logo-text p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ===== CONTROLES DE TEMA Y MOTOR ===== */
+        .controls-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .theme-switcher {
+            display: flex;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-btn {
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+        }
+
+        .theme-btn.active {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--glow-effect);
+        }
+
+        .theme-btn:hover:not(.active) {
+            background: var(--border-color);
+        }
+
+        .engine-selector {
             position: relative;
         }
-        .login-box::before, .login-box::after {
-            content: ''; position: absolute; width: 30px; height: 30px;
-            border-color: var(--green-neon); border-style: solid;
-        }
-        .login-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; box-shadow: -3px -3px 15px var(--green-glow); }
-        .login-box::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; box-shadow: 3px 3px 15px var(--green-glow); }
-        
-        .login-header { text-align: center; margin-bottom: 28px; }
-        .login-logo { font-size: 42px; margin-bottom: 12px; text-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); animation: pulse-glow 2s ease-in-out infinite; }
-        @keyframes pulse-glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.85;transform:scale(1.05)} }
-        .login-title { color: var(--green-neon); font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 20px var(--green-glow); margin-bottom: 6px; }
-        .login-subtitle { color: var(--text-gray); font-size: 12px; letter-spacing: 1px; }
-        
-        .login-form { display: flex; flex-direction: column; gap: 18px; }
-        .form-group { display: flex; flex-direction: column; gap: 8px; }
-        .form-label { color: var(--cyan-accent); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
-        .input-cyber {
-            width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.6); border: 1px solid rgba(0,255,65,0.2);
-            color: var(--green-bright); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none;
-            transition: all 0.3s ease; letter-spacing: 0.5px;
-        }
-        .input-cyber:focus { border-color: var(--green-neon); box-shadow: 0 0 15px rgba(57,255,20,0.3), inset 0 0 20px rgba(57,255,20,0.05); }
-        .input-cyber::placeholder { color: rgba(0,255,65,0.25); font-style: italic; }
-        
-        .checkbox-group { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 0; }
-        .checkbox-custom {
-            width: 18px; height: 18px; border: 2px solid rgba(0,255,65,0.3); background: transparent;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
-        }
-        .checkbox-custom.checked { background: var(--green-neon); border-color: var(--green-neon); box-shadow: 0 0 12px var(--green-glow); }
-        .checkbox-custom.checked::after { content: '✓'; color: var(--bg-black); font-weight: bold; font-size: 13px; }
-        .checkbox-label { color: var(--text-gray); font-size: 12px; user-select: none; }
-        
-        .btn-login {
-            width: 100%; padding: 16px; background: transparent; border: 2px solid var(--green-neon);
-            color: var(--green-neon); font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
-            letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; margin-top: 8px;
-        }
-        .btn-login:hover:not(:disabled) { background: var(--green-neon); color: var(--bg-black); box-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); transform: translateY(-2px); }
-        .btn-login:disabled { opacity: 0.5; cursor: not-allowed; border-color: var(--text-gray); color: var(--text-gray); }
-        
-        .message-box { padding: 14px 18px; font-size: 12px; margin-top: 14px; display: none; animation: shake 0.5s ease-in-out; line-height: 1.7; }
-        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
-        .error-message { background: rgba(255,56,96,0.08); border: 1px solid rgba(255,56,96,0.35); color: var(--red-error); border-left: 3px solid var(--red-error); }
-        .success-message { background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.35); color: var(--green-bright); border-left: 3px solid var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
-        .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
-        @keyframes spin { to{transform:rotate(360deg)} }
-        
-        .login-info { margin-top: 24px; padding-top: 20px; border-top: 1px dashed rgba(0,255,65,0.15); }
-        .info-title { color: var(--lime-warn); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
-        .info-text { color: var(--text-gray); font-size: 12px; line-height: 1.8; }
-        .info-link { color: var(--cyan-accent); text-decoration: none; border-bottom: 1px dashed var(--cyan-accent); }
-        .info-link:hover { color: var(--green-neon); border-bottom-style: solid; }
 
-        /* MAIN SCREEN */
-        .main-screen { display: none; flex-direction: column; height: 100vh; }
-        .main-screen.active { display: flex; }
-        .status-bar {
-            background: linear-gradient(180deg, rgba(0,255,65,0.08) 0%, transparent 100%);
-            border-bottom: 1px solid rgba(0,255,65,0.25); padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-shrink: 0;
+        .engine-btn {
+            padding: 12px 24px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+            justify-content: space-between;
         }
-        .status-left { color: var(--green-neon); font-weight: 600; text-shadow: 0 0 10px var(--green-glow); }
-        .status-right { color: var(--text-gray); display: flex; gap: 20px; font-size: 12px; }
-        .status-highlight { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
-        .status-time { color: #00cc33; font-variant-numeric: tabular-nums; }
-        .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-neon); display: inline-block; animation: pulse-green 1.5s infinite; box-shadow: 0 0 10px var(--green-glow); }
-        @keyframes pulse-green { 0%,100%{box-shadow:0 0 5px var(--green-glow),0 0 10px var(--green-glow)} 50%{box-shadow:0 0 15px var(--green-glow),0 0 25px var(--green-glow)} }
-        .logout-btn { background: none; border: 1px solid var(--red-error); color: var(--red-error); padding: 4px 12px; font-family: inherit; font-size: 11px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
-        .logout-btn:hover { background: var(--red-error); color: var(--bg-black); }
-        
-        .output-area { flex: 1; overflow-y: auto; padding: 20px 24px; scroll-behavior: smooth; }
-        .output-area::-webkit-scrollbar { width: 10px; }
-        .output-area::-webkit-scrollbar-track { background: var(--bg-black); border-left: 1px solid rgba(0,255,65,0.1); }
-        .output-area::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.2); }
-        
-        .boot-line { margin: 3px 0; white-space: pre-wrap; }
-        .boot-ok { color: var(--green-bright); text-shadow: 0 0 5px rgba(0,255,65,0.4); }
-        
-        .cyber-box { border: 1px solid rgba(0,255,65,0.3); padding: 20px 24px; margin: 24px 0; position: relative; background: rgba(0,255,65,0.02); box-shadow: inset 0 0 30px rgba(0,255,65,0.03); }
-        .cyber-box::before, .cyber-box::after { content: ''; position: absolute; width: 20px; height: 20px; border-color: var(--green-bright); border-style: solid; }
-        .cyber-box::before { top:-1px;left:-1px;border-width:2px 0 0 2px; }
-        .cyber-box::after {bottom:-1px;right:-1px;border-width:0 2px 2px 0; }
-        .box-title { color: var(--green-neon); font-weight: 700; margin-bottom: 16px; font-size: 15px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px var(--green-glow); }
-        .box-content { color: var(--text-white); line-height: 1.9; }
-        .box-content p { margin: 8px 0; }
-        .cmd-hint { color: var(--cyan-accent); font-weight: 600; text-shadow: 0 0 8px rgba(0,255,200,0.5); }
-        
-        .input-line { display: flex; align-items: center; padding: 14px 24px; border-top: 1px solid rgba(0,255,65,0.15); background: linear-gradient(180deg, rgba(0,255,65,0.03) 0%, transparent 100%); flex-shrink: 0; }
-        .prompt-prefix { color: var(--cyan-accent); margin-right: 10px; white-space: nowrap; text-shadow: 0 0 8px rgba(0,255,200,0.4); }
-        .prompt-user { color: var(--green-neon); font-weight: 700; }
-        .prompt-path { color: var(--text-gray); }
-        .prompt-symbol { color: var(--green-bright); margin-right: 12px; font-weight: bold; }
-        .terminal-input { flex: 1; background: transparent; border: none; outline: none; color: var(--green-bright); font-family: inherit; font-size: inherit; caret-color: var(--green-neon); }
-        .terminal-input::placeholder { color: rgba(0,255,65,0.25); }
-        .cursor-cyber { display: inline-block; width: 10px; height: 18px; background: var(--green-neon); animation: blink-cursor 0.8s step-end infinite; vertical-align: middle; margin-left: 3px; box-shadow: 0 0 10px var(--green-glow); }
-        @keyframes blink-cursor { 0%,50%{opacity:1} 51%,100%{opacity:0} }
-        
-        .output-line { margin: 4px 0; white-space: pre-wrap; word-break: break-word; }
-        .line-error { color: var(--red-error); text-shadow: 0 0 8px rgba(255,56,96,0.4); }
-        .line-success { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
-        .line-info { color: var(--cyan-accent); }
-        .line-dim { color: var(--text-gray); }
-        .line-ai { color: var(--green-neon); border-left: 2px solid var(--green-bright); padding-left: 12px; margin: 12px 0; }
-        
-        .ai-response { border: 1px solid rgba(0,255,200,0.25); background: rgba(0,255,200,0.03); padding: 16px 20px; margin: 16px 0; position: relative; }
-        .ai-response::before { content: '[ GEMINI ]'; position: absolute; top: -11px; left: 16px; background: var(--bg-black); padding: 0 10px; font-size: 11px; color: var(--cyan-accent); letter-spacing: 2px; }
-        
-        .prompt-output { border: 1px solid rgba(0,255,65,0.35); background: rgba(0,255,65,0.03); padding: 18px 22px; margin: 18px 0; font-size: 13px; line-height: 1.75; color: var(--green-bright); position: relative; }
-        .prompt-output::before { content: '[ PROMPT ]'; position: absolute; top: -11px; left: 16px; background: var(--bg-black); padding: 0 10px; font-size: 11px; color: var(--green-neon); letter-spacing: 2px; font-weight: 700; }
-        
-        .step-indicator { color: var(--green-neon); font-weight: 700; font-size: 13px; letter-spacing: 1px; margin: 14px 0 10px 0; padding: 8px 14px; background: rgba(0,255,65,0.05); border-left: 3px solid var(--green-bright); }
-        
-        ::selection { background: var(--green-bright); color: var(--bg-black); }
-        @media(max-width:768px){ body{font-size:13px} .login-box{padding:24px 18px} .login-logo{font-size:34px} .login-title{font-size:17px} .status-bar{padding:8px 14px;font-size:11px;flex-wrap:wrap;gap:8px} .output-area{padding:14px 16px} .input-line{padding:12px 16px} }
-        .hidden{display:none!important}
+
+        .engine-btn:hover {
+            border-color: var(--accent-primary);
+            box-shadow: var(--glow-effect);
+        }
+
+        .engine-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .engine-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .engine-option {
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .engine-option:last-child {
+            border-bottom: none;
+        }
+
+        .engine-option:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .engine-option.selected {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .engine-name {
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .engine-version {
+            font-size: 12px;
+            opacity: 0.7;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .engine-desc {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== LAYOUT PRINCIPAL ===== */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== SIDEBAR DE HERRAMIENTAS ===== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-gradient);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover::before,
+        .tool-card.active::before {
+            transform: scaleY(1);
+        }
+
+        .tool-card:hover,
+        .tool-card.active {
+            border-color: var(--accent-primary);
+            box-shadow: var(--glow-effect);
+            transform: translateX(4px);
+        }
+
+        .tool-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover .tool-icon,
+        .tool-card.active .tool-icon {
+            background: var(--accent-gradient);
+        }
+
+        .tool-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .tool-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* ===== ÁREA DE CONTENIDO PRINCIPAL ===== */
+        .content-area {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px var(--shadow-color);
+            min-height: 70vh;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .content-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-title::before {
+            content: '▸';
+            color: var(--accent-primary);
+            font-size: 1.2rem;
+        }
+
+        /* ===== SECCIONES DE CONTENIDO ===== */
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== FORMULARIOS E INPUTS ===== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Fira Code', monospace;
+            line-height: 1.6;
+        }
+
+        .form-select {
+            cursor: pointer;
+        }
+
+        /* ===== BOTONES ===== */
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        /* ===== ÁREA DE RESULTADO / OUTPUT ===== */
+        .output-area {
+            background: var(--code-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .output-title {
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .output-content {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--text-primary);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .output-content.ascii-art {
+            font-size: 12px;
+            line-height: 1.2;
+            color: var(--accent-primary);
+        }
+
+        /* Scrollbar personalizado */
+        .output-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .output-content::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+
+        .output-content::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        /* ===== CARACTERÍSTICAS ESPECIALES CYBER MODE ===== */
+        [data-theme="cyber"] .tool-card {
+            border-style: dashed;
+        }
+
+        [data-theme="cyber"] .output-area {
+            border-style: dashed;
+            animation: cyber-border 3s linear infinite;
+        }
+
+        @keyframes cyber-border {
+            0%, 100% { border-color: #00ff8833; }
+            33% { border-color: #ff00ff33; }
+            66% { border-color: #00ffff33; }
+        }
+
+        [data-theme="cyber"] .logo-icon {
+            animation: cyber-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes cyber-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px #00ff88, 0 0 40px #ff00ff;
+                transform: scale(1) rotate(0deg);
+            }
+            50% { 
+                box-shadow: 0 0 30px #00ffff, 0 0 60px #ff00ff;
+                transform: scale(1.05) rotate(5deg);
+            }
+        }
+
+        /* ===== SECCIÓN DE PLANIFICACIÓN ===== */
+        .planning-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .plan-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .plan-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-4px);
+        }
+
+        .plan-card-title {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-card-content {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* ===== FLUJOGRAMA VISUAL ===== */
+        .flowchart-container {
+            background: var(--code-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            min-width: fit-content;
+        }
+
+        .flow-node {
+            padding: 16px 32px;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 180px;
+            position: relative;
+            box-shadow: var(--glow-effect);
+        }
+
+        .flow-node.start-end {
+            border-radius: 30px;
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .flow-node.decision {
+            transform: rotate(0deg);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            padding: 30px 40px;
+            background: var(--warning);
+            color: #000;
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: var(--accent-primary);
+        }
+
+        .flow-branch {
+            display: flex;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+
+        .flow-branch-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .branch-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        /* ===== TAGS Y BADGES ===== */
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent-gradient);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        .tag-outline {
+            background: transparent;
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* ===== LOADING ANIMATION ===== */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .controls-container {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .logo-container {
+                flex-direction: column;
+            }
+
+            .content-area {
+                padding: 1.5rem;
+            }
+
+            .engine-btn {
+                width: 100%;
+            }
+        }
+
+        /* ===== ASCII ART DISPLAY ===== */
+        .ascii-preview {
+            background: #000;
+            color: #0f0;
+            padding: 2rem;
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            line-height: 1.1;
+            overflow-x: auto;
+            text-shadow: 0 0 5px #0f0;
+        }
+
+        [data-theme="cyber"] .ascii-preview {
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+            animation: ascii-flicker 0.1s infinite;
+        }
+
+        @keyframes ascii-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.97; }
+        }
+
+        /* ===== TOOLTIP ===== */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            margin-bottom: 8px;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--accent-primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
     </style>
 </head>
-<body>
-<div class="app-container" id="appContainer">
-<div class="login-screen" id="loginScreen">
-<div class="login-box">
-<div class="login-header">
-<div class="login-logo">⬡</div>
-<div class="login-title">PromptForge.sh</div>
-<div class="login-subtitle">CYBER TERMINAL v5.0 // COMPATIBLE CON TODAS LAS KEYS</div>
-</div>
+<body data-theme="light">
+    <!-- ===== HERO SECTION ===== -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <div class="logo-container">
+                <div class="logo-icon">🧠</div>
+                <div class="logo-text">
+                    <h1>Mr. Prompt</h1>
+                    <p>Ingeniero de Prompts & Planificador Estratégico</p>
+                </div>
+            </div>
 
-<form class="login-form" id="loginForm" onsubmit="return false;">
-<div class="form-group">
-<label class="form-label">// CLAVE DE API (CUALQUIER FORMATO)</label>
-<input type="text" id="apiKeyInput" class="input-cyber" placeholder="Pega tu API Key aquí (AQ... o AIzaSy...)..." autocomplete="off" spellcheck="false">
-</div>
+            <div class="controls-container">
+                <!-- Selector de Tema -->
+                <div class="theme-switcher">
+                    <button class="theme-btn active" data-theme="light" onclick="setTheme('light')">
+                        ☀️ Día
+                    </button>
+                    <button class="theme-btn" data-theme="amoled" onclick="setTheme('amoled')">
+                        🌙 AMOLED
+                    </button>
+                    <button class="theme-btn" data-theme="cyber" onclick="setTheme('cyber')">
+                        ⚡ Cyber
+                    </button>
+                </div>
 
-<div style="background:rgba(0,255,200,0.05);border-left:2px solid var(--cyan-accent);padding:10px 14px;margin:10px 0;font-size:11px;color:var(--cyan-accent);">
-<strong>✅ Formatos soportados:</strong><br>
-• AIzaSyC... (API Key tradicional)<br>
-• AQ.Ab8RN6JxX... (OAuth-style / nueva)<br>
-• Cualquier key válida de Google AI
-</div>
+                <!-- Selector de Motor IA -->
+                <div class="engine-selector">
+                    <button class="engine-btn" id="currentEngine" onclick="toggleEngineDropdown()">
+                        <span id="engineNameDisplay">Aristarco 1.0</span>
+                        <span>▼</span>
+                    </button>
+                    <div class="engine-dropdown" id="engineDropdown">
+                        <div class="engine-option selected" data-engine="gemini" data-name="Aristarco" data-version="1.0" onclick="selectEngine(this)">
+                            <div>
+                                <div class="engine-name">⚡ Aristarco 1.0</div>
+                                <div class="engine-desc">Motor de razonamiento avanzado y creatividad</div>
+                            </div>
+                            <span class="engine-version">v1.0</span>
+                        </div>
+                        <div class="engine-option" data-engine="deepseek" data-name="Géminides" data-version="2.0" onclick="selectEngine(this)">
+                            <div>
+                                <div class="engine-name">🔮 Géminides 2.0</div>
+                                <div class="engine-desc">Motor de análisis profundo y lógica</div>
+                            </div>
+                            <span class="engine-version">v2.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<div class="checkbox-group" onclick="toggleRemember()">
-<div class="checkbox-custom" id="rememberCheckbox"></div>
-<span class="checkbox-label">Recordar clave en este dispositivo</span>
-</div>
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <main class="main-container">
+        <!-- SIDEBAR DE HERRAMIENTAS -->
+        <aside class="sidebar">
+            <div class="tool-card active" data-tool="prompt-engineer" onclick="switchTool('prompt-engineer')">
+                <div class="tool-icon">🔧</div>
+                <div class="tool-title">Ingeniero de Prompts</div>
+                <div class="tool-description">Crea prompts optimizados con estructura profesional y técnicas avanzadas</div>
+            </div>
 
-<button type="button" class="btn-login" id="loginBtn" onclick="iniciarSesion()">[ CONECTAR CON GEMINI ]</button>
+            <div class="tool-card" data-tool="planner" onclick="switchTool('planner')">
+                <div class="tool-icon">📋</div>
+                <div class="tool-title">Planificador Estratégico</div>
+                <div class="tool-description">Planifica proyectos, tareas y objetivos con metodologías probadas</div>
+            </div>
 
-<div class="error-message" id="errorMsg"></div>
-<div class="success-message" id="successMsg"></div>
-</form>
+            <div class="tool-card" data-tool="ascii-art" onclick="switchTool('ascii-art')">
+                <div class="tool-icon">🎨</div>
+                <div class="tool-title">Generador ASCII</div>
+                <div class="tool-description">Crea arte, diagramas y dibujos en formato texto ASCII</div>
+            </div>
 
-<div class="login-info">
-<div class="info-title">// ¿Dónde obtener tu key?</div>
-<div class="info-text">
-<p>1. Abre <a href="https://aistudio.google.com/app/apikey" target="_blank" class="info-link">Google AI Studio</a></p>
-<p>2. Click en <strong>"Create API key"</strong></p>
-<p>3. Copia la key (cualquier formato)</p>
-<p>4. Pégala aquí y conecta</p>
-</div>
-</div>
-</div>
-</div>
+            <div class="tool-card" data-tool="flowchart" onclick="switchTool('flowchart')">
+                <div class="tool-icon">🔄</div>
+                <div class="tool-title">Creador de Flujogramas</div>
+                <div class="tool-description">Diseña flujogramas visuales para procesos y sistemas</div>
+            </div>
 
-<!-- MAIN TERMINAL -->
-<div class="main-screen" id="mainScreen">
-<div class="status-bar">
-<span class="status-left">⬡ promptforge.sh // CYBER_TERMINAL v5.0</span>
-<span class="status-right">
-<span class="status-item">ia: <span style="color:var(--green-neon)">ACTIVA</span> <span class="ai-dot"></span></span>
-<span class="status-item">modelo: gemini-flash</span>
-<span class="status-time" id="clock">00:00:00</span>
-<button class="logout-btn" onclick="cerrarSesion()">[ SALIR ]</button>
-</span>
-</div>
+            <div class="tool-card" data-tool="analyzer" onclick="switchTool('analyzer')">
+                <div class="tool-icon">🔍</div>
+                <div class="tool-title">Analizador de Contexto</div>
+                <div class="tool-description">Analiza y optimiza tus ideas antes de generar el prompt final</div>
+            </div>
+        </aside>
 
-<div class="output-area" id="outputArea"></div>
-
-<div class="input-line">
-<span class="prompt-prefix"><span class="prompt-user">cyber</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-path">~</span><span class="prompt-symbol">$</span></span>
-<input type="text" class="terminal-input" id="cmdInput" autocomplete="off" spellcheck="false">
-<span class="cursor-cyber"></span>
-</div>
-</div>
-</div>
-
-<script>
-// =============================================
-// CONFIGURACIÓN CORREGIDA
-// =============================================
-const CONFIG = {
-    // Endpoint CORREGIDO: gemini-flash-latest (como tu curl)
-    endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
-    storageKeys: {
-        apiKey: 'pf_api_key_v5',
-        remember: 'pf_remember_v5',
-        prompts: 'pf_prompts_v5'
-    }
-};
-
-let state = {
-    apiKey: '',
-    rememberKey: false,
-    isConnected: false,
-    step: 1,
-    totalSteps: 5,
-    promptsCreated: 0,
-    data: { objetivo:'', contexto:'', formato:'', tono:'', restricciones:[], ejemplos:'' },
-    savedPrompts: [],
-    currentPrompt: '',
-    conversationHistory: []
-};
-
-// =============================================
-// INIT
-// =============================================
-document.addEventListener('DOMContentLoaded', () => {
-    verificarSesion();
-    iniciarReloj();
-    
-    document.getElementById('cmdInput').addEventListener('keydown', e => {
-        if (e.key === 'Enter') ejecutarComando();
-    });
-    
-    document.getElementById('apiKeyInput').addEventListener('keydown', e => {
-        if (e.key === 'Enter') iniciarSesion();
-    });
-});
-
-function verificarSesion() {
-    const savedKey = localStorage.getItem(CONFIG.storageKeys.apiKey);
-    const remember = localStorage.getItem(CONFIG.storageKeys.remember) === 'true';
-    
-    if (savedKey && remember) {
-        state.apiKey = savedKey;
-        state.rememberKey = true;
-        document.getElementById('rememberCheckbox').classList.add('checked');
-        
-        mostrarCargando(true);
-        setTimeout(async () => {
-            const resultado = await probarConexion(savedKey);
-            if (resultado.exito) {
-                mostrarExito('✓ Sesión restaurada');
-                setTimeout(() => entrarAlSistema(), 800);
-            } else {
-                mostrarError('La clave guardada ya no funciona: ' + resultado.error);
-                limpiarSesion();
-                mostrarCargando(false);
-            }
-        }, 600);
-    } else {
-        state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
-    }
-}
-
-function iniciarReloj() {
-    function act() {
-        const n = new Date();
-        document.getElementById('clock').textContent = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
-    }
-    act(); setInterval(act, 1000);
-}
-
-// =============================================
-// LOGIN
-// =============================================
-function toggleRemember() {
-    state.rememberKey = !state.rememberKey;
-    document.getElementById('rememberCheckbox').classList.toggle('checked', state.rememberKey);
-}
-
-async function iniciarSesion() {
-    const input = document.getElementById('apiKeyInput');
-    let key = input.value.trim().replace(/\s/g, '');
-    
-    if (!key || key.length < 10) {
-        mostrarError('Ingresa una clave válida (mínimo 10 caracteres).');
-        return;
-    }
-    
-    mostrarCargando(true);
-    ocultarMensajes();
-    
-    try {
-        const resultado = await probarConexion(key);
-        
-        if (resultado.exito) {
-            state.apiKey = key;
-            state.isConnected = true;
+        <!-- ÁREA DE CONTENIDO -->
+        <section class="content-area">
             
-            if (state.rememberKey) {
-                localStorage.setItem(CONFIG.storageKeys.apiKey, key);
-                localStorage.setItem(CONFIG.storageKeys.remember, 'true');
-            }
+            <!-- === INGENIERO DE PROMPTS === -->
+            <div class="section active" id="section-prompt-engineer">
+                <div class="content-header">
+                    <h2 class="content-title">Ingeniero de Prompts Avanzado</h2>
+                    <div class="stats-bar" style="border: none; padding: 0; margin: 0;">
+                        <span class="tag">Prompt Engineering</span>
+                        <span class="tag tag-outline">Chain-of-Thought</span>
+                        <span class="tag tag-outline">Few-Shot</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">¿Qué deseas lograr? (Objetivo Principal)</label>
+                    <textarea class="form-textarea" id="promptObjective" placeholder="Ejemplo: Crear un sistema de chatbot para atención al cliente que pueda manejar consultas técnicas sobre productos electrónicos..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Contexto y Requisitos Adicionales</label>
+                    <textarea class="form-textarea" id="promptContext" placeholder="Agrega detalles específicos: audiencia objetivo, tono deseado, restricciones, formato de salida, ejemplos de comportamiento esperado..."></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Rol de la IA</label>
+                        <select class="form-select" id="promptRole">
+                            <option value="">Seleccionar rol...</option>
+                            <option value="experto">Experto Técnico Especializado</option>
+                            <option value="creativo">Director Creativo</option>
+                            <option value="analista">Analista de Datos Senior</option>
+                            <option value="profesor">Educador/Mentor Experto</option>
+                            <option value="desarrollador">Ingeniero de Software</option>
+                            <option value="estratega">Consultor Estratégico</option>
+                            <option value="personalizado">Personalizado (especificar abajo)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Complejidad del Prompt</label>
+                        <select class="form-select" id="promptComplexity">
+                            <option value="basico">Básico - Directo y conciso</option>
+                            <option value="intermedio" selected>Intermedio - Estructurado</option>
+                            <option value="avanzado">Avanzado - Multi-capa</option>
+                            <option value="experto">Experto - Optimización máxima</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Formato de Salida</label>
+                        <select class="form-select" id="promptOutput">
+                            <option value="texto">Texto estructurado</option>
+                            <option value="markdown">Markdown formateado</option>
+                            <option value="codigo">Código/JSON</option>
+                            <option value="lista">Lista numerada</option>
+                            <option value="tabla">Tabla comparativa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tono y Estilo</label>
+                        <select class="form-select" id="promptTone">
+                            <option value="profesional">Profesional y formal</option>
+                            <option value="amigable">Amigable y accesible</option>
+                            <option value="tecnico">Técnico y detallado</option>
+                            <option value="creativo">Creativo e innovador</option>
+                            <option value="persuasivo">Persuasivo y convincente</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateAdvancedPrompt()">
+                        ⚡ Generar Prompt Profesional
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearForm('prompt')">
+                        🗑️ Limpiar Campos
+                    </button>
+                </div>
+
+                <div class="output-area" id="promptOutputArea" style="display: none;">
+                    <div class="output-header">
+                        <span class="output-title">📝 Prompt Optimizado</span>
+                        <button class="copy-btn" onclick="copyToClipboard('promptResult')">📋 Copiar</button>
+                    </div>
+                    <pre class="output-content" id="promptResult"></pre>
+                </div>
+            </div>
+
+            <!-- === PLANIFICADOR ESTRATÉGICO === -->
+            <div class="section" id="section-planner">
+                <div class="content-header">
+                    <h2 class="content-title">Planificador Estratégico</h2>
+                    <span class="tag">Metodología SMART</span>
+                    <span class="tag tag-outline">GTD</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Proyecto o Objetivo a Planificar</label>
+                    <textarea class="form-textarea" id="projectGoal" placeholder="Describe tu proyecto o objetivo principal: ¿Qué quieres lograr? ¿Para qué? ¿Cuándo lo necesitas?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Recursos Disponibles</label>
+                    <textarea class="form-textarea" id="projectResources" placeholder="Equipo, presupuesto, herramientas, tiempo disponible, conocimientos previos..."></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Proyecto</label>
+                        <select class="form-select" id="projectType">
+                            <option value="software">Desarrollo de Software</option>
+                            <option value="marketing">Marketing/Campaña</option>
+                            <option value="negocio">Plan de Negocio</option>
+                            <option value="educacion">Proyecto Educativo</option>
+                            <option value="investigacion">Investigación</option>
+                            <option value="evento">Organización de Evento</option>
+                            <option value="personal">Desarrollo Personal</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Plazo Estimado</label>
+                        <select class="form-select" id="projectTimeline">
+                            <option value="diario">Diario</option>
+                            <option value="semanal">Semanal</option>
+                            <option value="mensual">Mensual</option>
+                            <option value="trimestral">Trimestral</option>
+                            <option value="semestral">Semestral</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generatePlan()">
+                        📊 Generar Plan Estratégico
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearForm('plan')">
+                        🗑️ Limpiar
+                    </button>
+                </div>
+
+                <div class="output-area" id="planOutputArea" style="display: none;">
+                    <div class="output-header">
+                        <span class="output-title">📋 Plan Detallado</span>
+                        <button class="copy-btn" onclick="copyToClipboard('planResult')">📋 Copiar</button>
+                    </div>
+                    <div class="output-content" id="planResult"></div>
+                </div>
+            </div>
+
+            <!-- === GENERADOR ASCII ART === -->
+            <div class="section" id="section-ascii-art">
+                <div class="content-header">
+                    <h2 class="content-title">Generador de Arte ASCII</h2>
+                    <span class="tag">ASCII Art</span>
+                    <span class="tag tag-outline">Diagramas</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">¿Qué deseas crear?</label>
+                    <input type="text" class="form-input" id="asciiSubject" placeholder="Ejemplo: Un robot futurista, un gato, un cohete espacial, logo corporativo...">
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Estilo de Arte</label>
+                        <select class="form-select" id="asciiStyle">
+                            <option value="figlet">Figlet (Texto grande)</option>
+                            <option value="dibujo">Dibujo/Diagrama</option>
+                            <option value="logo">Logo/Emblema</option>
+                            <option value="personaje">Personaje/Criatura</option>
+                            <option value="objeto">Objeto/Máquina</option>
+                            <option value="paisaje">Paisaje/Escena</option>
+                            <option value="interfaz">Interfaz/UI Mockup</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Complejidad</label>
+                        <select class="form-select" id="asciiComplexity">
+                            <option value="simple">Simple (pequeño)</option>
+                            <option value="medium" selected>Mediano (detallado)</option>
+                            <option value="complex">Complejo (elaborado)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ancho Aproximado</label>
+                        <select class="form-select" id="asciiWidth">
+                            <option value="40">40 caracteres</option>
+                            <option value="60" selected>60 caracteres</option>
+                            <option value="80">80 caracteres</option>
+                            <option value="100">100 caracteres</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateASCII()">
+                        🎨 Generar ASCII Art
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearForm('ascii')">
+                        🗑️ Limpiar
+                    </button>
+                </div>
+
+                <div class="output-area" id="asciiOutputArea" style="display: none;">
+                    <div class="output-header">
+                        <span class="output-title">🖼️ Arte ASCII Generado</span>
+                        <button class="copy-btn" onclick="copyToClipboard('asciiResult')">📋 Copiar</button>
+                    </div>
+                    <pre class="output-content ascii-art" id="asciiResult"></pre>
+                </div>
+            </div>
+
+            <!-- === CREADOR DE FLUJOGRAMAS === -->
+            <div class="section" id="section-flowchart">
+                <div class="content-header">
+                    <h2 class="content-title">Creador de Flujogramas</h2>
+                    <span class="tag">Flujo Visual</span>
+                    <span class="tag tag-outline">Procesos</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Proceso o Sistema a Diagramar</label>
+                    <textarea class="form-textarea" id="flowProcess" placeholder="Describe el proceso paso a paso: inicio, decisiones, acciones, condiciones, fin...&#10;&#10;Ejemplo: Sistema de login de usuario → Verificar credenciales → ¿Son correctas? → SI: Acceder al dashboard | NO: Mostrar error y reintentar"></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="form-group">
+                        <label class="form-label">Tipo de Flujo</label>
+                        <select class="form-select" id="flowType">
+                            <option value="secuencial">Secuencial (lineal)</option>
+                            <option value="decision">Con Decisiones (si/no)</option>
+                            <option value="bucle">Con Bucles/Repeticiones</option>
+                            <option value="paralelo">Paralelo (múltiples caminos)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nivel de Detalle</label>
+                        <select class="form-select" id="flowDetail">
+                            <option value="alto">Alto nivel (resumen)</option>
+                            <option value="medio" selected>Medio (estándar)</option>
+                            <option value="bajo">Bajo nivel (detallado)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateFlowchart()">
+                        🔄 Generar Flujograma
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearForm('flow')">
+                        🗑️ Limpiar
+                    </button>
+                </div>
+
+                <div class="output-area" id="flowOutputArea" style="display: none;">
+                    <div class="output-header">
+                        <span class="output-title">📊 Flujograma Visual</span>
+                        <div>
+                            <button class="copy-btn" onclick="copyToClipboard('flowAscii')">📋 Copiar ASCII</button>
+                            <button class="copy-btn" onclick="toggleFlowView()">👁️ Cambiar Vista</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Vista Visual -->
+                    <div class="flowchart-container" id="flowVisualView" style="display: block;"></div>
+                    
+                    <!-- Vista ASCII -->
+                    <pre class="output-content ascii-art" id="flowAscii" style="display: none;"></pre>
+                </div>
+            </div>
+
+            <!-- === ANALIZADOR DE CONTEXTO === -->
+            <div class="section" id="section-analyzer">
+                <div class="content-header">
+                    <h2 class="content-title">Analizador de Contexto</h2>
+                    <span class="tag">Pre-Análisis</span>
+                    <span class="tag tag-outline">Optimización</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tu Idea o Concepto (sin procesar)</label>
+                    <textarea class="form-textarea" id="analyzeInput" placeholder="Escribe tu idea tal como se te ocurrió, sin preocuparte por la estructura...&#10;&#10;Ejemplo: Quiero hacer una app que ayude a la gente a organizarse mejor, tipo calendario pero más inteligente que aprenda de mis hábitos..."></textarea>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="analyzeContext()">
+                        🔍 Analizar y Optimizar
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearForm('analyze')">
+                        🗑️ Limpiar
+                    </button>
+                </div>
+
+                <div class="output-area" id="analyzeOutputArea" style="display: none;">
+                    <div class="output-header">
+                        <span class="output-title">📈 Análisis de Contexto</span>
+                        <button class="copy-btn" onclick="copyToClipboard('analyzeResult')">📋 Copiar Análisis</button>
+                    </div>
+                    <div class="output-content" id="analyzeResult"></div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ===== CONFIGURACIÓN GLOBAL =====
+        let currentTheme = 'light';
+        let currentEngine = { name: 'Aristarco', version: '1.0', type: 'gemini' };
+        let currentTool = 'prompt-engineer';
+
+        // ===== SISTEMA DE TEMAS =====
+        function setTheme(theme) {
+            currentTheme = theme;
+            document.body.setAttribute('data-theme', theme);
             
-            mostrarExito('¡Conexión establecida con Gemini!');
-            setTimeout(() => entrarAlSistema(), 1000);
-        } else {
-            mostrarError('Error: ' + resultado.error);
-            mostrarCargando(false);
+            // Actualizar botones activos
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === theme);
+            });
+
+            // Guardar preferencia
+            localStorage.setItem('mrprompt-theme', theme);
         }
-    } catch(e) {
-        mostrarError('Error: ' + e.message);
-        mostrarCargando(false);
-    }
-}
 
-// =============================================
-// CONEXIÓN CORREGIDA (como tu curl)
-// =============================================
-async function probarConexion(apiKey) {
-    try {
-        // Método CORREGIDO: usar header X-goog-api-key (como tu curl)
-        const response = await fetch(CONFIG.endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-goog-api-key': apiKey  // ← ESTO ES LO QUE FALTABA
-            },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: 'Responde solo: OK' }]
-                }],
-                generationConfig: {
-                    maxOutputTokens: 5
-                }
-            })
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            return {
-                exito: false,
-                error: errorData.error?.message || `HTTP ${response.status}`
+        // ===== SELECTOR DE MOTOR IA =====
+        function toggleEngineDropdown() {
+            const dropdown = document.getElementById('engineDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function selectEngine(option) {
+            const engineName = option.dataset.name;
+            const engineVersion = option.dataset.version;
+            const engineType = option.dataset.engine;
+
+            currentEngine = {
+                name: engineName,
+                version: engineVersion,
+                type: engineType
             };
+
+            document.getElementById('engineNameDisplay').textContent = `${engineName} ${engineVersion}`;
+            document.getElementById('currentEngine').innerHTML = `
+                <span>${engineName} ${engineVersion}</span>
+                <span>▼</span>
+            `;
+
+            // Actualizar selección visual
+            document.querySelectorAll('.engine-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            option.classList.add('selected');
+
+            // Cerrar dropdown
+            toggleEngineDropdown();
+
+            // Guardar preferencia
+            localStorage.setItem('mrprompt-engine', JSON.stringify(currentEngine));
         }
-        
-        return { exito: true, error: null };
-    } catch(e) {
-        return { exito: false, error: e.message };
-    }
-}
 
-// Llamada a Gemini (CORREGIDA)
-async function llamarGemini(prompt, historial = []) {
-    const response = await fetch(CONFIG.endpoint, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-goog-api-key': state.apiKey  // ← Header correcto
-        },
-        body: JSON.stringify({
-            contents: [
-                ...historial,
-                { role: 'user', parts: [{ text: prompt }] }
-            ],
-            generationConfig: {
-                temperature: 0.8,
-                topK: 40,
-                topP: 0.95,
-                maxOutputTokens: 2048
-            },
-            safetySettings: [
-                { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-                { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-                { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-            ]
-        })
-    });
-    
-    if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.error?.message || `Error ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-}
+        // Cerrar dropdown al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.engine-selector')) {
+                document.getElementById('engineDropdown').classList.remove('show');
+            }
+        });
 
-function entrarAlSistema() {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('mainScreen').classList.add('active');
-    state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
-    secuenciaBoot();
-    document.getElementById('cmdInput').focus();
-}
+        // ===== NAVEGACIÓN DE HERRAMIENTAS =====
+        function switchTool(toolId) {
+            currentTool = toolId;
 
-function cerrarSesion() {
-    if (confirm('¿Cerrar sesión?')) {
-        limpiarSesion();
-        location.reload();
-    }
-}
+            // Actualizar cards activas
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.classList.toggle('active', card.dataset.tool === toolId);
+            });
 
-function limpiarSesion() {
-    localStorage.removeItem(CONFIG.storageKeys.apiKey);
-    localStorage.removeItem(CONFIG.storageKeys.remember);
-    state.apiKey = '';
-    state.isConnected = false;
-}
-
-function mostrarError(msg) {
-    const el = document.getElementById('errorMsg');
-    el.innerHTML = '✗ ERROR:<br>' + msg.replace(/\n/g, '<br>');
-    el.style.display = 'block';
-}
-
-function mostrarExito(msg) {
-    const el = document.getElementById('successMsg');
-    el.textContent = '✓ ' + msg;
-    el.style.display = 'block';
-}
-
-function ocultarMensajes() {
-    document.getElementById('errorMsg').style.display = 'none';
-    document.getElementById('successMsg').style.display = 'none';
-}
-
-function mostrarCargando(mostrar) {
-    const btn = document.getElementById('loginBtn');
-    btn.disabled = mostrar;
-    btn.innerHTML = mostrar ? '<span class="loading-spinner"></span>CONECTANDO...' : '[ CONECTAR CON GEMINI ]';
-}
-
-// =============================================
-// BOOT
-// =============================================
-function secuenciaBoot() {
-    const msgs = [
-        '[ OK ] promptforge.sh v5.0 iniciando...',
-        '[ OK ] usuario autenticado',
-        '[ OK ] conexión Gemini verificada (modo flash)',
-        '[ OK ] módulos cargados',
-        '[ OK ] sistema listo'
-    ];
-    
-    let i = 0;
-    function next() {
-        if (i < msgs.length) {
-            agregarLinea(`<span class="boot-ok">${msgs[i]}</span>`, 'boot-line');
-            i++;
-            setTimeout(next, 80 + Math.random() * 40);
-        } else {
-            setTimeout(() => {
-                agregarLinea(`
-<div class="cyber-box">
-<div class="box-title">// promptforge.sh — generador con IA Gemini</div>
-<div class="box-content">
-<p><span class="cmd-hint">ayuda</span> — comandos disponibles</p>
-<p><span class="cmd-hint">chat [msg]</span> — hablar con Gemini IA</p>
-<p><span class="cmd-hint">nuevo</span> — nueva sesión de prompt</p>
-<p><span class="cmd-hint">guardar</span> — guardar prompt actual</p>
-<p><span class="cmd-hint">salir</span> — cerrar sesión</p>
-</div>
-</div>`);
-                flujo[0].ask();
-                scrollFinal();
-            }, 300);
+            // Mostrar sección correspondiente
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`section-${toolId}`).classList.add('active');
         }
-    }
-    next();
-}
 
-// =============================================
-// FLUJO
-// =============================================
-const flujo = [
-    { paso: 1, ask: () => imprimir(`<div class="step-indicator">▶ PASO 01/05 — OBJETIVO</div><div style="color:var(--text-white)">¿Cuál es el objetivo de tu prompt?<br><br>Escribe:</div>`) },
-    { paso: 2, ask: () => imprimir(`<div class="step-indicator">▶ PASO 02/05 — CONTEXTO</div><div style="color:var(--text-white)">Contexto y audiencia:</div>`) },
-    { paso: 3, ask: () => imprimir(`<div class="step-indicator">▶ PASO 03/05 — FORMATO</div><div style="color:var(--text-white)">Formato y estilo:</div>`) },
-    { paso: 4, ask: () => imprimir(`<div class="step-indicator">▶ PASO 04/05 — RESTRICCIONES</div><div style="color:var(--text-white)">Limitaciones:</div>`) },
-    { paso: 5, action: 'generate' }
-];
+        // ===== GENERADOR DE PROMPTS AVANZADO =====
+        function generateAdvancedPrompt() {
+            const objective = document.getElementById('promptObjective').value.trim();
+            const context = document.getElementById('promptContext').value.trim();
+            const role = document.getElementById('promptRole').value;
+            const complexity = document.getElementById('promptComplexity').value;
+            const output = document.getElementById('promptOutput').value;
+            const tone = document.getElementById('promptTone').value;
 
-// =============================================
-// COMANDOS
-// =============================================
-async function ejecutarComando() {
-    const input = document.getElementById('cmdInput');
-    const cmd = input.value.trim();
-    if (!cmd) return;
-    
-    agregarLinea(`<span style="color:var(--cyan-accent)">cyber@promptforge:~$</span> ${escaparHtml(cmd)}`);
-    input.value = '';
-    
-    await procesarCmd(cmd);
-    scrollFinal();
-}
+            if (!objective) {
+                alert('Por favor, describe el objetivo principal de tu prompt.');
+                return;
+            }
 
-async function procesarCmd(cmd) {
-    const c = cmd.toLowerCase().trim();
-    
-    if (c === 'ayuda' || c === 'help') { mostrarAyuda(); return; }
-    if (c === 'limpiar' || c === 'clear') { document.getElementById('outputArea').innerHTML = ''; agregarLinea('<span class="line-dim">limpio</span>'); return; }
-    if (c === 'nuevo') { resetearSesion(); return; }
-    if (c.startsWith('chat ') || c.startsWith('hablar ')) { await chatAI(c.substring(c.indexOf(' ')+1)); return; }
-    if (c === 'guardar' || c === 'save') { guardarPrompt(); return; }
-    if (c === 'lista' || c === 'list') { listarGuardados(); return; }
-    if (c === 'copiar' || c === 'copy') { copiarPrompt(); return; }
-    if (c === 'descargar' || c === 'download') { descargarPrompt(); return; }
-    if (c === 'salir' || c === 'exit' || c === 'logout') { cerrarSesion(); return; }
-    if (c === '') return;
-    
-    await manejarRespuesta(cmd);
-}
+            // Construir prompt optimizado según configuración
+            let prompt = '';
+            const timestamp = new Date().toLocaleString();
 
-function resetearSesion() {
-    state.step = 1;
-    state.data = { objetivo:'', contexto:'', formato:'', tono:'', restricciones:[], ejemplos:'' };
-    agregarLinea('<span class="line-success">[OK] nueva sesión</span>');
-    flujo[0].ask();
-}
+            prompt += `╔══════════════════════════════════════════════════════════════╗\n`;
+            prompt += `║           PROMPT OPTIMIZADO - MR. PROMPT ENGINEER            ║\n`;
+            prompt += `║              Motor: ${currentEngine.name} v${currentEngine.version.padEnd(19)}║\n`;
+            prompt += `╚══════════════════════════════════════════════════════════════╝\n\n`;
 
-async function chatAI(msg) {
-    if(!msg.trim()) { agregarLinea('<span class="line-error">error: escribe mensaje</span>'); return; }
-    
-    agregarLinea(`<span class="line-ai">[TÚ] ${escaparHtml(msg)}</span>`);
-    agregarLinea('<span class="line-info">[GEMINI] pensando...</span>');
-    
-    try {
-        const r = await llamarGemini(msg, state.conversationHistory.slice(-10));
-        state.conversationHistory.push(
-            {role:'user', parts:[{text:msg}]},
-            {role:'model', parts:[{text:r}]}
-        );
-        agregarLinea(`<div class="ai-response"><div style="color:var(--text-white);line-height:1.7">${formatearAI(r)}</div></div>`);
-    } catch(e) {
-        agregarLinea(`<span class="line-error">error: ${e.message}</span>`);
-    }
-}
+            // Rol del sistema
+            prompt += `【 CONFIGURACIÓN DEL SISTEMA 】\n`;
+            prompt += `┌─────────────────────────────────────────────────────────────┐\n`;
+            
+            const roles = {
+                'experto': 'Eres un EXPERTO TÉCNICO ESPECIALIZADO con 20+ años de experiencia',
+                'creativo': 'Eres un DIRECTOR CREATIVO galardonado con visión innovadora',
+                'analista': 'Eres un ANALISTA DE DATOS SENIOR con metodología rigurosa',
+                'profesor': 'Eres un EDUCADOR/MENTOR EXPerto en pedagogía moderna',
+                'desarrollador': 'Eres un INGENIERO DE SOFTWARE con arquitectura de sistemas',
+                'estratega': 'Eres un CONSULTOR ESTRATÉGICO de nivel ejecutivo',
+                'personalizado': ''
+            };
 
-async function manejarRespuesta(resp) {
-    switch(state.step) {
-        case 1: state.data.objetivo = resp; break;
-        case 2: state.data.contexto = resp; break;
-        case 3: state.data.formato = resp; break;
-        case 4: state.data.restricciones.push(resp); break;
-    }
-    
-    if(state.step < state.totalSteps) {
-        state.step++;
-        flujo[state.step-1].ask();
-    } else {
-        await generarPrompt();
-    }
-}
+            if (role && roles[role]) {
+                prompt += `│ ROL ASIGNADO: ${roles[role]}\n`;
+            }
+            prompt += `│ TONO: ${tone.toUpperCase()}\n`;
+            prompt += `│ FORMATO DE SALIDA: ${output.toUpperCase()}\n`;
+            prompt += `│ NIVEL DE COMPLEJIDAD: ${complexity.toUpperCase()}\n`;
+            prompt += `└─────────────────────────────────────────────────────────────┘\n\n`;
 
-async function generarPrompt() {
-    agregarLinea('<span class="line-info">[GEMINI] generando prompt optimizado...</span>');
-    
-    try {
-        const d = state.data;
-        const inst = `Eres experto en ingeniería de prompts. Crea un PROMPT PROFESIONAL EN INGLÉS con:\n\nOBJETIVO: ${d.objetivo}\nCONTEXTO: ${d.contexto||'-'}\nFORMATO: ${d.formato||'-'}\nRESTRICCIONES: ${d.restricciones.join(', ')||'-'}\n\nIncluye: rol claro, instrucciones específicas, formato salida, ejemplos, criterios calidad.\n\nResponde SOLO con el prompt generado.`;
-        
-        state.currentPrompt = await llamarGemini(inst, []);
-    } catch(e) {
-        state.currentPrompt = `# ROL\nExperto en: ${state.data.objetivo}\n\n# OBJETIVO\n${state.data.objetivo}\n\n${state.data.contexto?'# CONTEXTO\n'+state.data.contexto+'\n\n':''}${state.data.formato?'# FORMATO\n'+state.data.formato+'\n\n':''}# EJECUTAR`;
-        agregarLinea('<span class="line-warn">[WARN] modo plantilla (sin IA)</span>');
-    }
-    
-    state.promptsCreated++;
-    
-    agregarLinea('<span class="line-success">[OK] ════════════════════════</span>');
-    agregarLinea('<span class="line-success">[OK] ¡PROMPT GENERADO!</span>');
-    agregarLinea('');
-    agregarLinea(`<div class="prompt-output">${escaparHtml(state.currentPrompt)}</div>`);
-    agregarLinea('');
-    agregarLinea('<span class="line-info">comandos: guardar | copiar | descargar</span>');
-    
-    setTimeout(() => {
-        state.step = 1;
-        state.data = { objetivo:'', contexto:'', formato:'', tono:'', restricciones:[], ejemplos:'' };
-    }, 100);
-}
+            // Instrucciones base según complejidad
+            const instructions = {
+                'basico': [
+                    'Responde de manera directa y concisa.',
+                    'Enfócate en el objetivo principal.'
+                ],
+                'intermedio': [
+                    'Aplica razonamiento paso a paso (Chain-of-Thought).',
+                    'Estructura tu respuesta de forma lógica.',
+                    'Incluye ejemplos cuando sea relevante.',
+                    'Verifica la coherencia de tu respuesta.'
+                ],
+                'avanzado': [
+                    'Aplica Chain-of-Thought profundo con múltiples niveles de análisis.',
+                    'Utiliza técnica Few-Shot si aplica al contexto.',
+                    'Considera múltiples perspectivas antes de responder.',
+                    'Estructura con jerarquía clara (títulos, subtítulos, puntos).',
+                    'Incluye consideraciones edge-case y limitaciones.',
+                    'Proporciona alternativas cuando sea posible.',
+                    'Valida cada afirmación con lógica sólida.'
+                ],
+                'experto': [
+                    'ACTIVA MODO EXPERTO: Análisis multidimensional completo.',
+                    'Chain-of-Thought con desglose atómico de cada componente.',
+                    'Meta-cognición: Evalúa tu propio razonamiento durante el proceso.',
+                    'Técnica Tree-of-Thought para explorar múltiples caminos.',
+                    'Self-consistency: Verifica resultados desde diferentes ángulos.',
+                    'Estructura modular con secciones claramente definidas.',
+                    'Incluye: Contexto → Análisis → Solución → Validación → Alternativas.',
+                    'Considera: Ética, viabilidad, escalabilidad, riesgos.',
+                    'Output optimizado para máxima claridad y acción inmediata.'
+                ]
+            };
 
-function mostrarAyuda() {
-    agregarLinea(`
-<span style="color:var(--green-neon)">COMANDOS DISPONIBLES:</span>
+            prompt += `【 INSTRUCCIONES OPERATIVAS 】\n`;
+            prompt += `${'─'.repeat(60)}\n`;
+            instructions[complexity].forEach((inst, i) => {
+                prompt += `▸ ${inst}\n`;
+            });
+            prompt += `\n`;
 
-  ayuda          - esta ayuda
-  chat [msg]     - conversar con Gemini IA
-  nuevo          - nueva sesión de prompt
-  guardar        - guardar prompt actual
-  lista          - ver prompts guardados
-  copiar         - copiar al portapapeles
-  descargar      - descargar como .txt
-  limpiar        - limpiar pantalla
-  salir          - cerrar sesión`);
-}
+            // Objetivo principal
+            prompt += `【 OBJETIVO PRINCIPAL 】\n`;
+            prompt += `${'═'.repeat(60)}\n`;
+            prompt += `${objective}\n\n`;
 
-function guardarPrompt() {
-    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que guardar</span>'); return; }
-    
-    const entry = {
-        id: state.savedPrompts.length + 1,
-        titulo: state.data.objetivo.substring(0, 45) || 'sin_título',
-        contenido: state.currentPrompt,
-        fecha: new Date().toISOString()
-    };
-    
-    state.savedPrompts.push(entry);
-    localStorage.setItem(CONFIG.storageKeys.prompts, JSON.stringify(state.savedPrompts));
-    agregarLinea(`<span class="line-success">[OK] guardado como #${entry.id} — "${entry.titulo}"</span>`);
-}
+            // Contexto adicional
+            if (context) {
+                prompt += `【 CONTEXTO Y REQUISITOS ADICIONALES 】\n`;
+                prompt += `${'─'.repeat(60)}\n`;
+                prompt += `${context}\n\n`;
+            }
 
-function listarGuardados() {
-    if(!state.savedPrompts.length) { agregarLinea('<span class="line-dim">vacío</span>'); return; }
-    agregarLinea('<span style="color:var(--cyan-accent)">PROMPTS GUARDADOS:</span>');
-    state.savedPrompts.forEach(p => {
-        agregarLinea(`  <span class="line-success">#${p.id}</span> ${p.titulo}  <span class="line-dim">[${new Date(p.fecha).toLocaleDateString('es')}]</span>`);
-    });
-}
+            // Formato de salida específico
+            prompt += `【 FORMATO DE SALIDA REQUERIDO 】\n`;
+            prompt += `${'─'.repeat(60)}\n`;
+            
+            const formats = {
+                'texto': '• Texto estructurado con párrafos bien definidos\n• Uso de negritas para énfasis clave\n• Lista de puntos para elementos relacionados',
+                'markdown': '• Markdown completo con encabezados (# ## ###)\n• Código en bloques ``` cuando aplique\n• Tablas para datos comparativos\n• Listas ordenadas y desordenadas',
+                'codigo': '• JSON válido y bien formateado\n• Comentarios explicativos incluidos\n• Estructura anidada lógica\n• Tipado consistente',
+                'lista': '• Numeración jerárquica (1, 1.1, 1.1.1)\n• Cada punto autocontenido\n• Resumen al final si es extenso',
+                'tabla': '• Filas y columnas claramente definidas\n• Encabezados descriptivos\n• Celdas con información concisa'
+            };
+            
+            prompt += formats[output];
+            prompt += `\n\n`;
 
-function copiarPrompt() {
-    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
-    navigator.clipboard.writeText(state.currentPrompt);
-    agregarrLinea('<span class="line-success">[OK] copiado ✓</span>');
-}
+            // Prompt final
+            prompt += `【 PROMPT DE EJECUCIÓN 】\n`;
+            prompt += `${'═'.repeat(60)}\n`;
+            prompt += `Basándote en toda la configuración anterior, genera ahora la respuesta\n`;
+            prompt += `completa y optimizada siguiendo estrictamente las instrucciones.\n`;
+            prompt += `\n`;
+            prompt += `Generado por: Mr. Prompt Engine (${currentEngine.name} v${currentEngine.version})\n`;
+            prompt += `Timestamp: ${timestamp}\n`;
 
-function copiarrPrompt() {
-    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
-    navigator.clipboard.writeText(state.currentPrompt);
-    agregarLinea('<span class="line-success">[OK] copiado ✓</span>');
-}
+            // Mostrar resultado
+            document.getElementById('promptResult').textContent = prompt;
+            document.getElementById('promptOutputArea').style.display = 'block';
+        }
 
-function descargarPrompt() {
-    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que descargar</span>'); return; }
-    const blob = new Blob([state.currentPrompt], {type:'text/plain'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `prompt_${Date.now()}.txt`;
-    a.click();
-    URL.revokeObjectURL(a.href);
-    agregarLinea('<span class="line-success">[OK] descargado ✓</span>');
-}
+        // ===== PLANIFICADOR ESTRATÉGICO =====
+        function generatePlan() {
+            const goal = document.getElementById('projectGoal').value.trim();
+            const resources = document.getElementById('projectResources').value.trim();
+            const projectType = document.getElementById('projectType').value;
+            const timeline = document.getElementById('projectTimeline').value;
 
-// =============================================
-// UTILIDADES
-// =============================================
-function agregarLinea(html, cls='') {
-    const d = document.createElement('div');
-    d.className = 'output-line ' + cls;
-    d.innerHTML = html;
-    document.getElementById('outputArea').appendChild(d);
-}
+            if (!goal) {
+                alert('Por favor, describe el proyecto o objetivo a planificar.');
+                return;
+            }
 
-function imprimir(html) { agregarLinea(html); }
+            let plan = '';
+            const timestamp = new Date().toLocaleString();
 
-function escaparHtml(t) {
-    const d = document.createElement('div');
-    d.textContent = t;
-    return d.innerHTML;
-}
+            plan += `╔══════════════════════════════════════════════════════════════╗\n`;
+            plan += `║          PLAN ESTRATÉGICO - MR. PROMPT PLANNER               ║\n`;
+            plan += `║              Motor: ${currentEngine.name} v${currentEngine.version.padEnd(19)}║\n`;
+            plan += `╚══════════════════════════════════════════════════════════════╝\n\n`;
 
-function formatearAI(t) {
-    return escaparHtml(t)
-        .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--green-neon)">$1</strong>')
-        .replace(/`(.*?)`/g, '<code style="color:var(--cyan-accent)">$1</code>')
-        .replace(/\n/g, '<br>');
-}
+            // Análisis SMART
+            plan += `【 ANÁLISIS OBJETIVO SMART 】\n`;
+            plan += `${'─'.repeat(60)}\n`;
+            plan += `📌 ESPECÍFICO (Specific):\n`;
+            plan += `   ${goal.substring(0, 150)}${goal.length > 150 ? '...' : ''}\n\n`;
+            plan += `📏 MEDIBLE (Measurable): Definir KPIs y métricas de éxito\n`;
+            plan += `🎯 ALCANZABLE (Achievable): Evaluar viabilidad con recursos actuales\n`;
+            plan += `⏰ RELEVANTE (Time-bound): Plazo: ${timeline.toUpperCase()}\n\n`;
 
-function scrollFinal() {
-    requestAnimationFrame(() => {
-        document.getElementById('outputArea').scrollTop = 999999;
-    });
-}
-</script>
+            // Fases del proyecto
+            plan += `【 FASES DEL PROYECTO 】\n`;
+            plan += `${'═'.repeat(60)}\n\n`;
+
+            const phases = [
+                { name: 'FASE 1: INICIO Y PLANIFICACIÓN', tasks: ['Definir alcance detallado', 'Identificar stakeholders', 'Asignar recursos', 'Crear cronograma inicial'] },
+                { name: 'FASE 2: DISEÑO Y ARQUITECTURA', tasks: ['Diseñar solución propuesta', 'Validar con equipo', 'Documentar especificaciones', 'Aprobar diseño'] },
+                { name: 'FASE 3: EJECUCIÓN', tasks: ['Desarrollar/implementar', 'Revisiones periódicas', 'Ajustes iterativos', 'Control de calidad'] },
+                { name: 'FASE 4: CIERRE Y EVALUACIÓN', tasks: ['Entrega final', 'Documentación', 'Retroalimentación', 'Lecciones aprendidas'] }
+            ];
+
+            phases.forEach((phase, i) => {
+                plan += `┌─ ${phase.name} ─┐\n`;
+                phase.tasks.forEach(task => {
+                    plan += `  ☐ ${task}\n`;
+                });
+                plan += `\n`;
+            });
+
+            // Matriz de riesgos
+            plan += `【 MATRIZ DE RIESGOS PRELIMINAR 】\n`;
+            plan += `${'─'.repeat(60)}\n`;
+            plan += `| Riesgo              | Probabilidad | Impacto | Mitigación         |\n`;
+            plan += `|---------------------|--------------|---------|--------------------|\n`;
+            plan += `| Scope creep         | Media        | Alto    | Change control     |\n`;
+            plan += `| Recursos insufic.   | Baja         | Alto    | Buffer 15%         |\n`;
+            plan += `| Dependencias ext.   | Media        | Medio   | Plan B definido    |\n`;
+            plan += `| Retrasos            | Media        | Medio   | Sprint adaptativo  |\n\n`;
+
+            // Recursos
+            if (resources) {
+                plan += `【 RECURSOS IDENTIFICADOS 】\n`;
+                plan += `${'─'.repeat(60)}\n`;
+                plan += `${resources}\n\n`;
+            }
+
+            // Próximos pasos inmediatos
+            plan += `【 ACCIONES INMEDIATAS (Próximas 48h) 】\n`;
+            plan += `${'═'.repeat(60)}\n`;
+            plan += `1. ✉️ Convocar reunión de kick-off con equipo clave\n`;
+            plan += `2. 📋 Crear documento de requisitos detallados\n`;
+            plan += `3. 📅 Configurar herramientas de seguimiento\n`;
+            plan += `4. 👥 Confirmar disponibilidad de recursos críticos\n`;
+            plan += `5. 🎯 Establecer primer milestone (semana 1)\n\n`;
+
+            plan += `Generado por: Mr. Prompt Planner (${currentEngine.name} v${currentEngine.version})\n`;
+            plan += `Timestamp: ${timestamp}\n`;
+
+            document.getElementById('planResult').innerHTML = plan.replace(/\n/g, '<br>');
+            document.getElementById('planOutputArea').style.display = 'block';
+        }
+
+        // ===== GENERADOR DE ASCII ART =====
+        function generateASCII() {
+            const subject = document.getElementById('asciiSubject').value.trim();
+            const style = document.getElementById('asciiStyle').value;
+            const complexity = document.getElementById('asciiComplexity').value;
+            const width = parseInt(document.getElementById('asciiWidth').value);
+
+            if (!subject) {
+                alert('Por favor, indica qué deseas crear en ASCII.');
+                return;
+            }
+
+            let ascii = '';
+
+            // Colección de arte ASCII predefinido y generado dinámicamente
+            const asciiArtLibrary = {
+                robot: `
+    ╔══════════════════════════════════════╗
+    ║                                      ║
+    ║     ┌──────────────────────────┐      ║
+    ║     │  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  │      ║
+    ║     │  █ MR. PROMPT ROBOT █  │      ║
+    ║     │  █████████████████████  │      ║
+    ║     └──────────────────────────┘      ║
+    ║              ╱╲                        ║
+    ║             ╱  ╲                       ║
+    ║        ╭━━━━━━━━━━╮                   ║
+    ║        │  ◯    ◯  │  ← Ojos AI       ║
+    ║        │    ───   │  ← Visión         ║
+    ║        │  ╲____╱  │  ← Procesador     ║
+    ║        ╰━━━━━━━━━━╯                   ║
+    ║           │  │                        ║
+    ║         ╭┴──┴╮                        ║
+    ║         │    │  Cuerpo                ║
+    ║        ╱└────┘╲                       ║
+    ║       │  ┌──┐  │                      ║
+    ║       │  │░░│  │  Núcleo             ║
+    ║       │  └──┘  │                      ║
+    ║       ╰━━━━━━━╯                      ║
+    ║         ╱     ╲                       ║
+    ║        ╱       ╲  Piernas             ║
+    ║       ╱         ╲                     ║
+    ║      ╱           ╲                    ║
+    ╚══════════════════════════════════════╝`,
+                
+                rocket: `
+                    ▲
+                   ╱█╲
+                  ╱███╲
+                 ╱█████╲
+                ╱███████╲
+               ╱█████████╲
+              ╱███████████╲
+             ┌─────────────┐
+             │  MR.PROMPT  │
+             │   ENGINE    │
+             │  █████████  │
+             └──────┬──────┘
+                ═╧══
+                 ││
+               ═╧╧═
+                ││
+               ─┴┴─
+              ╱    ╲
+             ╱ FIRE ╲
+            ╱   ══   ╲
+           ╱          ╲
+          ▼            ▼`,
+
+                brain: `
+        ╔══════════════════════════════════════╗
+        ║                                      ║
+        ║        ╭─────────────────────╮        ║
+        ║       ╱                       ╲       ║
+        ║      │    ╔═══════════════╗    │      ║
+        ║      │    ║  ╭─────────╮  ║    │      ║
+        ║      │    ║  │ CREATIVE │  ║    │      ║
+        ║      │    ║  │  ENGINE  │  ║    │      ║
+        ║      │    ║  ╰─────────╯  ║    │      ║
+        ║      │    ╠═══════════════╣    │      ║
+        ║      │    ║  ╭─────────╮  ║    │      ║
+        ║      │    ║  │ LOGIC   │  ║    │      ║
+        ║      │    ║  │ PROCESS │  ║    │      ║
+        ║      │    ║  ╰─────────╯  ║    │      ║
+        ║      │    ╠═══════════════╣    │      ║
+        ║      │    ║  ╭─────────╮  ║    │      ║
+        ║      │    ║  │ PROMPT  │  ║    │      ║
+        ║      │    ║  │ OPTIMIZE│  ║    │      ║
+        ║      │    ║  ╰─────────╯  ║    │      ║
+        ║      │    ╚═══════════════╝    │      ║
+        ║      │                           │      ║
+        ║       ╲                         ╱       ║
+        ║        ╰─────────────────────╯        ║
+        ║                                      ║
+        ║         ★ NEURAL NETWORK ★          ║
+        ╚══════════════════════════════════════╝`,
+
+                computer: `
+    ╔═════════════════════════════════════════════╗
+    ║                                             ║
+    ║   ┌─────────────────────────────────────┐   ║
+    ║   │  ╔═══════════════════════════════╗  │   ║
+    ║   │  ║  MR. PROMPT WORKSTATION v2.0  ║  │   ║
+    ║   │  ╚═══════════════════════════════╝  │   ║
+    ║   │                                     │   ║
+    ║   │  ┌─────────────────────────────┐   │   ║
+    ║   │  │                             │   │   ║
+    ║   │  │   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄   │   │   ║
+    ║   │  │   █ PROMPT INPUT HERE  █   │   │   ║
+    ║   │   ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀   │   │   ║
+    ║   │  │                             │   │   ║
+    ║   │  │  [■■■■■■■■■■■■■■■■■■■■]  │   │   ║
+    ║   │  │  Processing... 100%        │   │   ║
+    ║   │  │                             │   │   ║
+    ║   │  └─────────────────────────────┘   │   ║
+    ║   │                                     │   ║
+    ║   │  ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐     │   ║
+    ║   │  └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘     │   ║
+    ║   └─────────────────────────────────────┘   ║
+    ║                                             ║
+    ║   ╔═════════════════════════════════════╗   ║
+    ║   ║  ⌨ KEYBOARD  |  🖱 MOUSE  |  💾 HDD ║   ║
+    ║   ╚═════════════════════════════════════╝   ║
+    ╚═════════════════════════════════════════════╝`
+            };
+
+            // Seleccionar arte basado en el sujeto o generar uno genérico
+            const lowerSubject = subject.toLowerCase();
+            
+            if (lowerSubject.includes('robot') || lowerSubject.includes('ia') || lowerSubject.includes('ai')) {
+                ascii = asciiArtLibrary.robot;
+            } else if (lowerSubject.includes('cohete') || lowerSubject.includes('rocket') || lowerSubject.includes('espacio')) {
+                ascii = asciiArtLibrary.rocket;
+            } else if (lowerSubject.includes('cerebro') || lowerSubject.includes('brain') || lowerSubject.includes('mente')) {
+                ascii = asciiArtLibrary.brain;
+            } else if (lowerSubject.includes('computadora') || lowerSubject.includes('pc') || lowerSubject.includes('laptop')) {
+                ascii = asciiArtLibrary.computer;
+            } else {
+                // Generar arte genérico basado en el texto
+                ascii = generateDynamicASCII(subject, style, complexity, width);
+            }
+
+            // Agregar header
+            const header = `
+╔${'═'.repeat(width)}╗
+║${' '.repeat(width)}║
+║${centerText(`★ ${subject.toUpperCase()} ★`, width)}║
+║${' '.repeat(width)}║
+║${centerText(`Estilo: ${style} | Complejidad: ${complexity}`, width)}║
+║${centerText(`Motor: ${currentEngine.name} v${currentEngine.version}`, width)}║
+║${' '.repeat(width)}║
+╚${'═'.repeat(width)}╝
+
+`;
+
+            document.getElementById('asciiResult').textContent = header + ascii;
+            document.getElementById('asciiOutputArea').style.display = 'block';
+        }
+
+        function generateDynamicASCII(subject, style, complexity, width) {
+            // Generar arte ASCII dinámico basado en parámetros
+            const lines = [];
+            const padding = Math.floor((width - subject.length - 4) / 2);
+            
+            lines.push(`${' '.repeat(padding)}╭${'─'.repeat(subject.length + 4)}╮`);
+            lines.push(`${' '.repeat(padding)}│  ${'█'.repeat(Math.floor(subject.length/2))}${subject.toUpperCase()}${'█'.repeat(Math.ceil(subject.length/2))}  │`);
+            lines.push(`${' '.repeat(padding)}╰${'─'.repeat(subject.length + 4)}╯`);
+            lines.push('');
+            lines.push(`${' '.repeat(padding - 5)}┌${'─'.repeat(width - 20)}┐`);
+            lines.push(`${' '.repeat(padding - 5)}│`);
+            lines.push(`${' '.repeat(padding - 5)}│  ${'◈'.repeat(3)} ARTE ASCII GENERADO ${'◈'.repeat(3)}`);
+            lines.push(`${' '.repeat(padding - 5)}│`);
+            lines.push(`${' '.repeat(padding - 5)}│  Este es un representación visual`);
+            lines.push(`${' '.repeat(padding - 5)}│  conceptual de: "${subject}"`);
+            lines.push(`${' '.repeat(padding - 5)}│`);
+            lines.push(`${' '.repeat(padding - 5)}│  Estilo: ${style}`);
+            lines.push(`${' '.repeat(padding - 5)}│  Motor: ${currentEngine.name}`);
+            lines.push(`${' '.repeat(padding - 5)}│`);
+            lines.push(`${' '.repeat(padding - 5)}└${'─'.repeat(width - 20)}┘`);
+
+            return lines.join('\n');
+        }
+
+        function centerText(text, width) {
+            const padding = Math.floor((width - text.length) / 2);
+            return ' '.repeat(Math.max(0, padding)) + text;
+        }
+
+        // ===== GENERADOR DE FLUJOGRAMAS =====
+        function generateFlowchart() {
+            const process = document.getElementById('flowProcess').value.trim();
+            const flowType = document.getElementById('flowType').value;
+            const detailLevel = document.getElementById('flowDetail').value;
+
+            if (!process) {
+                alert('Por favor, describe el proceso a diagramar.');
+                return;
+            }
+
+            // Generar vista visual HTML
+            const visualContainer = document.getElementById('flowVisualView');
+            let visualHTML = '<div class="flowchart">';
+            
+            // Nodo de inicio
+            visualHTML += `<div class="flow-node start-end">▶ INICIO</div>`;
+            visualHTML += `<div class="flow-arrow">↓</div>`;
+
+            // Analizar proceso y extraer pasos
+            const steps = extractSteps(process, flowType);
+
+            steps.forEach((step, index) => {
+                if (step.type === 'decision') {
+                    visualHTML += `<div class="flow-node decision">${step.text}</div>`;
+                    visualHTML += `<div class="flow-branch">`;
+                    visualHTML += `<div class="flow-branch-item"><span class="branch-label">SÍ</span><div class="flow-arrow">↘</div><div class="flow-node">${step.yesAction || 'Continuar'}</div></div>`;
+                    visualHTML += `<div class="flow-branch-item"><span class="branch-label">NO</span><div class="flow-arrow">↙</div><div class="flow-node">${step.noAction || 'Alternativa'}</div></div>`;
+                    visualHTML += `</div>`;
+                } else {
+                    visualHTML += `<div class="flow-node">${step.text}</div>`;
+                }
+                if (index < steps.length - 1) {
+                    visualHTML += `<div class="flow-arrow">↓</div>`;
+                }
+            });
+
+            // Nodo de fin
+            visualHTML += `<div class="flow-arrow">↓</div>`;
+            visualHTML += `<div class="flow-node start-end">■ FIN</div>`;
+            
+            visualHTML += '</div>';
+            visualContainer.innerHTML = visualHTML;
+
+            // Generar versión ASCII
+            const asciiFlow = generateASCIIFlowchart(steps, flowType);
+            document.getElementById('flowAscii').textContent = asciiFlow;
+
+            document.getElementById('flowOutputArea').style.display = 'block';
+        }
+
+        function extractSteps(processText, flowType) {
+            // Parseo simple del texto para extraer pasos
+            const steps = [];
+            const separators = ['→', '->', '→', ',', ';', '\n'];
+            let parts = [processText];
+
+            separators.forEach(sep => {
+                parts = parts.flatMap(p => p.split(sep).map(s => s.trim()).filter(s => s));
+            });
+
+            parts.slice(0, 6).forEach((part, i) => {
+                const isDecision = part.toLowerCase().includes('?') || 
+                                   part.toLowerCase().includes('¿') ||
+                                   part.toLowerCase().includes('si') ||
+                                   part.toLowerCase().includes('no');
+                
+                steps.push({
+                    text: part.length > 40 ? part.substring(0, 37) + '...' : part,
+                    type: isDecision ? 'decision' : 'action',
+                    yesAction: isDecision ? 'Ejecutar acción' : null,
+                    noAction: isDecision ? 'Manejar excepción' : null
+                });
+            });
+
+            if (steps.length === 0) {
+                steps.push({ text: processText.substring(0, 40), type: 'action' });
+            }
+
+            return steps;
+        }
+
+        function generateASCIIFlowchart(steps, flowType) {
+            let ascii = '';
+            const width = 60;
+
+            ascii += `╔${'═'.repeat(width)}╗\n`;
+            ascii += `║${centerText('FLUJOGRAMA - REPRESENTACIÓN ASCII', width)}║\n`;
+            ascii += `╚${'═'.repeat(width)}╝\n\n`;
+
+            ascii += `        ┌─────────────┐\n`;
+            ascii += `        │   ▶ INICIO   │\n`;
+            ascii += `        └──────┬──────┘\n`;
+            ascii += `               ↓\n`;
+
+            steps.forEach((step, i) => {
+                if (step.type === 'decision') {
+                    ascii += `        ┌─────────────┐\n`;
+                    ascii += `        │◇ ${padRight(step.text, 11)}│\n`;
+                    ascii += `        └──────┬──────┘\n`;
+                    ascii += `          ┌────┴────┐\n`;
+                    ascii += `       SÍ ↓         ↓ NO\n`;
+                    ascii += `    ┌────────┐  ┌────────┐\n`;
+                    ascii += `    │${padRight(step.yesAction || 'Acción', 8)}│  │${padRight(step.noAction || 'Alt.', 8)}│\n`;
+                    ascii += `    └───┬────┘  └───┬────┘\n`;
+                    ascii += `        └────┬────┘\n`;
+                    ascii += `             ↓\n`;
+                } else {
+                    ascii += `        ┌─────────────┐\n`;
+                    ascii += `        │▢ ${padRight(step.text, 11)}│\n`;
+                    ascii += `        └──────┬──────┘\n`;
+                    ascii += `               ↓\n`;
+                }
+            });
+
+            ascii += `        ┌─────────────┐\n`;
+            ascii += `        │    ■ FIN    │\n`;
+            ascii += `        └─────────────┘\n\n`;
+
+            ascii += `Leyenda:\n`;
+            ascii += `  ▶ ■ = Inicio/Fin    ◇ = Decisión    ▢ = Acción\n`;
+            ascii += `\nGenerado por: ${currentEngine.name} v${currentEngine.version}\n`;
+
+            return ascii;
+        }
+
+        function padRight(text, length) {
+            return (text || '').toString().substring(0, length).padEnd(length);
+        }
+
+        function toggleFlowView() {
+            const visual = document.getElementById('flowVisualView');
+            const ascii = document.getElementById('flowAscii');
+            
+            if (visual.style.display === 'none') {
+                visual.style.display = 'block';
+                ascii.style.display = 'none';
+            } else {
+                visual.style.display = 'none';
+                ascii.style.display = 'block';
+            }
+        }
+
+        // ===== ANALIZADOR DE CONTEXTO =====
+        function analyzeContext() {
+            const input = document.getElementById('analyzeInput').value.trim();
+
+            if (!input) {
+                alert('Por favor, ingresa tu idea o concepto para analizar.');
+                return;
+            }
+
+            let analysis = '';
+
+            analysis += `╔══════════════════════════════════════════════════════════════╗\n`;
+            analysis += `║           ANÁLISIS DE CONTEXTO - MR. PROMPT                 ║\n`;
+            analysis += `║                  Motor: ${currentEngine.name} v${currentEngine.version.padEnd(21)}║\n`;
+            analysis += `╚══════════════════════════════════════════════════════════════╝\n\n`;
+
+            // Extracto original
+            analysis += `【 IDEA ORIGINAL (Sin Procesar) 】\n`;
+            analysis += `${'─'.repeat(60)}\n`;
+            analysis += `"${input}"\n\n`;
+
+            // Análisis de componentes
+            analysis += `【 DESGLOSE DE COMPONENTES 】\n`;
+            analysis += `${'═'.repeat(60)}\n\n`;
+
+            // Detectar palabras clave y conceptos
+            const keywords = extractKeywords(input);
+            analysis += `📌 PALABRAS CLAVE IDENTIFICADAS:\n`;
+            keywords.forEach(kw => {
+                analysis += `   • ${kw}\n`;
+            });
+            analysis += `\n`;
+
+            // Clasificar intención
+            const intention = classifyIntention(input);
+            analysis += `🎯 INTENCIÓN DETECTADA: ${intention.category}\n`;
+            analysis += `   Subcategoría: ${intention.subcategory}\n`;
+            analysis += `   Confianza: ${intention.confidence}%\n\n`;
+
+            // Sugerencias de mejora
+            analysis += `【 SUGERENCIAS DE OPTIMIZACIÓN 】\n`;
+            analysis += `${'─'.repeat(60)}\n\n`;
+
+            const suggestions = generateSuggestions(input, intention);
+            suggestions.forEach((sug, i) => {
+                analysis += `${i + 1}. 💡 ${sug.title}\n`;
+                analysis += `   ${sug.description}\n`;
+                analysis += `   Impacto: ${'★'.repeat(sug.impact)}${'☆'.repeat(5-sug.impact)}\n\n`;
+            });
+
+            // Prompt optimizado sugerido
+            analysis += `【 PROMPT SUGERIDO (Optimizado) 】\n`;
+            analysis += `${'═'.repeat(60)}\n`;
+            analysis += generateOptimizedPromptFromAnalysis(input, intention, keywords);
+            analysis += `\n\n`;
+
+            analysis += `Generado por: Mr. Prompt Analyzer (${currentEngine.name} v${currentEngine.version})\n`;
+
+            document.getElementById('analyzeResult').innerHTML = analysis.replace(/\n/g, '<br>');
+            document.getElementById('analyzeOutputArea').style.display = 'block';
+        }
+
+        function extractKeywords(text) {
+            const stopWords = ['que', 'de', 'la', 'en', 'un', 'una', 'con', 'para', 'por', 'del', 'los', 'las', 'es', 'son', 'como', 'más', 'pero', 'tipo', 'yo', 'quiero', 'hacer'];
+            const words = text.toLowerCase()
+                .replace(/[^\w\s]/g, '')
+                .split(/\s+/)
+                .filter(word => word.length > 3 && !stopWords.includes(word));
+            
+            return [...new Set(words)].slice(0, 10);
+        }
+
+        function classifyIntention(text) {
+            const lowerText = text.toLowerCase();
+            
+            const categories = [
+                { patterns: ['app', 'aplicación', 'software', 'programa', 'desarrollar'], category: 'DESARROLLO DE SOFTWARE', subcategory: 'Aplicación/Sistema', confidence: 90 },
+                { patterns: ['idea', 'crear', 'innovar', 'nuevo', 'producto'], category: 'INNOVACIÓN DE PRODUCTO', subcategory: 'Conceptualización', confidence: 85 },
+                { patterns: ['organizar', 'plan', 'gestión', 'proyecto', 'tareas'], category: 'PLANIFICACIÓN/GESTIÓN', subcategory: 'Productividad', confidence: 88 },
+                { patterns: ['aprender', 'enseñar', 'curso', 'educación', 'tutorial'], category: 'EDUCACIÓN/APRENDIZAJE', subcategory: 'Contenido Educativo', confidence: 82 },
+                { patterns: ['negocio', 'empresa', 'vender', 'marketing', 'clientes'], category: 'NEGOCIOS/EMPRESA', subcategory: 'Estrategia Comercial', confidence: 87 },
+                { patterns: ['escribir', 'contenido', 'blog', 'artículo', 'texto'], category: 'CREACIÓN DE CONTENIDO', subcategory: 'Redacción', confidence: 84 }
+            ];
+
+            for (const cat of categories) {
+                if (cat.patterns.some(p => lowerText.includes(p))) {
+                    return cat;
+                }
+            }
+
+            return { category: 'GENERAL', subcategory: 'No clasificado', confidence: 60 };
+        }
+
+        function generateSuggestions(text, intention) {
+            return [
+                {
+                    title: 'Especificar el contexto de uso',
+                    description: 'Define quién usará el resultado y en qué escenario.',
+                    impact: 5
+                },
+                {
+                    title: 'Definir formato de salida deseado',
+                    description: 'Indica si necesitas código, texto, lista, tabla, etc.',
+                    impact: 4
+                },
+                {
+                    title: 'Agregar restricciones o límites',
+                    description: 'Menciona qué NO debe incluir o considerar.',
+                    impact: 4
+                },
+                {
+                    title: 'Proporcionar ejemplos de referencia',
+                    description: 'Incluye 1-2 ejemplos de lo que esperas obtener.',
+                    impact: 5
+                },
+                {
+                    title: 'Establecer nivel de detalle',
+                    description: 'Indica si prefieres resumen o explicación exhaustiva.',
+                    impact: 3
+                }
+            ];
+        }
+
+        function generateOptimizedPromptFromAnalysis(text, intention, keywords) {
+            return `[ROL]: Eres un experto en ${intention.category.toLowerCase()} con amplia experiencia.\n\n` +
+                   `[CONTEXTO]: Necesito ayuda con: "${text.substring(0, 200)}"\n\n` +
+                   `[PALABRAS CLAVE]: ${keywords.join(', ')}\n\n` +
+                   `[REQUISITOS]:\n` +
+                   `- Proporcionar respuesta estructurada y accionable\n` +
+                   `- Incluir ejemplos prácticos cuando aplique\n` +
+                   `- Considerar mejores prácticas del sector\n` +
+                   `- Formato: Markdown con secciones claras\n\n` +
+                   `[OBJETIVO]: Generar una solución completa y optimizada.`;
+        }
+
+        // ===== UTILIDADES =====
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent || element.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // Feedback visual temporal
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ ¡Copiado!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar:', err);
+                alert('No se pudo copiar. Selecciona y copia manualmente.');
+            });
+        }
+
+        function clearForm(formType) {
+            switch(formType) {
+                case 'prompt':
+                    document.getElementById('promptObjective').value = '';
+                    document.getElementById('promptContext').value = '';
+                    document.getElementById('promptRole').value = '';
+                    document.getElementById('promptComplexity').value = 'intermedio';
+                    document.getElementById('promptOutput').value = 'texto';
+                    document.getElementById('promptTone').value = 'profesional';
+                    document.getElementById('promptOutputArea').style.display = 'none';
+                    break;
+                case 'plan':
+                    document.getElementById('projectGoal').value = '';
+                    document.getElementById('projectResources').value = '';
+                    document.getElementById('projectType').value = 'software';
+                    document.getElementById('projectTimeline').value = 'mensual';
+                    document.getElementById('planOutputArea').style.display = 'none';
+                    break;
+                case 'ascii':
+                    document.getElementById('asciiSubject').value = '';
+                    document.getElementById('asciiStyle').value = 'figlet';
+                    document.getElementById('asciiComplexity').value = 'medium';
+                    document.getElementById('asciiWidth').value = '60';
+                    document.getElementById('asciiOutputArea').style.display = 'none';
+                    break;
+                case 'flow':
+                    document.getElementById('flowProcess').value = '';
+                    document.getElementById('flowType').value = 'secuencial';
+                    document.getElementById('flowDetail').value = 'medio';
+                    document.getElementById('flowOutputArea').style.display = 'none';
+                    break;
+                case 'analyze':
+                    document.getElementById('analyzeInput').value = '';
+                    document.getElementById('analyzeOutputArea').style.display = 'none';
+                    break;
+            }
+        }
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', () => {
+            // Cargar preferencias guardadas
+            const savedTheme = localStorage.getItem('mrprompt-theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            }
+
+            const savedEngine = localStorage.getItem('mrprompt-engine');
+            if (savedEngine) {
+                const engine = JSON.parse(savedEngine);
+                currentEngine = engine;
+                document.getElementById('engineNameDisplay').textContent = `${engine.name} ${engine.version}`;
+            }
+
+            console.log('%c🧠 Mr. Prompt Engine Iniciado', 'font-size: 20px; font-weight: bold; color: #6366f1;');
+            console.log('%cSistema listo para ingeniería de prompts avanzada', 'color: #8b5cf6;');
+        });
+    </script>
 </body>
 </html>
