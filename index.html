@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⬡ PROMPFORGE.SH // DIAGNÓSTICO</title>
+    <title>⬡ PROMPFORGE.SH // FIXED v5.0</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         :root {
             --bg-black: #050a05;
             --green-bright: #00ff41;
@@ -18,15 +17,8 @@
             --text-white: #e0ffe0;
             --text-gray: #6b9b6b;
             --red-error: #ff3860;
-            --red-glow: rgba(255, 56, 96, 0.5);
-            --orange-debug: #ffa500;
         }
-
-        html, body {
-            height: 100%;
-            overflow-x: hidden;
-        }
-
+        html, body { height: 100%; overflow-x: hidden; }
         body {
             font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
             background: var(--bg-black);
@@ -34,1178 +26,694 @@
             font-size: 14px;
             line-height: 1.6;
         }
-
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 255, 65, 0.02) 2px,
-                rgba(0, 255, 65, 0.02) 4px
-            );
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,65,0.02) 2px, rgba(0,255,65,0.02) 4px);
             pointer-events: none;
             z-index: 9999;
         }
-
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-        }
-
-        /* LOGIN SCREEN */
+        .app-container { display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; }
+        
+        /* LOGIN */
         .login-screen {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 30px 20px;
-            background: radial-gradient(ellipse at center, rgba(0, 255, 65, 0.03) 0%, transparent 70%);
-            overflow-y: auto;
+            flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 30px 20px; background: radial-gradient(ellipse at center, rgba(0,255,65,0.03) 0%, transparent 70%);
         }
-
         .login-box {
-            width: 100%;
-            max-width: 700px;
-            border: 1px solid rgba(0, 255, 65, 0.25);
-            padding: 35px;
-            background: rgba(0, 255, 65, 0.01);
-            box-shadow: 0 0 60px rgba(0, 255, 65, 0.08), inset 0 0 80px rgba(0, 255, 65, 0.02);
+            width: 100%; max-width: 650px; border: 1px solid rgba(0,255,65,0.25); padding: 35px;
+            background: rgba(0,255,65,0.01);
+            box-shadow: 0 0 60px rgba(0,255,65,0.08), inset 0 0 80px rgba(0,255,65,0.02);
             position: relative;
         }
-
         .login-box::before, .login-box::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border-color: var(--green-neon);
-            border-style: solid;
+            content: ''; position: absolute; width: 30px; height: 30px;
+            border-color: var(--green-neon); border-style: solid;
         }
-
-        .login-box::before {
-            top: -1px; left: -1px;
-            border-width: 2px 0 0 2px;
-            box-shadow: -3px -3px 15px var(--green-glow);
-        }
-
-        .login-box::after {
-            bottom: -1px; right: -1px;
-            border-width: 0 2px 2px 0;
-            box-shadow: 3px 3px 15px var(--green-glow);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-
-        .login-logo {
-            font-size: 42px;
-            margin-bottom: 12px;
-            text-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow);
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.85; transform: scale(1.05); }
-        }
-
-        .login-title {
-            color: var(--green-neon);
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px var(--green-glow);
-            margin-bottom: 6px;
-        }
-
-        .login-subtitle {
-            color: var(--text-gray);
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-label {
-            color: var(--cyan-accent);
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
+        .login-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; box-shadow: -3px -3px 15px var(--green-glow); }
+        .login-box::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; box-shadow: 3px 3px 15px var(--green-glow); }
+        
+        .login-header { text-align: center; margin-bottom: 28px; }
+        .login-logo { font-size: 42px; margin-bottom: 12px; text-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); animation: pulse-glow 2s ease-in-out infinite; }
+        @keyframes pulse-glow { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.85;transform:scale(1.05)} }
+        .login-title { color: var(--green-neon); font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; text-shadow: 0 0 20px var(--green-glow); margin-bottom: 6px; }
+        .login-subtitle { color: var(--text-gray); font-size: 12px; letter-spacing: 1px; }
+        
+        .login-form { display: flex; flex-direction: column; gap: 18px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { color: var(--cyan-accent); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
         .input-cyber {
-            width: 100%;
-            padding: 14px 16px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 255, 65, 0.2);
-            color: var(--green-bright);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            outline: none;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
+            width: 100%; padding: 14px 16px; background: rgba(0,0,0,0.6); border: 1px solid rgba(0,255,65,0.2);
+            color: var(--green-bright); font-family: 'JetBrains Mono', monospace; font-size: 13px; outline: none;
+            transition: all 0.3s ease; letter-spacing: 0.5px;
         }
-
-        .input-cyber:focus {
-            border-color: var(--green-neon);
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3), inset 0 0 20px rgba(57, 255, 20, 0.05);
-        }
-
-        .input-cyber::placeholder {
-            color: rgba(0, 255, 65, 0.25);
-            font-style: italic;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 6px 0;
-        }
-
+        .input-cyber:focus { border-color: var(--green-neon); box-shadow: 0 0 15px rgba(57,255,20,0.3), inset 0 0 20px rgba(57,255,20,0.05); }
+        .input-cyber::placeholder { color: rgba(0,255,65,0.25); font-style: italic; }
+        
+        .checkbox-group { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 0; }
         .checkbox-custom {
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(0, 255, 65, 0.3);
-            background: transparent;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            flex-shrink: 0;
+            width: 18px; height: 18px; border: 2px solid rgba(0,255,65,0.3); background: transparent;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
         }
-
-        .checkbox-custom.checked {
-            background: var(--green-neon);
-            border-color: var(--green-neon);
-            box-shadow: 0 0 12px var(--green-glow);
-        }
-
-        .checkbox-custom.checked::after {
-            content: '✓';
-            color: var(--bg-black);
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .checkbox-label {
-            color: var(--text-gray);
-            font-size: 12px;
-            user-select: none;
-        }
-
-        .btn-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
+        .checkbox-custom.checked { background: var(--green-neon); border-color: var(--green-neon); box-shadow: 0 0 12px var(--green-glow); }
+        .checkbox-custom.checked::after { content: '✓'; color: var(--bg-black); font-weight: bold; font-size: 13px; }
+        .checkbox-label { color: var(--text-gray); font-size: 12px; user-select: none; }
+        
         .btn-login {
-            flex: 1;
-            padding: 15px;
-            background: transparent;
-            border: 2px solid var(--green-neon);
-            color: var(--green-neon);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            width: 100%; padding: 16px; background: transparent; border: 2px solid var(--green-neon);
+            color: var(--green-neon); font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
+            letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: all 0.3s ease; margin-top: 8px;
         }
+        .btn-login:hover:not(:disabled) { background: var(--green-neon); color: var(--bg-black); box-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow); transform: translateY(-2px); }
+        .btn-login:disabled { opacity: 0.5; cursor: not-allowed; border-color: var(--text-gray); color: var(--text-gray); }
+        
+        .message-box { padding: 14px 18px; font-size: 12px; margin-top: 14px; display: none; animation: shake 0.5s ease-in-out; line-height: 1.7; }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+        .error-message { background: rgba(255,56,96,0.08); border: 1px solid rgba(255,56,96,0.35); color: var(--red-error); border-left: 3px solid var(--red-error); }
+        .success-message { background: rgba(0,255,65,0.08); border: 1px solid rgba(0,255,65,0.35); color: var(--green-bright); border-left: 3px solid var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
+        .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+        
+        .login-info { margin-top: 24px; padding-top: 20px; border-top: 1px dashed rgba(0,255,65,0.15); }
+        .info-title { color: var(--lime-warn); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+        .info-text { color: var(--text-gray); font-size: 12px; line-height: 1.8; }
+        .info-link { color: var(--cyan-accent); text-decoration: none; border-bottom: 1px dashed var(--cyan-accent); }
+        .info-link:hover { color: var(--green-neon); border-bottom-style: solid; }
 
-        .btn-login:hover:not(:disabled) {
-            background: var(--green-neon);
-            color: var(--bg-black);
-            box-shadow: 0 0 30px var(--green-glow), 0 0 60px var(--green-glow);
-            transform: translateY(-2px);
-        }
-
-        .btn-login:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            border-color: var(--text-gray);
-            color: var(--text-gray);
-        }
-
-        .btn-diagnostic {
-            flex: 1;
-            padding: 15px;
-            background: transparent;
-            border: 2px solid var(--orange-debug);
-            color: var(--orange-debug);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-diagnostic:hover:not(:disabled) {
-            background: var(--orange-debug);
-            color: var(--bg-black);
-            box-shadow: 0 0 20px rgba(255, 165, 0, 0.4);
-        }
-
-        /* Messages */
-        .message-box {
-            padding: 14px 18px;
-            font-size: 12px;
-            margin-top: 14px;
-            display: none;
-            animation: shake 0.5s ease-in-out;
-            line-height: 1.7;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        .error-message {
-            background: rgba(255, 56, 96, 0.08);
-            border: 1px solid rgba(255, 56, 96, 0.35);
-            color: var(--red-error);
-            border-left: 3px solid var(--red-error);
-        }
-
-        .success-message {
-            background: rgba(0, 255, 65, 0.08);
-            border: 1px solid rgba(0, 255, 65, 0.35);
-            color: var(--green-bright);
-            border-left: 3px solid var(--green-bright);
-            text-shadow: 0 0 8px var(--green-glow);
-        }
-
-        .debug-message {
-            background: rgba(255, 165, 0, 0.08);
-            border: 1px solid rgba(255, 165, 0, 0.35);
-            color: var(--orange-debug);
-            border-left: 3px solid var(--orange-debug);
-            font-size: 11px;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid currentColor;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Info Section */
-        .login-info {
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px dashed rgba(0, 255, 65, 0.15);
-        }
-
-        .info-title {
-            color: var(--lime-warn);
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .info-text {
-            color: var(--text-gray);
-            font-size: 12px;
-            line-height: 1.8;
-        }
-
-        .info-link {
-            color: var(--cyan-accent);
-            text-decoration: none;
-            border-bottom: 1px dashed var(--cyan-accent);
-        }
-
-        .info-link:hover {
-            color: var(--green-neon);
-            border-bottom-style: solid;
-        }
-
-        .key-format-example {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 10px 14px;
-            margin: 10px 0;
-            border-left: 2px solid var(--cyan-accent);
-            font-size: 12px;
-            color: var(--cyan-accent);
-        }
-
-        /* Main Screen */
-        .main-screen {
-            display: none;
-            flex-direction: column;
-            height: 100vh;
-        }
-
+        /* MAIN SCREEN */
+        .main-screen { display: none; flex-direction: column; height: 100vh; }
         .main-screen.active { display: flex; }
-
         .status-bar {
-            background: linear-gradient(180deg, rgba(0, 255, 65, 0.08) 0%, transparent 100%);
-            border-bottom: 1px solid rgba(0, 255, 65, 0.25);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            flex-shrink: 0;
+            background: linear-gradient(180deg, rgba(0,255,65,0.08) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(0,255,65,0.25); padding: 10px 20px;
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-shrink: 0;
         }
-
-        .status-left {
-            color: var(--green-neon);
-            font-weight: 600;
-            text-shadow: 0 0 10px var(--green-glow);
-        }
-
-        .status-right {
-            color: var(--text-gray);
-            display: flex;
-            gap: 20px;
-            font-size: 12px;
-        }
-
+        .status-left { color: var(--green-neon); font-weight: 600; text-shadow: 0 0 10px var(--green-glow); }
+        .status-right { color: var(--text-gray); display: flex; gap: 20px; font-size: 12px; }
         .status-highlight { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
-        .status-time { color: var(--green-dim); font-variant-numeric: tabular-nums; }
-
-        .ai-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--green-neon);
-            display: inline-block;
-            animation: pulse-green 1.5s infinite;
-            box-shadow: 0 0 10px var(--green-glow);
-        }
-
-        @keyframes pulse-green {
-            0%, 100% { box-shadow: 0 0 5px var(--green-glow), 0 0 10px var(--green-glow); }
-            50% { box-shadow: 0 0 15px var(--green-glow), 0 0 25px var(--green-glow); }
-        }
-
-        .logout-btn {
-            background: none;
-            border: 1px solid var(--red-error);
-            color: var(--red-error);
-            padding: 4px 12px;
-            font-family: inherit;
-            font-size: 11px;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.2s;
-        }
-
-        .logout-btn:hover {
-            background: var(--red-error);
-            color: var(--bg-black);
-        }
-
-        .output-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 24px;
-            scroll-behavior: smooth;
-        }
-
+        .status-time { color: #00cc33; font-variant-numeric: tabular-nums; }
+        .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-neon); display: inline-block; animation: pulse-green 1.5s infinite; box-shadow: 0 0 10px var(--green-glow); }
+        @keyframes pulse-green { 0%,100%{box-shadow:0 0 5px var(--green-glow),0 0 10px var(--green-glow)} 50%{box-shadow:0 0 15px var(--green-glow),0 0 25px var(--green-glow)} }
+        .logout-btn { background: none; border: 1px solid var(--red-error); color: var(--red-error); padding: 4px 12px; font-family: inherit; font-size: 11px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .logout-btn:hover { background: var(--red-error); color: var(--bg-black); }
+        
+        .output-area { flex: 1; overflow-y: auto; padding: 20px 24px; scroll-behavior: smooth; }
         .output-area::-webkit-scrollbar { width: 10px; }
-        .output-area::-webkit-scrollbar-track { background: var(--bg-black); border-left: 1px solid rgba(0, 255, 65, 0.1); }
-        .output-area::-webkit-scrollbar-thumb { background: rgba(0, 255, 65, 0.2); }
-
+        .output-area::-webkit-scrollbar-track { background: var(--bg-black); border-left: 1px solid rgba(0,255,65,0.1); }
+        .output-area::-webkit-scrollbar-thumb { background: rgba(0,255,65,0.2); }
+        
         .boot-line { margin: 3px 0; white-space: pre-wrap; }
-        .boot-ok { color: var(--green-bright); text-shadow: 0 0 5px rgba(0, 255, 65, 0.4); }
-        .boot-warn { color: var(--lime-warn); }
-
-        .cyber-box {
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            padding: 20px 24px;
-            margin: 24px 0;
-            position: relative;
-            background: rgba(0, 255, 65, 0.02);
-            box-shadow: inset 0 0 30px rgba(0, 255, 65, 0.03);
-        }
-
-        .cyber-box::before, .cyber-box::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-color: var(--green-bright);
-            border-style: solid;
-        }
-
-        .cyber-box::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-        .cyber-box::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-
-        .box-title {
-            color: var(--green-neon);
-            font-weight: 700;
-            margin-bottom: 16px;
-            font-size: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px var(--green-glow);
-        }
-
+        .boot-ok { color: var(--green-bright); text-shadow: 0 0 5px rgba(0,255,65,0.4); }
+        
+        .cyber-box { border: 1px solid rgba(0,255,65,0.3); padding: 20px 24px; margin: 24px 0; position: relative; background: rgba(0,255,65,0.02); box-shadow: inset 0 0 30px rgba(0,255,65,0.03); }
+        .cyber-box::before, .cyber-box::after { content: ''; position: absolute; width: 20px; height: 20px; border-color: var(--green-bright); border-style: solid; }
+        .cyber-box::before { top:-1px;left:-1px;border-width:2px 0 0 2px; }
+        .cyber-box::after {bottom:-1px;right:-1px;border-width:0 2px 2px 0; }
+        .box-title { color: var(--green-neon); font-weight: 700; margin-bottom: 16px; font-size: 15px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 15px var(--green-glow); }
         .box-content { color: var(--text-white); line-height: 1.9; }
         .box-content p { margin: 8px 0; }
-        .cmd-hint { color: var(--cyan-accent); font-weight: 600; text-shadow: 0 0 8px rgba(0, 255, 200, 0.5); }
-
-        .input-line {
-            display: flex;
-            align-items: center;
-            padding: 14px 24px;
-            border-top: 1px solid rgba(0, 255, 65, 0.15);
-            background: linear-gradient(180deg, rgba(0, 255, 65, 0.03) 0%, transparent 100%);
-            flex-shrink: 0;
-        }
-
-        .prompt-prefix {
-            color: var(--cyan-accent);
-            margin-right: 10px;
-            white-space: nowrap;
-            text-shadow: 0 0 8px rgba(0, 255, 200, 0.4);
-        }
-
+        .cmd-hint { color: var(--cyan-accent); font-weight: 600; text-shadow: 0 0 8px rgba(0,255,200,0.5); }
+        
+        .input-line { display: flex; align-items: center; padding: 14px 24px; border-top: 1px solid rgba(0,255,65,0.15); background: linear-gradient(180deg, rgba(0,255,65,0.03) 0%, transparent 100%); flex-shrink: 0; }
+        .prompt-prefix { color: var(--cyan-accent); margin-right: 10px; white-space: nowrap; text-shadow: 0 0 8px rgba(0,255,200,0.4); }
         .prompt-user { color: var(--green-neon); font-weight: 700; }
         .prompt-path { color: var(--text-gray); }
         .prompt-symbol { color: var(--green-bright); margin-right: 12px; font-weight: bold; }
-
-        .terminal-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--green-bright);
-            font-family: inherit;
-            font-size: inherit;
-            caret-color: var(--green-neon);
-        }
-
-        .terminal-input::placeholder { color: rgba(0, 255, 65, 0.25); }
-
-        .cursor-cyber {
-            display: inline-block;
-            width: 10px;
-            height: 18px;
-            background: var(--green-neon);
-            animation: blink-cursor 0.8s step-end infinite;
-            vertical-align: middle;
-            margin-left: 3px;
-            box-shadow: 0 0 10px var(--green-glow);
-        }
-
-        @keyframes blink-cursor {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
+        .terminal-input { flex: 1; background: transparent; border: none; outline: none; color: var(--green-bright); font-family: inherit; font-size: inherit; caret-color: var(--green-neon); }
+        .terminal-input::placeholder { color: rgba(0,255,65,0.25); }
+        .cursor-cyber { display: inline-block; width: 10px; height: 18px; background: var(--green-neon); animation: blink-cursor 0.8s step-end infinite; vertical-align: middle; margin-left: 3px; box-shadow: 0 0 10px var(--green-glow); }
+        @keyframes blink-cursor { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+        
         .output-line { margin: 4px 0; white-space: pre-wrap; word-break: break-word; }
-        .line-error { color: var(--red-error); text-shadow: 0 0 8px rgba(255, 56, 96, 0.4); }
+        .line-error { color: var(--red-error); text-shadow: 0 0 8px rgba(255,56,96,0.4); }
         .line-success { color: var(--green-bright); text-shadow: 0 0 8px var(--green-glow); }
         .line-info { color: var(--cyan-accent); }
         .line-dim { color: var(--text-gray); }
         .line-ai { color: var(--green-neon); border-left: 2px solid var(--green-bright); padding-left: 12px; margin: 12px 0; }
-
-        .ai-response {
-            border: 1px solid rgba(0, 255, 200, 0.25);
-            background: rgba(0, 255, 200, 0.03);
-            padding: 16px 20px;
-            margin: 16px 0;
-            position: relative;
-        }
-
-        .ai-response::before {
-            content: '[ GEMINI ]';
-            position: absolute;
-            top: -11px;
-            left: 16px;
-            background: var(--bg-black);
-            padding: 0 10px;
-            font-size: 11px;
-            color: var(--cyan-accent);
-            letter-spacing: 2px;
-        }
-
-        .prompt-output {
-            border: 1px solid rgba(0, 255, 65, 0.35);
-            background: rgba(0, 255, 65, 0.03);
-            padding: 18px 22px;
-            margin: 18px 0;
-            font-size: 13px;
-            line-height: 1.75;
-            color: var(--green-bright);
-            position: relative;
-        }
-
-        .prompt-output::before {
-            content: '[ PROMPT ]';
-            position: absolute;
-            top: -11px;
-            left: 16px;
-            background: var(--bg-black);
-            padding: 0 10px;
-            font-size: 11px;
-            color: var(--green-neon);
-            letter-spacing: 2px;
-            font-weight: 700;
-        }
-
-        .step-indicator {
-            color: var(--green-neon);
-            font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 1px;
-            margin: 14px 0 10px 0;
-            padding: 8px 14px;
-            background: rgba(0, 255, 65, 0.05);
-            border-left: 3px solid var(--green-bright);
-        }
-
+        
+        .ai-response { border: 1px solid rgba(0,255,200,0.25); background: rgba(0,255,200,0.03); padding: 16px 20px; margin: 16px 0; position: relative; }
+        .ai-response::before { content: '[ GEMINI ]'; position: absolute; top: -11px; left: 16px; background: var(--bg-black); padding: 0 10px; font-size: 11px; color: var(--cyan-accent); letter-spacing: 2px; }
+        
+        .prompt-output { border: 1px solid rgba(0,255,65,0.35); background: rgba(0,255,65,0.03); padding: 18px 22px; margin: 18px 0; font-size: 13px; line-height: 1.75; color: var(--green-bright); position: relative; }
+        .prompt-output::before { content: '[ PROMPT ]'; position: absolute; top: -11px; left: 16px; background: var(--bg-black); padding: 0 10px; font-size: 11px; color: var(--green-neon); letter-spacing: 2px; font-weight: 700; }
+        
+        .step-indicator { color: var(--green-neon); font-weight: 700; font-size: 13px; letter-spacing: 1px; margin: 14px 0 10px 0; padding: 8px 14px; background: rgba(0,255,65,0.05); border-left: 3px solid var(--green-bright); }
+        
         ::selection { background: var(--green-bright); color: var(--bg-black); }
-
-        @media (max-width: 768px) {
-            body { font-size: 13px; }
-            .login-box { padding: 24px 18px; }
-            .login-logo { font-size: 34px; }
-            .login-title { font-size: 17px; }
-            .btn-row { flex-direction: column; }
-            .status-bar { padding: 8px 14px; font-size: 11px; flex-wrap: wrap; gap: 8px; }
-            .output-area { padding: 14px 16px; }
-            .input-line { padding: 12px 16px; }
-        }
-
-        .hidden { display: none !important; }
+        @media(max-width:768px){ body{font-size:13px} .login-box{padding:24px 18px} .login-logo{font-size:34px} .login-title{font-size:17px} .status-bar{padding:8px 14px;font-size:11px;flex-wrap:wrap;gap:8px} .output-area{padding:14px 16px} .input-line{padding:12px 16px} }
+        .hidden{display:none!important}
     </style>
 </head>
 <body>
-    <div class="app-container" id="appContainer">
+<div class="app-container" id="appContainer">
+<div class="login-screen" id="loginScreen">
+<div class="login-box">
+<div class="login-header">
+<div class="login-logo">⬡</div>
+<div class="login-title">PromptForge.sh</div>
+<div class="login-subtitle">CYBER TERMINAL v5.0 // COMPATIBLE CON TODAS LAS KEYS</div>
+</div>
+
+<form class="login-form" id="loginForm" onsubmit="return false;">
+<div class="form-group">
+<label class="form-label">// CLAVE DE API (CUALQUIER FORMATO)</label>
+<input type="text" id="apiKeyInput" class="input-cyber" placeholder="Pega tu API Key aquí (AQ... o AIzaSy...)..." autocomplete="off" spellcheck="false">
+</div>
+
+<div style="background:rgba(0,255,200,0.05);border-left:2px solid var(--cyan-accent);padding:10px 14px;margin:10px 0;font-size:11px;color:var(--cyan-accent);">
+<strong>✅ Formatos soportados:</strong><br>
+• AIzaSyC... (API Key tradicional)<br>
+• AQ.Ab8RN6JxX... (OAuth-style / nueva)<br>
+• Cualquier key válida de Google AI
+</div>
+
+<div class="checkbox-group" onclick="toggleRemember()">
+<div class="checkbox-custom" id="rememberCheckbox"></div>
+<span class="checkbox-label">Recordar clave en este dispositivo</span>
+</div>
+
+<button type="button" class="btn-login" id="loginBtn" onclick="iniciarSesion()">[ CONECTAR CON GEMINI ]</button>
+
+<div class="error-message" id="errorMsg"></div>
+<div class="success-message" id="successMsg"></div>
+</form>
+
+<div class="login-info">
+<div class="info-title">// ¿Dónde obtener tu key?</div>
+<div class="info-text">
+<p>1. Abre <a href="https://aistudio.google.com/app/apikey" target="_blank" class="info-link">Google AI Studio</a></p>
+<p>2. Click en <strong>"Create API key"</strong></p>
+<p>3. Copia la key (cualquier formato)</p>
+<p>4. Pégala aquí y conecta</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- MAIN TERMINAL -->
+<div class="main-screen" id="mainScreen">
+<div class="status-bar">
+<span class="status-left">⬡ promptforge.sh // CYBER_TERMINAL v5.0</span>
+<span class="status-right">
+<span class="status-item">ia: <span style="color:var(--green-neon)">ACTIVA</span> <span class="ai-dot"></span></span>
+<span class="status-item">modelo: gemini-flash</span>
+<span class="status-time" id="clock">00:00:00</span>
+<button class="logout-btn" onclick="cerrarSesion()">[ SALIR ]</button>
+</span>
+</div>
+
+<div class="output-area" id="outputArea"></div>
+
+<div class="input-line">
+<span class="prompt-prefix"><span class="prompt-user">cyber</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-path">~</span><span class="prompt-symbol">$</span></span>
+<input type="text" class="terminal-input" id="cmdInput" autocomplete="off" spellcheck="false">
+<span class="cursor-cyber"></span>
+</div>
+</div>
+</div>
+
+<script>
+// =============================================
+// CONFIGURACIÓN CORREGIDA
+// =============================================
+const CONFIG = {
+    // Endpoint CORREGIDO: gemini-flash-latest (como tu curl)
+    endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent',
+    storageKeys: {
+        apiKey: 'pf_api_key_v5',
+        remember: 'pf_remember_v5',
+        prompts: 'pf_prompts_v5'
+    }
+};
+
+let state = {
+    apiKey: '',
+    rememberKey: false,
+    isConnected: false,
+    step: 1,
+    totalSteps: 5,
+    promptsCreated: 0,
+    data: { objetivo:'', contexto:'', formato:'', tono:'', restricciones:[], ejemplos:'' },
+    savedPrompts: [],
+    currentPrompt: '',
+    conversationHistory: []
+};
+
+// =============================================
+// INIT
+// =============================================
+document.addEventListener('DOMContentLoaded', () => {
+    verificarSesion();
+    iniciarReloj();
+    
+    document.getElementById('cmdInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') ejecutarComando();
+    });
+    
+    document.getElementById('apiKeyInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') iniciarSesion();
+    });
+});
+
+function verificarSesion() {
+    const savedKey = localStorage.getItem(CONFIG.storageKeys.apiKey);
+    const remember = localStorage.getItem(CONFIG.storageKeys.remember) === 'true';
+    
+    if (savedKey && remember) {
+        state.apiKey = savedKey;
+        state.rememberKey = true;
+        document.getElementById('rememberCheckbox').classList.add('checked');
         
-        <!-- LOGIN SCREEN -->
-        <div class="login-screen" id="loginScreen">
-            <div class="login-box">
-                <div class="login-header">
-                    <div class="login-logo">⬡</div>
-                    <div class="login-title">PromptForge.sh</div>
-                    <div class="login-subtitle">CYBER TERMINAL v4.1 // MODO DIAGNÓSTICO</div>
-                </div>
-
-                <form class="login-form" id="loginForm" onsubmit="return false;">
-                    <div class="form-group">
-                        <label class="form-label">// CLAVE DE API DE GEMINI</label>
-                        <input 
-                            type="text" 
-                            id="apiKeyInput"
-                            class="input-cyber"
-                            placeholder="Pega aquí tu API Key completa..."
-                            autocomplete="off"
-                            spellcheck="false"
-                        >
-                    </div>
-
-                    <div class="key-format-example">
-                        <strong>Formato esperado:</strong> AIzaSyC... (39 caracteres)<br>
-                        <strong>Ejemplo:</strong> AIzaSyCabc123def456ghi789jkl012mno345pqr
-                    </div>
-
-                    <div class="checkbox-group" onclick="toggleRemember()">
-                        <div class="checkbox-custom" id="rememberCheckbox"></div>
-                        <span class="checkbox-label">Recordar clave en este dispositivo</span>
-                    </div>
-
-                    <div class="btn-row">
-                        <button type="button" class="btn-login" id="loginBtn" onclick="iniciarSesion()">
-                            [ CONECTAR ]
-                        </button>
-                        <button type="button" class="btn-diagnostic" id="diagBtn" onclick="ejecutarDiagnostico()">
-                            [ DIAGNOSTICAR ]
-                        </button>
-                    </div>
-
-                    <div class="error-message" id="errorMsg"></div>
-                    <div class="success-message" id="successMsg"></div>
-                    <div class="debug-message" id="debugMsg"></div>
-                </form>
-
-                <div class="login-info">
-                    <div class="info-title">// ¿Cómo obtener tu API Key?</div>
-                    <div class="info-text">
-                        <p><strong>Paso 1:</strong> Abre <a href="https://aistudio.google.com/app/apikey" target="_blank" class="info-link">Google AI Studio</a></p>
-                        <p><strong>Paso 2:</strong> Inicia sesión con tu cuenta Google</p>
-                        <p><strong>Paso 3:</strong> Haz clic en <strong>"Create API key"</strong></p>
-                        <p><strong>Paso 4:</strong> Selecciona un proyecto existente o crea uno nuevo</p>
-                        <p><strong>Paso 5:</strong> COPIA la key (empieza con <code style="color:var(--cyan-accent)">AIzaSy</code>)</p>
-                        <p style="margin-top: 10px; color: var(--lime-warn);">⚠️ La key debe tener exactamente 39 caracteres y empezar con "AIzaSy"</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MAIN TERMINAL -->
-        <div class="main-screen" id="mainScreen">
-            <div class="status-bar">
-                <span class="status-left">⬡ promptforge.sh // CYBER_TERMINAL</span>
-                <span class="status-right">
-                    <span class="status-item">ia: <span style="color:var(--green-neon)">ACTIVA</span> <span class="ai-dot"></span></span>
-                    <span class="status-item">crt: <span class="status-highlight">ON</span></span>
-                    <span class="status-time" id="clock">00:00:00</span>
-                    <button class="logout-btn" onclick="cerrarSesion()">[ SALIR ]</button>
-                </span>
-            </div>
-
-            <div class="output-area" id="outputArea"></div>
-
-            <div class="input-line">
-                <span class="prompt-prefix">
-                    <span class="prompt-user">cyber</span>@<span class="prompt-user">promptforge</span>:<span class="prompt-path">~</span><span class="prompt-symbol">$</span>
-                </span>
-                <input type="text" class="terminal-input" id="cmdInput" autocomplete="off" spellcheck="false">
-                <span class="cursor-cyber"></span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // =============================================
-        // CONFIGURACIÓN
-        // =============================================
-        const CONFIG = {
-            geminiEndpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
-            storageKeys: {
-                apiKey: 'pf_user_api_key_v2',
-                remember: 'pf_remember_key_v2',
-                prompts: 'pf_saved_prompts_v2'
-            }
-        };
-
-        let state = {
-            apiKey: '',
-            rememberKey: false,
-            isConnected: false,
-            step: 1,
-            totalSteps: 5,
-            promptsCreated: 0,
-            data: { objetivo:'', contexto:'', formato:'', tono:'', restricciones:[], ejemplos:'' },
-            savedPrompts: [],
-            currentPrompt: '',
-            conversationHistory: []
-        };
-
-        // =============================================
-        // INIT
-        // =============================================
-        document.addEventListener('DOMContentLoaded', () => {
-            verificarSesionGuardada();
-            iniciarReloj();
-            
-            document.getElementById('cmdInput').addEventListener('keydown', e => {
-                if (e.key === 'Enter') ejecutarComando();
-            });
-            
-            document.getElementById('apiKeyInput').addEventListener('keydown', e => {
-                if (e.key === 'Enter') iniciarSesion();
-            });
-        });
-
-        function verificarSesionGuardada() {
-            const savedKey = localStorage.getItem(CONFIG.storageKeys.apiKey);
-            const remember = localStorage.getItem(CONFIG.storageKeys.remember) === 'true';
-
-            if (savedKey && remember) {
-                state.apiKey = savedKey;
-                state.rememberKey = true;
-                document.getElementById('rememberCheckbox').classList.add('checked');
-                
-                mostrarCargando(true);
-                setTimeout(async () => {
-                    const resultado = await probarConexionCompleta(savedKey);
-                    if (resultado.exito) {
-                        mostrarExito('✓ Sesion restaurada automaticamente');
-                        setTimeout(() => entrarAlSistema(), 800);
-                    } else {
-                        mostrarError('La clave guardada ya no funciona: ' + resultado.error);
-                        mostrarDebug(resultado.debug);
-                        limpiarSesion();
-                        mostrarCargando(false);
-                    }
-                }, 600);
+        mostrarCargando(true);
+        setTimeout(async () => {
+            const resultado = await probarConexion(savedKey);
+            if (resultado.exito) {
+                mostrarExito('✓ Sesión restaurada');
+                setTimeout(() => entrarAlSistema(), 800);
             } else {
-                state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
-            }
-        }
-
-        function iniciarReloj() {
-            function actualizar() {
-                const n = new Date();
-                document.getElementById('clock').textContent = 
-                    `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
-            }
-            actualizar();
-            setInterval(actualizar, 1000);
-        }
-
-        // =============================================
-        // LOGIN
-        // =============================================
-        function toggleRemember() {
-            state.rememberKey = !state.rememberKey;
-            document.getElementById('rememberCheckbox').classList.toggle('checked', state.rememberKey);
-        }
-
-        async function iniciarSesion() {
-            const input = document.getElementById('apiKeyInput');
-            let key = input.value.trim();
-
-            // Limpiar espacios extra
-            key = key.replace(/\s/g, '');
-
-            if (!key || key.length < 10) {
-                mostrarError('Ingresa una clave valida. Debe tener al menos 10 caracteres.');
-                return;
-            }
-
-            // Validar formato básico
-            if (!key.startsWith('AIza')) {
-                mostrarError('Formato invalido. La clave debe empezar con "AIzaSy".\n\nLa que ingresaste empieza con: "' + key.substring(0, 10) + '..."');
-                return;
-            }
-
-            if (key.length !== 39) {
-                mostrarError(`Longitud incorrecta. Tu clave tiene ${key.length} caracteres.\nDebe tener exactamente 39 caracteres.`);
-                return;
-            }
-
-            mostrarCargando(true);
-            ocultarMensajes();
-
-            try {
-                const resultado = await probarConexionCompleta(key);
-
-                if (resultado.exito) {
-                    state.apiKey = key;
-                    state.isConnected = true;
-
-                    if (state.rememberKey) {
-                        localStorage.setItem(CONFIG.storageKeys.apiKey, key);
-                        localStorage.setItem(CONFIG.storageKeys.remember, 'true');
-                    }
-
-                    mostrarExito('¡Conexion establecida con Gemini AI!');
-                    
-                    setTimeout(() => entrarAlSistema(), 1000);
-                } else {
-                    mostrarError('Error de conexion: ' + resultado.error);
-                    if (resultado.debug) mostrarDebug(resultado.debug);
-                    mostrarCargando(false);
-                }
-            } catch (e) {
-                mostrarError('Error inesperado: ' + e.message);
+                mostrarError('La clave guardada ya no funciona: ' + resultado.error);
+                limpiarSesion();
                 mostrarCargando(false);
             }
-        }
+        }, 600);
+    } else {
+        state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
+    }
+}
 
-        // =============================================
-        // DIAGNÓSTICO DETALLADO
-        // =============================================
-        async function ejecutarDiagnostico() {
-            const input = document.getElementById('apiKeyInput');
-            let key = input.value.trim().replace(/\s/g, '');
+function iniciarReloj() {
+    function act() {
+        const n = new Date();
+        document.getElementById('clock').textContent = `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}:${String(n.getSeconds()).padStart(2,'0')}`;
+    }
+    act(); setInterval(act, 1000);
+}
 
-            ocultarMensajes();
+// =============================================
+// LOGIN
+// =============================================
+function toggleRemember() {
+    state.rememberKey = !state.rememberKey;
+    document.getElementById('rememberCheckbox').classList.toggle('checked', state.rememberKey);
+}
 
-            if (!key) {
-                mostrarError('Primero pega tu API Key en el campo.');
-                return;
-            }
-
-            const btn = document.getElementById('diagBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading-spinner"></span>ANALIZANDO...';
-
-            let debugInfo = `═══ DIAGNÓSTICO DE API KEY ═══\n\n`;
+async function iniciarSesion() {
+    const input = document.getElementById('apiKeyInput');
+    let key = input.value.trim().replace(/\s/g, '');
+    
+    if (!key || key.length < 10) {
+        mostrarError('Ingresa una clave válida (mínimo 10 caracteres).');
+        return;
+    }
+    
+    mostrarCargando(true);
+    ocultarMensajes();
+    
+    try {
+        const resultado = await probarConexion(key);
+        
+        if (resultado.exito) {
+            state.apiKey = key;
+            state.isConnected = true;
             
-            // Paso 1: Ver longitud
-            debugInfo += `📏 LONGITUD:\n`;
-            debugInfo += `   Tu clave: ${key.length} caracteres\n`;
-            debugInfo += `   Esperado: 39 caracteres\n`;
-            debugInfo += `   Estado: ${key.length === 39 ? '✓ CORRECTO' : '✗ INCORRECTO'}\n\n`;
+            if (state.rememberKey) {
+                localStorage.setItem(CONFIG.storageKeys.apiKey, key);
+                localStorage.setItem(CONFIG.storageKeys.remember, 'true');
+            }
+            
+            mostrarExito('¡Conexión establecida con Gemini!');
+            setTimeout(() => entrarAlSistema(), 1000);
+        } else {
+            mostrarError('Error: ' + resultado.error);
+            mostrarCargando(false);
+        }
+    } catch(e) {
+        mostrarError('Error: ' + e.message);
+        mostrarCargando(false);
+    }
+}
 
-            // Paso 2: Ver prefijo
-            debugInfo += `🔤 PREFIJO:\n`;
-            debugInfo += `   Empieza con: "${key.substring(0, 10)}..."\n`;
-            debugInfo += `   Debe empezar: "AIzaSy..."\n`;
-            debugInfo += `   Estado: ${key.startsWith('AIza') ? '✓ CORRECTO' : '✗ INCORRECTO'}\n\n`;
-
-            // Paso 3: Ver caracteres inválidos
-            const charsInvalidos = key.match(/[^A-Za-z0-9_\-]/g);
-            debugInfo += `🔣 CARACTERES:\n`;
-            debugInfo += `   Caracteres especiales encontrados: ${charsInvalidos ? JSON.stringify(charsInvalidos) : 'Ninguno ✓'}\n\n`;
-
-            // Paso 4: Probar conexión real
-            debugInfo += `🌐 PRUEBA DE CONEXIÓN:\n`;
-            debugInfo += `   Enviando solicitud a Google...\n`;
-
-            try {
-                const response = await fetch(`${CONFIG.geminiEndpoint}?key=${key}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: 'Responde: OK' }] }],
-                        generationConfig: { maxOutputTokens: 5 }
-                    })
-                });
-
-                debugInfo += `   Status HTTP: ${response.status}\n`;
-
-                if (response.ok) {
-                    const data = await response.json();
-                    debugInfo += `   Respuesta: ${JSON.stringify(data).substring(0, 150)}...\n`;
-                    debugInfo += `\n   ════════════════════════════\n`;
-                    debugInfo += `   ✅ ¡CONEXIÓN EXITOSA!\n`;
-                    debugInfo += `   Tu API Key FUNCIONA correctamente.\n`;
-                    debugInfo += `   ════════════════════════════\n`;
-                    
-                    mostrarDebug(debugInfo);
-                    mostrarExito('Diagnostico completado: Tu key funciona! Ahora presiona [CONECTAR]');
-                } else {
-                    const errorData = await response.json().catch(() => ({}));
-                    debugInfo += `   Error API: ${errorData.error?.message || 'Desconocido'}\n`;
-                    debugInfo += `   Codigo error: ${errorData.error?.code || response.status}\n`;
-                    debugInfo += `   Status: ${response.status}\n`;
-                    debugInfo += `\n   ════════════════════════════\n`;
-                    debugInfo += `   ❌ ERROR DE CONEXIÓN\n`;
-                    debugInfo += `   ════════════════════════════\n`;
-                    
-                    mostrarDebug(debugInfo);
-                    mostrarError('La API rechazó esta key. Revisa el diagnostico arriba.');
+// =============================================
+// CONEXIÓN CORREGIDA (como tu curl)
+// =============================================
+async function probarConexion(apiKey) {
+    try {
+        // Método CORREGIDO: usar header X-goog-api-key (como tu curl)
+        const response = await fetch(CONFIG.endpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-goog-api-key': apiKey  // ← ESTO ES LO QUE FALTABA
+            },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: 'Responde solo: OK' }]
+                }],
+                generationConfig: {
+                    maxOutputTokens: 5
                 }
-            } catch (err) {
-                debugInfo += `   Error de red: ${err.message}\n`;
-                debugInfo += `\n   ⚠️ No se pudo conectar al servidor.\n`;
-                debugInfo += `   Verifica tu conexion a internet.\n`;
-                
-                mostrarDebug(debugInfo);
-                mostrarError('Error de red: ' + err.message);
-            }
-
-            btn.disabled = false;
-            btn.innerHTML = '[ DIAGNOSTICAR ]';
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            return {
+                exito: false,
+                error: errorData.error?.message || `HTTP ${response.status}`
+            };
         }
+        
+        return { exito: true, error: null };
+    } catch(e) {
+        return { exito: false, error: e.message };
+    }
+}
 
-        async function probarConexionCompleta(apiKey) {
-            try {
-                const response = await fetch(`${CONFIG.geminiEndpoint}?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: 'OK' }] }],
-                        generationConfig: { maxOutputTokens: 5 }
-                    })
-                });
+// Llamada a Gemini (CORREGIDA)
+async function llamarGemini(prompt, historial = []) {
+    const response = await fetch(CONFIG.endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-goog-api-key': state.apiKey  // ← Header correcto
+        },
+        body: JSON.stringify({
+            contents: [
+                ...historial,
+                { role: 'user', parts: [{ text: prompt }] }
+            ],
+            generationConfig: {
+                temperature: 0.8,
+                topK: 40,
+                topP: 0.95,
+                maxOutputTokens: 2048
+            },
+            safetySettings: [
+                { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
+                { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+                { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
+                { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+            ]
+        })
+    });
+    
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error?.message || `Error ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
 
-                if (!response.ok) {
-                    const data = await response.json().catch(() => ({}));
-                    return {
-                        exito: false,
-                        error: data.error?.message || `HTTP ${response.status}`,
-                        debug: `Status: ${response.status}\nError: ${data.error?.message || 'Unknown'}`
-                    };
-                }
+function entrarAlSistema() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('mainScreen').classList.add('active');
+    state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
+    secuenciaBoot();
+    document.getElementById('cmdInput').focus();
+}
 
-                return { exito: true, error: null, debug: null };
-            } catch (e) {
-                return {
-                    exito: false,
-                    error: e.message,
-                    debug: `Network error: ${e.message}`
-                };
-            }
-        }
+function cerrarSesion() {
+    if (confirm('¿Cerrar sesión?')) {
+        limpiarSesion();
+        location.reload();
+    }
+}
 
-        function entrarAlSistema() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainScreen').classList.add('active');
-            state.savedPrompts = JSON.parse(localStorage.getItem(CONFIG.storageKeys.prompts) || '[]');
-            secuenciaBoot();
-            document.getElementById('cmdInput').focus();
-        }
+function limpiarSesion() {
+    localStorage.removeItem(CONFIG.storageKeys.apiKey);
+    localStorage.removeItem(CONFIG.storageKeys.remember);
+    state.apiKey = '';
+    state.isConnected = false;
+}
 
-        function cerrarSesion() {
-            if (confirm('Cerrar sesion?')) {
-                limpiarSesion();
-                location.reload();
-            }
-        }
+function mostrarError(msg) {
+    const el = document.getElementById('errorMsg');
+    el.innerHTML = '✗ ERROR:<br>' + msg.replace(/\n/g, '<br>');
+    el.style.display = 'block';
+}
 
-        function limpiarSesion() {
-            localStorage.removeItem(CONFIG.storageKeys.apiKey);
-            localStorage.removeItem(CONFIG.storageKeys.remember);
-            state.apiKey = '';
-            state.isConnected = false;
-        }
+function mostrarExito(msg) {
+    const el = document.getElementById('successMsg');
+    el.textContent = '✓ ' + msg;
+    el.style.display = 'block';
+}
 
-        function mostrarError(msg) {
-            const el = document.getElementById('errorMsg');
-            el.innerHTML = '✗ ERROR:<br>' + msg.replace(/\n/g, '<br>');
-            el.style.display = 'block';
-        }
+function ocultarMensajes() {
+    document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'none';
+}
 
-        function mostrarExito(msg) {
-            const el = document.getElementById('successMsg');
-            el.textContent = '✓ ' + msg;
-            el.style.display = 'block';
-        }
+function mostrarCargando(mostrar) {
+    const btn = document.getElementById('loginBtn');
+    btn.disabled = mostrar;
+    btn.innerHTML = mostrar ? '<span class="loading-spinner"></span>CONECTANDO...' : '[ CONECTAR CON GEMINI ]';
+}
 
-        function mostrarDebug(msg) {
-            const el = document.getElementById('debugMsg');
-            el.textContent = msg;
-            el.style.display = 'block';
-        }
-
-        function ocultarMensajes() {
-            document.getElementById('errorMsg').style.display = 'none';
-            document.getElementById('successMsg').style.display = 'none';
-            document.getElementById('debugMsg').style.display = 'none';
-        }
-
-        function mostrarCargando(mostrar) {
-            const btn = document.getElementById('loginBtn');
-            btn.disabled = mostrar;
-            btn.innerHTML = mostrar ? '<span class="loading-spinner"></span>CONECTANDO...' : '[ CONECTAR ]';
-        }
-
-        // =============================================
-        // BOOT SEQUENCE
-        // =============================================
-        function secuenciaBoot() {
-            const msgs = [
-                '[ OK ] promptforge.sh v4.1 iniciando...',
-                '[ OK ] usuario autenticado',
-                '[ OK ] conexion Gemini verificada',
-                '[ OK ] modulos cargados',
-                '[ OK ] sistema listo'
-            ];
-
-            let i = 0;
-            function next() {
-                if (i < msgs.length) {
-                    agregarLinea(`<span class="boot-ok">${msgs[i]}</span>`, 'boot-line');
-                    i++;
-                    setTimeout(next, 80 + Math.random() * 40);
-                } else {
-                    setTimeout(() => {
-                        agregarLinea(`
+// =============================================
+// BOOT
+// =============================================
+function secuenciaBoot() {
+    const msgs = [
+        '[ OK ] promptforge.sh v5.0 iniciando...',
+        '[ OK ] usuario autenticado',
+        '[ OK ] conexión Gemini verificada (modo flash)',
+        '[ OK ] módulos cargados',
+        '[ OK ] sistema listo'
+    ];
+    
+    let i = 0;
+    function next() {
+        if (i < msgs.length) {
+            agregarLinea(`<span class="boot-ok">${msgs[i]}</span>`, 'boot-line');
+            i++;
+            setTimeout(next, 80 + Math.random() * 40);
+        } else {
+            setTimeout(() => {
+                agregarLinea(`
 <div class="cyber-box">
-    <div class="box-title">// promptforge.sh — generador con IA</div>
-    <div class="box-content">
-        <p><span class="cmd-hint">ayuda</span> — comandos disponibles</p>
-        <p><span class="cmd-hint">chat [msg]</span> — hablar con Gemini</p>
-        <p><span class="cmd-hint">nuevo</span> — nueva sesion</p>
-        <p><span class="cmd-hint">guardar</span> — guardar prompt</p>
-        <p><span class="cmd-hint">salir</span> — cerrar sesion</p>
-    </div>
+<div class="box-title">// promptforge.sh — generador con IA Gemini</div>
+<div class="box-content">
+<p><span class="cmd-hint">ayuda</span> — comandos disponibles</p>
+<p><span class="cmd-hint">chat [msg]</span> — hablar con Gemini IA</p>
+<p><span class="cmd-hint">nuevo</span> — nueva sesión de prompt</p>
+<p><span class="cmd-hint">guardar</span> — guardar prompt actual</p>
+<p><span class="cmd-hint">salir</span> — cerrar sesión</p>
+</div>
 </div>`);
-                        mostrarPaso1();
-                        scrollFinal();
-                    }, 300);
-                }
-            }
-            next();
+                flujo[0].ask();
+                scrollFinal();
+            }, 300);
         }
+    }
+    next();
+}
 
-        // =============================================
-        // FLUJO DE PREGUNTAS
-        // =============================================
-        const flujo = [
-            { paso: 1, ask: () => imprimir(`<div class="step-indicator">▶ PASO 01/05 — OBJETIVO</div><div style="color:var(--text-white)">¿Cual es el objetivo de tu prompt?<br><br>Escribe tu respuesta:</div>`) },
-            { paso: 2, ask: () => imprimir(`<div class="step-indicator">▶ PASO 02/05 — CONTEXTO</div><div style="color:var(--text-white)">Contexto y audiencia:<br><br>Describe:</div>`) },
-            { paso: 3, ask: () => imprimir(`<div class="step-indicator">▶ PASO 03/05 — FORMATO</div><div style="color:var(--text-white)">Formato y estilo deseado:</div>`) },
-            { paso: 4, ask: () => imprimir(`<div class="step-indicator">▶ PASO 04/05 — RESTRICCIONES</div><div style="color:var(--text-white)">Limitaciones y detalles:</div>`) },
-            { paso: 5, action: 'generate' }
-        ];
+// =============================================
+// FLUJO
+// =============================================
+const flujo = [
+    { paso: 1, ask: () => imprimir(`<div class="step-indicator">▶ PASO 01/05 — OBJETIVO</div><div style="color:var(--text-white)">¿Cuál es el objetivo de tu prompt?<br><br>Escribe:</div>`) },
+    { paso: 2, ask: () => imprimir(`<div class="step-indicator">▶ PASO 02/05 — CONTEXTO</div><div style="color:var(--text-white)">Contexto y audiencia:</div>`) },
+    { paso: 3, ask: () => imprimir(`<div class="step-indicator">▶ PASO 03/05 — FORMATO</div><div style="color:var(--text-white)">Formato y estilo:</div>`) },
+    { paso: 4, ask: () => imprimir(`<div class="step-indicator">▶ PASO 04/05 — RESTRICCIONES</div><div style="color:var(--text-white)">Limitaciones:</div>`) },
+    { paso: 5, action: 'generate' }
+];
 
-        function mostrarPaso1() { flujo[0].ask(); }
+// =============================================
+// COMANDOS
+// =============================================
+async function ejecutarComando() {
+    const input = document.getElementById('cmdInput');
+    const cmd = input.value.trim();
+    if (!cmd) return;
+    
+    agregarLinea(`<span style="color:var(--cyan-accent)">cyber@promptforge:~$</span> ${escaparHtml(cmd)}`);
+    input.value = '';
+    
+    await procesarCmd(cmd);
+    scrollFinal();
+}
 
-        // =============================================
-        // EJECUTAR COMANDOS
-        // =============================================
-        async function ejecutarComando() {
-            const input = document.getElementById('cmdInput');
-            const cmd = input.value.trim();
-            if (!cmd) return;
+async function procesarCmd(cmd) {
+    const c = cmd.toLowerCase().trim();
+    
+    if (c === 'ayuda' || c === 'help') { mostrarAyuda(); return; }
+    if (c === 'limpiar' || c === 'clear') { document.getElementById('outputArea').innerHTML = ''; agregarLinea('<span class="line-dim">limpio</span>'); return; }
+    if (c === 'nuevo') { resetearSesion(); return; }
+    if (c.startsWith('chat ') || c.startsWith('hablar ')) { await chatAI(c.substring(c.indexOf(' ')+1)); return; }
+    if (c === 'guardar' || c === 'save') { guardarPrompt(); return; }
+    if (c === 'lista' || c === 'list') { listarGuardados(); return; }
+    if (c === 'copiar' || c === 'copy') { copiarPrompt(); return; }
+    if (c === 'descargar' || c === 'download') { descargarPrompt(); return; }
+    if (c === 'salir' || c === 'exit' || c === 'logout') { cerrarSesion(); return; }
+    if (c === '') return;
+    
+    await manejarRespuesta(cmd);
+}
 
-            agregarLinea(`<span style="color:var(--cyan-accent)">cyber@promptforge:~$</span> ${escaparHtml(cmd)}`);
-            input.value = '';
+function resetearSesion() {
+    state.step = 1;
+    state.data = { objetivo:'', contexto:'', formato:'', tono:'', restricciones:[], ejemplos:'' };
+    agregarLinea('<span class="line-success">[OK] nueva sesión</span>');
+    flujo[0].ask();
+}
 
-            await procesarCmd(cmd);
-            scrollFinal();
-        }
+async function chatAI(msg) {
+    if(!msg.trim()) { agregarLinea('<span class="line-error">error: escribe mensaje</span>'); return; }
+    
+    agregarLinea(`<span class="line-ai">[TÚ] ${escaparHtml(msg)}</span>`);
+    agregarLinea('<span class="line-info">[GEMINI] pensando...</span>');
+    
+    try {
+        const r = await llamarGemini(msg, state.conversationHistory.slice(-10));
+        state.conversationHistory.push(
+            {role:'user', parts:[{text:msg}]},
+            {role:'model', parts:[{text:r}]}
+        );
+        agregarLinea(`<div class="ai-response"><div style="color:var(--text-white);line-height:1.7">${formatearAI(r)}</div></div>`);
+    } catch(e) {
+        agregarLinea(`<span class="line-error">error: ${e.message}</span>`);
+    }
+}
 
-        async function procesarCmd(cmd) {
-            const c = cmd.toLowerCase().trim();
+async function manejarRespuesta(resp) {
+    switch(state.step) {
+        case 1: state.data.objetivo = resp; break;
+        case 2: state.data.contexto = resp; break;
+        case 3: state.data.formato = resp; break;
+        case 4: state.data.restricciones.push(resp); break;
+    }
+    
+    if(state.step < state.totalSteps) {
+        state.step++;
+        flujo[state.step-1].ask();
+    } else {
+        await generarPrompt();
+    }
+}
 
-            if (c === 'ayuda' || c === 'help') { mostrarAyuda(); return; }
-            if (c === 'limpiar' || c === 'clear') { document.getElementById('outputArea').innerHTML = ''; agregarLinea('<span class="line-dim">limpio</span>'); return; }
-            if (c === 'nuevo') { state.step = 1; state.data = {objetivo:'',contexto:'',formato:'',tono:'',restricciones:[],ejemplos:''}; agregarLinea('<span class="line-success">[OK] nueva sesion</span>'); flujo[0].ask(); return; }
-            if (c.startsWith('chat ')) { await chatAI(c.substring(5)); return; }
-            if (c === 'guardar') { guardarPrompt(); return; }
-            if (c === 'lista') { listarGuardados(); return; }
-            if (c === 'copiar') { if(state.currentPrompt){navigator.clipboard.writeText(state.currentPrompt);agregarLinea('<span class="line-success">[OK] copiado</span>');}else agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
-            if (c === 'descargar') { descargarPrompt(); return; }
-            if (c === 'salir') { cerrarSesion(); return; }
-            if (c === '') return;
+async function generarPrompt() {
+    agregarLinea('<span class="line-info">[GEMINI] generando prompt optimizado...</span>');
+    
+    try {
+        const d = state.data;
+        const inst = `Eres experto en ingeniería de prompts. Crea un PROMPT PROFESIONAL EN INGLÉS con:\n\nOBJETIVO: ${d.objetivo}\nCONTEXTO: ${d.contexto||'-'}\nFORMATO: ${d.formato||'-'}\nRESTRICCIONES: ${d.restricciones.join(', ')||'-'}\n\nIncluye: rol claro, instrucciones específicas, formato salida, ejemplos, criterios calidad.\n\nResponde SOLO con el prompt generado.`;
+        
+        state.currentPrompt = await llamarGemini(inst, []);
+    } catch(e) {
+        state.currentPrompt = `# ROL\nExperto en: ${state.data.objetivo}\n\n# OBJETIVO\n${state.data.objetivo}\n\n${state.data.contexto?'# CONTEXTO\n'+state.data.contexto+'\n\n':''}${state.data.formato?'# FORMATO\n'+state.data.formato+'\n\n':''}# EJECUTAR`;
+        agregarLinea('<span class="line-warn">[WARN] modo plantilla (sin IA)</span>');
+    }
+    
+    state.promptsCreated++;
+    
+    agregarLinea('<span class="line-success">[OK] ════════════════════════</span>');
+    agregarLinea('<span class="line-success">[OK] ¡PROMPT GENERADO!</span>');
+    agregarLinea('');
+    agregarLinea(`<div class="prompt-output">${escaparHtml(state.currentPrompt)}</div>`);
+    agregarLinea('');
+    agregarLinea('<span class="line-info">comandos: guardar | copiar | descargar</span>');
+    
+    setTimeout(() => {
+        state.step = 1;
+        state.data = { objetivo:'', contexto:'', formato:'', tono:'', restricciones:[], ejemplos:'' };
+    }, 100);
+}
 
-            await manejarRespuesta(cmd);
-        }
+function mostrarAyuda() {
+    agregarLinea(`
+<span style="color:var(--green-neon)">COMANDOS DISPONIBLES:</span>
 
-        // =============================================
-        // GEMINI INTEGRATION
-        // =============================================
-        async function llamarGemini(prompt, historial = []) {
-            const resp = await fetch(`${CONFIG.geminiEndpoint}?key=${state.apiKey}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    contents: [...historial, {role:'user', parts:[{text:prompt}]}],
-                    generationConfig: {temperature:0.8, topK:40, topP:0.95, maxOutputTokens:2048},
-                    safetySettings: [
-                        {category:'HARM_CATEGORY_HARASSMENT', threshold:'BLOCK_NONE'},
-                        {category:'HARM_CATEGORY_HATE_SPEECH', threshold:'BLOCK_NONE'},
-                        {category:'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold:'BLOCK_NONE'},
-                        {category:'HARM_CATEGORY_DANGEROUS_CONTENT', threshold:'BLOCK_NONE'}
-                    ]
-                })
-            });
-
-            if(!resp.ok) throw new Error((await resp.json())?.error?.message || 'API Error');
-            const data = await resp.json();
-            return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        }
-
-        async function chatAI(msg) {
-            if(!msg.trim()){agregarLinea('<span class="line-error">error: escribe mensaje</span>');return;}
-            agregarLinea(`<span class="line-ai">[TU] ${escaparHtml(msg)}</span>`);
-            agregarLinea('<span class="line-info">[GEMINI] pensando...</span>');
-            try{
-                const r = await llamarGemini(msg, state.conversationHistory.slice(-10));
-                state.conversationHistory.push({role:'user',parts:[{text:msg}]},{role:'model',parts:[{text:r}]});
-                agregarLinea(`<div class="ai-response"><div style="color:var(--text-white);line-height:1.7">${formatearAI(r)}</div></div>`);
-            }catch(e){agregarLinea(`<span class="line-error">error: ${e.message}</span>`);}
-        }
-
-        async function manejarRespuesta(resp){
-            switch(state.step){
-                case 1: state.data.objetivo = resp; break;
-                case 2: state.data.contexto = resp; break;
-                case 3: state.data.formato = resp; break;
-                case 4: state.data.restricciones.push(resp); break;
-            }
-            if(state.step < state.totalSteps){
-                state.step++;
-                flujo[state.step-1].ask();
-            }else await generarPrompt();
-        }
-
-        async function generarPrompt(){
-            agregarLinea('<span class="line-info">[GEMINI] generando prompt optimizado...</span>');
-            try{
-                const d=state.data;
-                const inst=`Eres experto en prompts. Crea uno en INGLÉS con:\nOBJ:${d.objetivo}\nCTX:${d.contexto||'-'}\nFMT:${d.formato||'-'}\nRES:${d.restricciones.join(',')||'-'}\nIncluye rol,instrucciones,formato,ejemplos,criterios.Responde SOLO con el prompt.`;
-                state.currentPrompt = await llamarGemini(inst,[]);
-            }catch(e){
-                state.currentPrompt=`# EXPERTO EN: ${state.data.objetivo}\n\n# OBJETIVO\n${state.data.objetivo}\n\n${state.data.contexto?'# CONTEXTO\n'+state.data.contexto+'\n\n':''}${state.data.formato?'# FORMATO\n'+state.data.formato+'\n\n':''}# EJECUTAR`;
-                agregarLinea('<span class="line-warn">[WARN] modo plantilla</span>');
-            }
-            state.promptsCreated++;
-            agregarLinea('<span class="line-success">[OK] ════════════════════════</span>');
-            agregarLinea('<span class="line-success">[OK] PROMPT GENERADO!</span>');
-            agregarLinea('');
-            agregarLinea(`<div class="prompt-output">${escaparHtml(state.currentPrompt)}</div>`);
-            agregarLinea('');
-            agregarLinea('<span class="line-info">comandos: guardar | copiar | descargar</span>');
-            setTimeout(()=>{state.step=1;state.data={objetivo:'',contexto:'',formato:'',tono:'',restricciones:[],ejemplos:''};},100);
-        }
-
-        function mostrarAyuda(){
-            agregarLinea(`
-<span style="color:var(--green-neon)">COMANDOS:</span>
   ayuda          - esta ayuda
-  chat [msg]     - hablar con Gemini
-  nuevo          - nueva sesion
-  guardar        - guardar prompt
-  lista          - ver guardados
-  copiar         - copiar portapapeles
-  descargar      - descargar .txt
+  chat [msg]     - conversar con Gemini IA
+  nuevo          - nueva sesión de prompt
+  guardar        - guardar prompt actual
+  lista          - ver prompts guardados
+  copiar         - copiar al portapapeles
+  descargar      - descargar como .txt
   limpiar        - limpiar pantalla
-  salir          - cerrar sesion`);
-        }
+  salir          - cerrar sesión`);
+}
 
-        function guardarPrompt(){
-            if(!state.currentPrompt){agregarLinea('<span class="line-error">error: nada que guardar</span>');return;}
-            const e={id:state.savedPrompts.length+1,titulo:state.data.objetivo.substring(0,45)||'sin_titulo',contenido:state.currentPrompt,fecha:new Date().toISOString()};
-            state.savedPrompts.push(e);
-            localStorage.setItem(CONFIG.storageKeys.prompts,JSON.stringify(state.savedPrompts));
-            agregarLinea(`<span class="line-success">[OK] guardado como #${e.id}</span>`);
-        }
+function guardarPrompt() {
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que guardar</span>'); return; }
+    
+    const entry = {
+        id: state.savedPrompts.length + 1,
+        titulo: state.data.objetivo.substring(0, 45) || 'sin_título',
+        contenido: state.currentPrompt,
+        fecha: new Date().toISOString()
+    };
+    
+    state.savedPrompts.push(entry);
+    localStorage.setItem(CONFIG.storageKeys.prompts, JSON.stringify(state.savedPrompts));
+    agregarLinea(`<span class="line-success">[OK] guardado como #${entry.id} — "${entry.titulo}"</span>`);
+}
 
-        function listarGuardados(){
-            if(!state.savedPrompts.length){agregarLinea('<span class="line-dim">vacío</span>');return;}
-            agregarLinea('<span style="color:var(--cyan-acce)">GUARDADOS:</span>');
-            state.savedPrompts.forEach(p=>agregarLinea(`  #${p.id} ${p.titulo}`));
-        }
+function listarGuardados() {
+    if(!state.savedPrompts.length) { agregarLinea('<span class="line-dim">vacío</span>'); return; }
+    agregarLinea('<span style="color:var(--cyan-accent)">PROMPTS GUARDADOS:</span>');
+    state.savedPrompts.forEach(p => {
+        agregarLinea(`  <span class="line-success">#${p.id}</span> ${p.titulo}  <span class="line-dim">[${new Date(p.fecha).toLocaleDateString('es')}]</span>`);
+    });
+}
 
-        function descargarPrompt(){
-            if(!state.currentPrompt){agregarLinea('<span class="line-error">error</span>');return;}
-            const b=new Blob([state.currentPrompt],{type:'text/plain'});
-            const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`prompt_${Date.now()}.txt`;a.click();
-            agregarLinea('<span class="line-success">[OK] descargado</span>');
-        }
+function copiarPrompt() {
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
+    navigator.clipboard.writeText(state.currentPrompt);
+    agregarrLinea('<span class="line-success">[OK] copiado ✓</span>');
+}
 
-        function agregarLinea(html,cls=''){const d=document.createElement('div');d.className='output-line '+cls;d.innerHTML=html;document.getElementById('outputArea').appendChild(d);}
-        function imprimir(html){agregarLinea(html);}
-        function escaparHtml(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
-        function formatearAI(t){return escaparHtml(t).replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--green-neon)">$1</strong>').replace(/`(.*?)`/g,'<code style="color:var(--cyan-accent)">$1</code>').replace(/\n/g,'<br>');}
-        function scrollFinal(){requestAnimationFrame(()=>document.getElementById('outputArea').scrollTop=999999);}
-    </script>
+function copiarrPrompt() {
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que copiar</span>'); return; }
+    navigator.clipboard.writeText(state.currentPrompt);
+    agregarLinea('<span class="line-success">[OK] copiado ✓</span>');
+}
+
+function descargarPrompt() {
+    if(!state.currentPrompt) { agregarLinea('<span class="line-error">error: nada que descargar</span>'); return; }
+    const blob = new Blob([state.currentPrompt], {type:'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `prompt_${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+    agregarLinea('<span class="line-success">[OK] descargado ✓</span>');
+}
+
+// =============================================
+// UTILIDADES
+// =============================================
+function agregarLinea(html, cls='') {
+    const d = document.createElement('div');
+    d.className = 'output-line ' + cls;
+    d.innerHTML = html;
+    document.getElementById('outputArea').appendChild(d);
+}
+
+function imprimir(html) { agregarLinea(html); }
+
+function escaparHtml(t) {
+    const d = document.createElement('div');
+    d.textContent = t;
+    return d.innerHTML;
+}
+
+function formatearAI(t) {
+    return escaparHtml(t)
+        .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--green-neon)">$1</strong>')
+        .replace(/`(.*?)`/g, '<code style="color:var(--cyan-accent)">$1</code>')
+        .replace(/\n/g, '<br>');
+}
+
+function scrollFinal() {
+    requestAnimationFrame(() => {
+        document.getElementById('outputArea').scrollTop = 999999;
+    });
+}
+</script>
 </body>
 </html>
